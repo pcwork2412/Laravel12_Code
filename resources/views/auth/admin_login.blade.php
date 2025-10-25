@@ -175,7 +175,6 @@
 
                 <div class="login-footer">
                     <p>Need help? Contact support@edumanage.com</p>
-                    <p>© 2023 EduManage Pro. All rights reserved.</p>
                 </div>
             </div>
         </div>

@@ -14,21 +14,22 @@ use App\Http\Controllers\Student\CrudController;
 use App\Http\Controllers\Student\ImportController;
 use App\Http\Controllers\Student\MarksAllotTableController;
 use App\Http\Controllers\Teacher\TeacherCrudController;
+use App\Http\Controllers\Register\AdminRegisterController;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\Finder\Glob;
 
-// use App\Http\Controllers\AuthController;
+// ---------------- Admin Register ----------------
+Route::middleware('guest.role')->prefix('admin')->group(function () {
+Route::get('/register', [AdminRegisterController::class, 'showRegisterForm'])->name('admin.register.form');
+Route::post('/register', [AdminRegisterController::class, 'register'])->name('admin.register');
+});
 
-// Route::get('/admin', function () {
-//     return view('dashboard');
-// });
 
 
 
-// ID Card Templates
-// Route::get('students/idcardtemplate', [SchoolIdCardController::class, 'idCardTemplate'])->name('students.idcardtemplate');
-// Route::post('students/templates/set', [SchoolIdCardController::class, 'templateSet'])->name('students.templates.set');
-// ---------------- Admin Login ----------------
+
+
+
 // ---------------- Admin Login ----------------
 Route::middleware('guest.role')->prefix('admin')->group(function () {
     Route::get('/login', [AdminAuthController::class,'showLoginForm'])->name('admin.login');
