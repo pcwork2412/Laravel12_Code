@@ -161,9 +161,9 @@
                             <label class="form-check-label" for="remember">Remember Me</label>
                         </div>
 
-                        @if (Route::has('password.request'))
+                        {{-- @if (Route::has('password.request'))
                             <a class="forgot-password" href="{{ route('password.request') }}">Forgot Password?</a>
-                        @endif
+                        @endif --}}
                     </div>
 
                     <div class="d-grid mb-3">

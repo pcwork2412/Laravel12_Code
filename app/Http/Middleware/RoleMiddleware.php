@@ -20,7 +20,7 @@ class RoleMiddleware
 
     // Agar current role allowed roles me nahi hai
     if (!$currentRole || !in_array($currentRole, $roles)) {
-        return redirect('/login');
+        return redirect('/admin/login');
     }
 
     return $next($request);
