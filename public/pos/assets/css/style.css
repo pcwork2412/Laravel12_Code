@@ -1471,7 +1471,7 @@ table.dataTable thead > tr > td.sorting {
     bottom: 12px;
 }
 .status {
-	background-color: #263238;
+	/* background-color: #263238; */
 	border-radius: 50%;
 	display: inline-block;
 	height: 10px;

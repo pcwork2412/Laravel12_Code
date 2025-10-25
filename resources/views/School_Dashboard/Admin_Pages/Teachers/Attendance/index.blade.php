@@ -345,6 +345,14 @@
                     }
                 });
             });
+
+            
+            $(document).on('click', '.viewTeacherAttendanceBtn', function() {
+                let id = $(this).data('id');
+
+                // redirect to show page
+                window.location.href = "/teacher_attendance/" + id;
+            });
         });
     </script>
 @endpush

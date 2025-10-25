@@ -13,7 +13,7 @@ class TeacherAttendanceController extends Controller
     /**
      * Display a listing of the resource.
      */
-     public function index(Request $request)
+    public function index(Request $request)
     {
         // 🧠 Step 2: AJAX request handle
         if ($request->ajax()) {
@@ -52,10 +52,13 @@ class TeacherAttendanceController extends Controller
                 // 🧩 Action Buttons Column
                 ->addColumn('action', function ($row) {
                     return '
-                        <button class="btn btn-sm btn-info editBtn" data-id="'.$row->id.'">
+                        <button class="btn btn-sm btn-warning text-white viewTeacherAttendanceBtn" data-id="' . $row->teacher_id . '">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-info editBtn" data-id="' . $row->id . '">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn btn-sm btn-danger deleteBtn" data-id="'.$row->id.'">
+                        <button class="btn btn-sm btn-danger deleteBtn" data-id="' . $row->id . '">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     ';
@@ -76,7 +79,7 @@ class TeacherAttendanceController extends Controller
     {
         return view('school_dashboard.admin_pages.teachers.attendance.create');
     }
-     public function fetchTeachers(Request $request)
+    public function fetchTeachers(Request $request)
     {
         $teachers = TeacherCrud::all();
         return response()->json($teachers);
@@ -85,115 +88,147 @@ class TeacherAttendanceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-      public function store(Request $request)
-{
-    // 🧾 Step 1: Basic validation
-    $request->validate([
-        'date'         => 'required|date',
-        'teacher_ids'  => 'required|array',
-    ]);
-
-    // 🚫 Step 2: Check if attendance already exists
-    $exists = TeacherAttendance::where('date', $request->date)
-        ->exists();
-
-    if ($exists) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Attendance already exists for this Class,Section and date.'
+    public function store(Request $request)
+    {
+        // 🧾 Step 1: Basic validation
+        $request->validate([
+            'date'         => 'required|date',
+            'teacher_ids'  => 'required|array',
         ]);
-    }
 
-    // 📦 Step 3: Get data safely
-    $absent  = $request->absent ?? [];
-    $leave   = $request->leave ?? [];
-    $reasons = $request->reason ?? [];
+        // 🚫 Step 2: Check if attendance already exists
+        $exists = TeacherAttendance::where('date', $request->date)
+            ->exists();
 
-    // ⚠️ Step 4: Leave reason required validation
-    foreach ($leave as $teacherId) {
-        if (empty($reasons[$teacherId])) {
+        if ($exists) {
             return response()->json([
                 'success' => false,
-                'message' => "Please provide a reason for teacher ID: $teacherId (Leave)."
+                'message' => 'Attendance already exists for this Class,Section and date.'
             ]);
         }
-    }
 
-    // 🧠 Step 5: Save attendance
-    foreach ($request->teacher_ids as $teacherId) {
+        // 📦 Step 3: Get data safely
+        $absent  = $request->absent ?? [];
+        $leave   = $request->leave ?? [];
+        $reasons = $request->reason ?? [];
 
-        // Leave > Absent > Present
-        if (in_array($teacherId, $leave)) {
-            $status = 'Leave';
-        } elseif (in_array($teacherId, $absent)) {
-            $status = 'Absent';
-        } else {
-            $status = 'Present';
+        // ⚠️ Step 4: Leave reason required validation
+        foreach ($leave as $teacherId) {
+            if (empty($reasons[$teacherId])) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Please provide a reason for teacher ID: $teacherId (Leave)."
+                ]);
+            }
         }
 
-        TeacherAttendance::create([
-            'teacher_id' => $teacherId,
-            'date'       => $request->date,
-            'status'     => $status,
-            'reason'     => $reasons[$teacherId] ?? null,
+        // 🧠 Step 5: Save attendance
+        foreach ($request->teacher_ids as $teacherId) {
+
+            // Leave > Absent > Present
+            if (in_array($teacherId, $leave)) {
+                $status = 'Leave';
+            } elseif (in_array($teacherId, $absent)) {
+                $status = 'Absent';
+            } else {
+                $status = 'Present';
+            }
+
+            TeacherAttendance::create([
+                'teacher_id' => $teacherId,
+                'date'       => $request->date,
+                'status'     => $status,
+                'reason'     => $reasons[$teacherId] ?? null,
+            ]);
+        }
+
+        // ✅ Step 6: Success response
+        return response()->json([
+            'success' => true,
+            'message' => 'Attendance created successfully.'
         ]);
     }
-
-    // ✅ Step 6: Success response
-    return response()->json([
-        'success' => true,
-        'message' => 'Attendance created successfully.'
-    ]);
-}
 
     /**
      * Display the specified resource.
      */
-    public function show(TeacherAttendance $teacherAttendance)
+    public function show(Request $request, $id)
     {
-        //
+        $teacher = \App\Models\Teacher\TeacherCrud::findOrFail($id);
+
+        // 🗓 Select month from input or current month
+        $selectedMonth = $request->get('month') ?? now()->format('Y-m');
+
+        // Parse month + year from the input
+        $date = \Carbon\Carbon::createFromFormat('Y-m', $selectedMonth);
+        $month = $date->month;
+        $year = $date->year;
+
+        // 🎯 Get attendance for selected month
+        $attendance = \App\Models\Attendance\TeacherAttendance::where('teacher_id', $id)
+            ->whereMonth('date', $month)
+            ->whereYear('date', $year)
+            ->get(['date', 'status']);
+
+        // 🗂️ Convert to [day => status] array
+        $attendanceData = [];
+        foreach ($attendance as $record) {
+            $day = \Carbon\Carbon::parse($record->date)->day;
+            $status = strtolower($record->status) === 'present' ? 'P' : 'A';
+            $attendanceData[$day] = $status;
+        }
+
+        // 🔹 Pass data to view
+        return view('school_dashboard.admin_pages.teachers.attendance.report', [
+            'teacher' => $teacher,
+            'attendanceData' => $attendanceData,
+            'selectedMonth' => $selectedMonth,
+            'month' => $month,
+            'year' => $year,
+        ]);
     }
+
 
     /**
      * Show the form for editing the specified resource.
      */
-      public function edit($id)
-{
-    $attendance = TeacherAttendance::with('teacher')->findOrFail($id);
+    public function edit($id)
+    {
+        $attendance = TeacherAttendance::with('teacher')->findOrFail($id);
 
-    return response()->json([
-        'id' => $attendance->id,
-        'teacher_name' => $attendance->teacher->teacher_name, // assuming relation 'teacher'
-        'date' => $attendance->date,
-        'status' => $attendance->status,
-        'reason' => $attendance->reason,
-    ]);
-}
+        return response()->json([
+            'id' => $attendance->id,
+            'teacher_name' => $attendance->teacher->teacher_name, // assuming relation 'teacher'
+            'date' => $attendance->date,
+            'status' => $attendance->status,
+            'reason' => $attendance->reason,
+        ]);
+    }
 
 
     /**
      * Update the specified resource in storage.
      */
-  
-public function update(Request $request, $id)
-{
-    $request->validate([
-        'status' => 'required|in:Present,Absent,Leave',
-        'reason' => 'required_if:status,Leave',
-    ]);
 
-    $attendance = TeacherAttendance::findOrFail($id);
-    $attendance->status = $request->status;
-    $attendance->reason = $request->reason;
-    $attendance->save();
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:Present,Absent,Leave',
+            'reason' => 'required_if:status,Leave',
+        ]);
 
-    return response()->json(['message' => 'Attendance updated successfully!']);
-}
+        $attendance = TeacherAttendance::findOrFail($id);
+        $attendance->status = $request->status;
+        $attendance->reason = $request->reason;
+        $attendance->save();
+
+        return response()->json(['message' => 'Attendance updated successfully!']);
+    }
 
     /**
      * Remove the specified resource from storage.
      */
-     public function destroy($id)
+    public function destroy($id)
     {
         $attendance = TeacherAttendance::findOrFail($id);
         $attendance->delete();
