@@ -1,0 +1,876 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/*********** Media Querry For Responsive Screen Start ***********/
+@media (max-width: 1200px) {
+    .navbar-light .navbar-nav .nav-link {
+        padding: 25px 8px;
+        font-size: 16.8px;
+    }
+    .carousel-item {
+        position: absolute;
+        top: 36px;
+    }
+}
+@media (max-width: 992px) {
+    .carousel-item {
+        position: absolute;
+        top: 13px;
+    }
+}
+@media (max-width: 768px) {
+    .carousel-item {
+        position: absolute;
+        top: 9px;
+    }
+    .carousel-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+@media (max-width: 576px) {
+    /* .carousel-item {
+    position: absolute;
+  top: 9px;
+  } */
+    /* .carousel-item  {
+    width: 100%;
+    height: 100%;
+  } */
+}
+/*********** Media Querry For Responsive Screen End ***********/
+
+/********************  Global CSS  *********************/
+html body {
+    overflow-x: hidden; /* horizontal scroll bar hatayega */
+    scroll-behavior: smooth; /* smooth scroll enable karega */
+}
+
+[id] {
+    scroll-margin-top: 100px; /* Navbar ki height */
+}
+
+.global-fit-img {
+    width: 200px;
+    height: 250px;
+    padding: 20px;
+    overflow: visible;
+    background: #fff; /* khali jagah white rahegi */
+    flex-wrap: nowrap;
+}
+
+.global-fit-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* image puri visible rahegi */
+}
+
+.global-fit-img img {
+    transition: transform 0.3s ease-in-out;
+}
+/* .global-fit-img img:hover{
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+} */
+
+/***************** Index Page CSS Start *****************/
+.dropdown-item {
+    padding: 10px 20px;
+    font-size: 16px;
+}
+.dropdown-item:hover {
+    background-color: #0d6efd; /* Blue */
+    color: #fff;
+}
+.dropdown-item:active {
+    background-color: #0b5ed7; /* Darker Blue */
+    color: #fff;
+}
+/* Quick Card Section Start */
+.quick-card {
+    background: #fff;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.quick-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+.icon-wrapper {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #007bff, #6610f2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+.btn-gradient {
+    background: linear-gradient(135deg, #007bff, #6610f2);
+    border: none;
+    color: #fff;
+    border-radius: 50px;
+    transition: 0.3s;
+}
+.btn-gradient:hover {
+    opacity: 0.9;
+    transform: scale(1.03);
+}
+/* Quick Card Section End */
+
+/* Notice Board Section Start */
+.notice-board {
+    width: 80%;
+    height: 250px;
+    border-radius: 4px;
+    border: 8px solid #0d6efd; /* Bootstrap primary color */
+    background-color: #f8f9fa;
+}
+/* Notice Board Section End */
+
+.intro-section h3 {
+    color: #0d6efd; /* Heading blue */
+    font-weight: 600;
+}
+
+.notice-board {
+    max-height: 350px;
+}
+
+.notice-list {
+    height: 250px;
+    overflow: hidden;
+    position: relative;
+}
+
+.notice-list ul {
+    position: absolute;
+    top: 100%;
+    animation: scroll-up 15s linear infinite;
+}
+.notice-list ul:hover {
+    animation-play-state: paused;
+}
+
+@keyframes scroll-up {
+    0% {
+        top: 50%;
+    }
+    100% {
+        top: -130%;
+    }
+}
+
+.notice-list li {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    font-size: 15px;
+    text-align: left;
+    line-height: 1.4;
+}
+.facilities-item {
+    margin: 30px;
+    width: 400px;
+    height: 300px;
+    background-color: rgba(0, 0, 0, 0.03);
+    position: relative;
+    overflow: visible !important;
+    transition: all 0.3s ease-in-out;
+}
+
+.facilities-item:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    background-color: white;
+}
+
+/* Grey base line */
+.facility-content::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 10px;
+    width: 5px;
+    height: 100%;
+    background-color: grey;
+}
+
+/* Blue overlay line (hidden initially) */
+.facility-content::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 10px;
+    width: 5px;
+    height: 0%;
+    background-color: blue;
+    transition: height 0.5s ease-in-out;
+}
+
+/* Hover → blue fill full height */
+.facilities-item:hover .facility-content::after {
+    height: 100%;
+}
+
+.facility-content {
+    padding: 20px 30px 20px 20px;
+    width: 100%;
+    height: 100%;
+}
+
+.facility-text {
+    font-size: 14px;
+    text-align: justify;
+}
+
+/* Right side image overflow */
+.facility-img {
+    position: absolute;
+    top: 50%;
+    right: -80px; /* overflow right */
+    transform: translateY(-50%);
+    width: 250px;
+}
+
+.facility-img img {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+.fill-box {
+    width: 5px;
+    color: grey;
+    background-color: black;
+}
+.facility-btn {
+    position: absolute;
+    bottom: -40px; /* overflow bottom */
+    left: 50%;
+    transform: translateX(-50%);
+    transition: all 0.3s ease-in-out;
+}
+.facility-btn button {
+    padding: 10px 20px 20px 20px;
+    font-size: 19.5px;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Owl nav container */
+.facilities-carousel {
+    width: 100%;
+}
+.facilities-carousel .owl-nav {
+    position: absolute;
+    top: 50%;
+    width: 110%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    transform: translateX(-5%);
+    pointer-events: none; /* prevent blocking content */
+}
+
+/* Each button */
+.facilities-carousel .owl-nav .left-arrow,
+.right-arrow {
+    background: #fff;
+    color: #fff;
+    border: none;
+    font-size: 28px;
+    text-align: center;
+    width: 45px;
+    height: 45px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease-in-out;
+    pointer-events: all; /* enable click */
+    background: #007bff; /* Bootstrap blue */
+}
+
+/* Hover effect */
+.facilities-carousel .owl-nav .left-arrow:hover,
+.right-arrow:hover {
+    transform: scale(1.1);
+}
+
+/* Remove outline on click */
+.facilities-carousel .owl-nav button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.4);
+}
+
+/* FontAwesome icons */
+.facilities-carousel .owl-nav i {
+    line-height: 45px;
+}
+/******************* Index Page CSS End *******************/
+
+/****************** About Page CSS Start ******************/
+.about-head {
+    font-size: 39px;
+    letter-spacing: 1px;
+    margin-bottom: 40px;
+    text-decoration: underline;
+}
+
+.about-para {
+    font-size: 15px;
+    text-align: justify;
+    line-height: 1.8;
+    color: #555;
+    font-weight: 600;
+    margin-bottom: 40px;
+}
+/****************** About Page CSS End ******************/
+
+/****************** Director Page CSS Start ******************/
+.award-img {
+    width: 200px;
+    height: 250px;
+    padding: 20px;
+    overflow: visible;
+    background: #fff; /* khali jagah white rahegi */
+    flex-wrap: nowrap;
+}
+
+.award-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* image puri visible rahegi */
+}
+
+.award-img img {
+    transition: transform 0.3s ease-in-out;
+}
+.award-img img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/****************** Director Page CSS End ******************/
+
+/****************** Academics(School Timings) Page CSS Start ******************/
+table th,
+table td {
+    padding: 12px !important; /* uniform spacing */
+    text-align: left;
+    vertical-align: middle;
+    font-size: 15px;
+}
+
+.table thead th {
+    font-weight: 600;
+}
+
+ul li {
+    margin-bottom: 6px;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+/****************** Academics(School Timings) Page CSS End ******************/
+
+/****************** Academics(Results) Page CSS Start ******************/
+.result-section {
+    text-align: center;
+    margin: 20px auto;
+    width: 90%;
+    font-family: Arial, sans-serif;
+}
+
+.result-title {
+    background: #023a7a; /* Dark Green */
+    color: white;
+    padding: 5px;
+    margin-bottom: 15px;
+    font-size: 30px;
+    font-weight: bolder;
+}
+
+.result-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.result-table th,
+.result-table td {
+    border: 2px solid #023a7a;
+    padding: 10px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.result-table .sub-title {
+    background: #d9ead3;
+    font-size: 25px;
+    font-weight: bolder;
+    color: #023a7a;
+}
+
+.toppers-section {
+    width: 100%;
+    margin: 30px auto;
+    font-family: Arial, sans-serif;
+}
+
+.toppers-title {
+    background: #023a7a;
+    color: white;
+    padding: 5px;
+    text-align: center;
+    font-size: 30px;
+    font-weight: bolder;
+    margin-bottom: 20px;
+}
+
+.toppers-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.class-box {
+    width: 48%;
+    text-align: center;
+}
+.middle-line {
+    width: 2px;
+    background-color: #023a7a;
+    margin: 0 10px;
+    display: inline-block;
+    height: 300px;
+}
+
+.class-title::before {
+    content: "";
+    display: inline-block;
+    width: 100px;
+    height: 1.79px;
+    background-color: #023a7a;
+    margin-bottom: 9px;
+    margin-right: 18px;
+}
+.class-title {
+    color: #023a7a;
+    font-size: 30px;
+    margin-bottom: 15px;
+    font-weight: bolder;
+}
+.class-title::after {
+    content: "";
+    display: inline-block;
+    width: 100px;
+    height: 1.79px;
+    background-color: #023a7a;
+    margin-bottom: 9px;
+    margin-left: 18px;
+}
+.students {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+}
+
+.student {
+    width: 160px;
+    height: 160px;
+    text-align: center;
+}
+
+.student img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border: 2px solid #023a7a;
+    border-radius: 4px;
+}
+
+.name {
+    margin: 5px 0 0;
+    font-size: 19px;
+    font-weight: 500;
+    color: #131212; /* Red text for name */
+}
+
+.percent {
+    margin: 0;
+    font-size: 16px;
+    color: #cc0000;
+    font-weight: bold;
+}
+
+/****************** Academics(Results) Page CSS End ******************/
+
+/****************** Downloads(Transfer Certificate) Page CSS Start ******************/
+
+/* Card Styling */
+.tc-card {
+    background: #ffffff;
+    border-radius: 15px;
+}
+
+/* Gradient Text */
+.text-gradient {
+    background: linear-gradient(90deg, #6a11cb, #2575fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Input focus */
+.form-control:focus {
+    border-color: #2575fc;
+    box-shadow: 0 0 8px rgba(37, 117, 252, 0.3);
+}
+
+/* Gradient Button */
+.btn-gradient {
+    background: linear-gradient(90deg, #6a11cb, #2575fc);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    transition: all 0.3s ease-in-out;
+}
+
+/****************** Downloads(Transfer Certificate) Page CSS End ******************/
+
+/****************** Admission(School Fee) Page CSS Start ******************/
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap");
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+    color: #1a237e;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+h2 {
+    color: #3949ab;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+.card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    padding: 25px;
+    margin-bottom: 30px;
+}
+
+.download-section {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.dowload-btn {
+    display: inline-block;
+    padding: 14px 28px;
+    background: #d32f2f;
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3);
+    border: none;
+    cursor: pointer;
+}
+
+.dowload-btn:hover {
+    background: #b71c1c;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(211, 47, 47, 0.4);
+}
+
+.dowload-btn i {
+    margin-right: 8px;
+}
+
+.instructions {
+    text-align: center;
+    margin-top: 15px;
+    color: #666;
+    font-size: 16px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+th {
+    background-color: #3949ab;
+    color: white;
+    text-align: left;
+    padding: 15px;
+    font-weight: 500;
+}
+
+td {
+    padding: 14px 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+tr:hover {
+    background-color: #f1f3f9;
+}
+
+.total-row {
+    font-weight: 600;
+    background-color: #e8eaf6 !important;
+}
+
+.notes {
+    background-color: #e8eaf6;
+    padding: 25px;
+    border-radius: 8px;
+    margin: 25px 0;
+}
+
+.notes h3 {
+    margin-top: 0;
+    color: #1a237e;
+    border-bottom: 2px solid #3949ab;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+ol {
+    padding-left: 20px;
+}
+
+li {
+    margin-bottom: 12px;
+    line-height: 1.6;
+}
+
+.declaration {
+    margin-top: 40px;
+    padding: 25px;
+    border: 1px dashed #999;
+    border-radius: 8px;
+    background: #f9f9f9;
+}
+
+.declaration h3 {
+    margin-top: 0;
+    color: #1a237e;
+    border-bottom: 2px solid #3949ab;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.form-fields {
+    margin: 25px 0;
+}
+
+.form-field {
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+}
+
+.form-field label {
+    width: 180px;
+    font-weight: 500;
+    color: #555;
+}
+
+.dotted-line {
+    flex-grow: 1;
+    border-bottom: 1px dotted #999;
+    margin: 0 10px;
+    height: 20px;
+}
+
+.highlight {
+    background-color: #ffecb3;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+footer {
+    text-align: center;
+    margin-top: 40px;
+    color: #666;
+    padding: 20px;
+    font-size: 15px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .btn {
+        padding: 12px 24px;
+        font-size: 16px;
+    }
+
+    .form-field {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .form-field label {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+    .dotted-line {
+        width: 100%;
+        margin: 5px 0;
+    }
+}
+/****************** Admission(School Fee) Page CSS End ******************/
+
+/****************** Gallery(Photo Gallery) Page CSS Start ******************/
+.gallery-block .section-title {
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+}
+
+.lightbox {
+    width: 300px;
+    height: 200px;
+    padding: 10px;
+}
+
+.gallery-block .item .image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* box full fill, main part of image visible */
+    transition: transform 0.5s ease;
+}
+
+.gallery-block .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    padding: 15px;
+}
+
+.gallery-block .item:hover .image {
+    transform: scale(1.1);
+}
+
+.gallery-block .item:hover .overlay {
+    opacity: 1;
+}
+
+.gallery-block .overlay h5 {
+    font-size: 1.25rem;
+    color: wheat;
+    font-weight: bolder;
+    margin-bottom: 10px;
+}
+
+.gallery-block .overlay p {
+    font-size: 0.85rem;
+    line-height: 1.2;
+    font-weight: 300;
+}
+
+/****************** Gallery(Photo Gallery) Page CSS End ******************/
+
+/* Small custom styles for better look */
+.prospectus-hero {
+    background: linear-gradient(135deg, #f8fafc, #eef2ff);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+}
+.feature-icon {
+    font-size: 1.5rem;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.6rem;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+}
+.facts .card {
+    border: 0;
+    background: #fff;
+    box-shadow: 0 6px 18px rgba(14, 30, 50, 0.06);
+}
+.btn-cta {
+    background: #0d6efd;
+    color: #fff;
+}
+.curriculum-list li {
+    margin-bottom: 0.35rem;
+}
+@media (max-width: 767px) {
+    .prospectus-hero {
+        text-align: center;
+    }
+}
+
+/**** prospectus ******/
+.custom-accordion .custom-accordion-header:hover {
+    background: #e3f2fd;
+}
+
+.custom-accordion .custom-accordion-header {
+    transition: background 1s;
+}
+
+.custom-accordion-body {
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out;
+}

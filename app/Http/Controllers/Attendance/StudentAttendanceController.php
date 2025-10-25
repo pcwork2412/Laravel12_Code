@@ -1,0 +1,241 @@
+<?php
+
+namespace App\Http\Controllers\Attendance;
+
+use App\Http\Controllers\Controller;
+use App\Models\Attendance\StudentAttendance;
+use App\Models\Masters\Section;
+use App\Models\Masters\StdClass;
+use App\Models\Students\Crud;
+use Illuminate\Http\Request;
+use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Distributions\StudentT;
+use Yajra\DataTables\Facades\DataTables;
+
+class StudentAttendanceController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+     // 🧾 Step 1: Index View
+    public function index(Request $request)
+    {
+        // 🧠 Step 2: AJAX request handle
+        if ($request->ajax()) {
+
+            // ✅ Fetch all attendance records with relations
+            $data = StudentAttendance::with(['student', 'section','class'])
+                ->latest();
+
+                  // ✅ Filter by class if not "All"
+                if ($request->class_id && $request->class_id != 'All') {
+                    $data->where('class_id', $request->class_id);
+                }
+                // ✅ Filter by section if not "All"
+                if ($request->section_id && $request->section_id != 'All') {
+                    $data->where('section_id', $request->section_id);
+                }
+
+            return DataTables::of($data)
+                ->addIndexColumn()
+
+                // 🧩 Student Name Column
+                ->addColumn('student_name', function ($row) {
+                    return $row->student->student_name ?? 'N/A';
+                })
+
+                // 🧩 Class 
+                ->addColumn('class', function ($row) {
+                    return $row->class->class_name ?? '';
+                })
+                //  Section Name Column
+                ->addColumn('section', function ($row) {
+                    return "Sec-".trim($row->section->section_name) ?? '';
+                })
+
+                // 🧩 Date Column
+                ->editColumn('date', function ($row) {
+                    return \Carbon\Carbon::parse($row->date)->format('d M Y');
+                })
+                // edit reason agr null hai to "-" hojaye
+                ->editColumn('reason', function ($row) {
+                    return $row->reason ?? '-';
+                })
+
+                // 🧩 Status Badge Column
+                ->addColumn('status_badge', function ($row) {
+                    $color = match ($row->status) {
+                        'Present' => 'success',
+                        'Absent' => 'danger',
+                        'Leave' => 'warning',
+                        default => 'secondary'
+                    };
+                    return "<span class='badge bg-$color p-2 fw-normal fs-6'>$row->status</span>";
+                })
+
+                // 🧩 Action Buttons Column
+                ->addColumn('action', function ($row) {
+                    return '
+                        <button class="btn btn-sm btn-info editBtn" data-id="'.$row->id.'">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger deleteBtn" data-id="'.$row->id.'">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    ';
+                })
+
+                // ⚙️ Allow HTML in columns
+                ->rawColumns(['status_badge', 'action'])
+                ->make(true);
+        }
+        $classes = StdClass::all();
+        // 🖥️ Step 3: Return the index view
+        return view('school_dashboard.admin_pages.students.attendance.index', compact('classes'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $classes = StdClass::all();
+        return view('school_dashboard.admin_pages.students.attendance.create', compact('classes'));
+    }
+
+    // Class select -> sections load
+    // public function fetchSections(Request $request)
+    // {
+    //     $sections = Section::where('class_id', $request->class_id)->get();
+    //     return response()->json($sections);
+    // }
+
+    // Section select -> students load
+    public function fetchStudents(Request $request)
+    {
+        $students = Crud::where('section_id', $request->section_id)->where('class_id', $request->class_id)->get();
+        return response()->json($students);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+   public function store(Request $request)
+{
+    // 🧾 Step 1: Basic validation
+    $request->validate([
+        'class_id'   => 'required|exists:std_classes,id',
+        'section_id'   => 'required|exists:sections,id',
+        'date'         => 'required|date',
+        'student_ids'  => 'required|array',
+    ]);
+
+    // 🚫 Step 2: Check if attendance already exists
+    $exists = StudentAttendance::where('date', $request->date)
+        ->where('section_id', $request->section_id)
+        ->where('class_id', $request->class_id)
+        ->exists();
+
+    if ($exists) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Attendance already exists for this Class,Section and date.'
+        ]);
+    }
+
+    // 📦 Step 3: Get data safely
+    $absent  = $request->absent ?? [];
+    $leave   = $request->leave ?? [];
+    $reasons = $request->reason ?? [];
+
+    // ⚠️ Step 4: Leave reason required validation
+    foreach ($leave as $studentId) {
+        if (empty($reasons[$studentId])) {
+            return response()->json([
+                'success' => false,
+                'message' => "Please provide a reason for student ID: $studentId (Leave)."
+            ]);
+        }
+    }
+
+    // 🧠 Step 5: Save attendance
+    foreach ($request->student_ids as $studentId) {
+
+        // Leave > Absent > Present
+        if (in_array($studentId, $leave)) {
+            $status = 'Leave';
+        } elseif (in_array($studentId, $absent)) {
+            $status = 'Absent';
+        } else {
+            $status = 'Present';
+        }
+
+        StudentAttendance::create([
+            'student_id' => $studentId,
+            'section_id' => $request->section_id,
+            'class_id'   => $request->class_id,
+            'date'       => $request->date,
+            'status'     => $status,
+            'reason'     => $reasons[$studentId] ?? null,
+        ]);
+    }
+
+    // ✅ Step 6: Success response
+    return response()->json([
+        'success' => true,
+        'message' => 'Attendance created successfully.'
+    ]);
+}
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(StudentAttendance $studentAttendance)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+       // ✏️ Step 4: Edit Record
+   public function edit($id)
+{
+    $attendance = StudentAttendance::with('student')->findOrFail($id);
+
+    return response()->json([
+        'id' => $attendance->id,
+        'student_name' => $attendance->student->student_name, // assuming relation 'student'
+        'date' => $attendance->date,
+        'status' => $attendance->status,
+        'reason' => $attendance->reason,
+    ]);
+}
+
+public function update(Request $request, $id)
+{
+    $request->validate([
+        'status' => 'required|in:Present,Absent,Leave',
+        'reason' => 'required_if:status,Leave',
+    ]);
+
+    $attendance = StudentAttendance::findOrFail($id);
+    $attendance->status = $request->status;
+    $attendance->reason = $request->reason;
+    $attendance->save();
+
+    return response()->json(['message' => 'Attendance updated successfully!']);
+}
+
+
+    /**
+     * Remove the specified resource from storage.
+     */
+       // ❌ Step 6: Delete Record
+    public function destroy($id)
+    {
+        $attendance = StudentAttendance::findOrFail($id);
+        $attendance->delete();
+
+        return response()->json(['success' => true, 'message' => 'Record deleted successfully.']);
+    }
+}

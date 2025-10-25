@@ -1,0 +1,77 @@
+[26-Oct-2024 09:40:55 UTC] PHP Warning:  move_uploaded_file(uploads/671cb927f2d841729935655.jpg): Failed to open stream: No such file or directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 96
+[26-Oct-2024 09:40:55 UTC] PHP Warning:  move_uploaded_file(): Unable to move &quot;/tmp/phpLjERiA&quot; to &quot;uploads/671cb927f2d841729935655.jpg&quot; in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 96
+[26-Oct-2024 09:40:55 UTC] PHP Warning:  unlink(uploads/670023d8165131728062424.jpg): No such file or directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 98
+[26-Oct-2024 09:41:29 UTC] PHP Warning:  move_uploaded_file(uploads/671cb949443cb1729935689.jpg): Failed to open stream: No such file or directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 96
+[26-Oct-2024 09:41:29 UTC] PHP Warning:  move_uploaded_file(): Unable to move &quot;/tmp/phpabqdF3&quot; to &quot;uploads/671cb949443cb1729935689.jpg&quot; in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 96
+[26-Oct-2024 09:41:29 UTC] PHP Warning:  unlink(uploads/671cb927f2d841729935655.jpg): No such file or directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 98
+[26-Oct-2024 09:44:47 UTC] PHP Warning:  move_uploaded_file(uploads/671cba0f3f6381729935887.jpg): Failed to open stream: No such file or directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 96
+[26-Oct-2024 09:44:47 UTC] PHP Warning:  move_uploaded_file(): Unable to move &quot;/tmp/phphAL6cd&quot; to &quot;uploads/671cba0f3f6381729935887.jpg&quot; in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 96
+[26-Oct-2024 09:44:47 UTC] PHP Warning:  unlink(uploads/671cb949443cb1729935689.jpg): No such file or directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 98
+[26-Oct-2024 09:46:17 UTC] PHP Warning:  move_uploaded_file(uploads/671cba69b5de01729935977.avif): Failed to open stream: No such file or directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 96
+[26-Oct-2024 09:46:17 UTC] PHP Warning:  move_uploaded_file(): Unable to move &quot;/tmp/phpi9buZq&quot; to &quot;uploads/671cba69b5de01729935977.avif&quot; in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 96
+[26-Oct-2024 09:46:17 UTC] PHP Warning:  unlink(uploads/671cba0f3f6381729935887.jpg): No such file or directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 98
+[26-Oct-2024 09:47:20 UTC] PHP Warning:  move_uploaded_file(uploads/671cbaa8829af1729936040.avif): Failed to open stream: No such file or directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 96
+[26-Oct-2024 09:47:20 UTC] PHP Warning:  move_uploaded_file(): Unable to move &quot;/tmp/phpli4an5&quot; to &quot;uploads/671cbaa8829af1729936040.avif&quot; in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 96
+[26-Oct-2024 09:47:20 UTC] PHP Warning:  unlink(uploads/671c7549444381729918281.png): No such file or directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 98
+[26-Oct-2024 09:47:34 UTC] PHP Warning:  unlink(uploads/671cbaa8829af1729936040.avif): No such file or directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 134
+[26-Oct-2024 09:47:56 UTC] PHP Warning:  move_uploaded_file(uploads/671cbacc850f81729936076.avif): Failed to open stream: No such file or directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 96
+[26-Oct-2024 09:47:56 UTC] PHP Warning:  move_uploaded_file(): Unable to move &quot;/tmp/phpdIwfwc&quot; to &quot;uploads/671cbacc850f81729936076.avif&quot; in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 96
+[26-Oct-2024 09:47:56 UTC] PHP Warning:  unlink(uploads/671cba69b5de01729935977.avif): No such file or directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 98
+[26-Oct-2024 09:49:55 UTC] PHP Warning:  move_uploaded_file(uploads/671cbb43ecf2d1729936195.png): Failed to open stream: No such file or directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 34
+[26-Oct-2024 09:49:55 UTC] PHP Warning:  move_uploaded_file(): Unable to move &quot;/tmp/phpownCXk&quot; to &quot;uploads/671cbb43ecf2d1729936195.png&quot; in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 34
+[26-Oct-2024 09:51:24 UTC] PHP Warning:  move_uploaded_file(././uploads/671cbb9c435201729936284.avif): Failed to open stream: No such file or directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 34
+[26-Oct-2024 09:51:24 UTC] PHP Warning:  move_uploaded_file(): Unable to move &quot;/tmp/phpXSdwMg&quot; to &quot;././uploads/671cbb9c435201729936284.avif&quot; in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 34
+[26-Oct-2024 09:52:32 UTC] PHP Warning:  move_uploaded_file(uploads/671cbbe0e83641729936352.avif): Failed to open stream: No such file or directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 96
+[26-Oct-2024 09:52:32 UTC] PHP Warning:  move_uploaded_file(): Unable to move &quot;/tmp/phpv7DERr&quot; to &quot;uploads/671cbbe0e83641729936352.avif&quot; in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 96
+[26-Oct-2024 09:52:32 UTC] PHP Warning:  unlink(uploads/671cbacc850f81729936076.avif): No such file or directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 98
+[26-Oct-2024 09:53:08 UTC] PHP Warning:  move_uploaded_file(uploads/671cbc04a286d1729936388.avif): Failed to open stream: No such file or directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 96
+[26-Oct-2024 09:53:08 UTC] PHP Warning:  move_uploaded_file(): Unable to move &quot;/tmp/php6niSMW&quot; to &quot;uploads/671cbc04a286d1729936388.avif&quot; in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 96
+[26-Oct-2024 09:53:08 UTC] PHP Warning:  unlink(uploads/671cbbe0e83641729936352.avif): No such file or directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 98
+[26-Oct-2024 09:53:55 UTC] PHP Warning:  move_uploaded_file(uploads/671cbc338bda21729936435.avif): Failed to open stream: No such file or directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 96
+[26-Oct-2024 09:53:55 UTC] PHP Warning:  move_uploaded_file(): Unable to move &quot;/tmp/phpnnNcJH&quot; to &quot;uploads/671cbc338bda21729936435.avif&quot; in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 96
+[26-Oct-2024 09:53:55 UTC] PHP Warning:  unlink(uploads/671cbc04a286d1729936388.avif): No such file or directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 98
+[26-Oct-2024 11:28:27 UTC] PHP Warning:  move_uploaded_file(uploads/671cd25b3cfa31729942107.avif): Failed to open stream: No such file or directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 96
+[26-Oct-2024 11:28:27 UTC] PHP Warning:  move_uploaded_file(): Unable to move &quot;/tmp/phpOSUlK2&quot; to &quot;uploads/671cd25b3cfa31729942107.avif&quot; in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 96
+[26-Oct-2024 11:28:27 UTC] PHP Warning:  unlink(uploads/67012d36f0fd31728130358.jpg): No such file or directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 98
+[26-Oct-2024 11:28:55 UTC] PHP Warning:  move_uploaded_file(uploads/671cd277e47421729942135.png): Failed to open stream: No such file or directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 96
+[26-Oct-2024 11:28:55 UTC] PHP Warning:  move_uploaded_file(): Unable to move &quot;/tmp/phphoQ8L1&quot; to &quot;uploads/671cd277e47421729942135.png&quot; in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 96
+[26-Oct-2024 11:28:55 UTC] PHP Warning:  unlink(uploads/671cd25b3cfa31729942107.avif): No such file or directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 98
+[26-Oct-2024 11:30:50 UTC] PHP Warning:  unlink(uploads/671cbc338bda21729936435.avif): No such file or directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/server.php on line 98
+[26-Oct-2024 12:19:50 UTC] PHP Warning:  Undefined array key "id" in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/load-table.php on line 18
+[26-Oct-2024 12:19:50 UTC] PHP Fatal error:  Uncaught Error: mysqli object is already closed in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/load-table.php:20
+Stack trace:
+#0 /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/load-table.php(20): mysqli_query(Object(mysqli), 'SELECT * FROM u...')
+#1 {main}
+  thrown in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/load-table.php on line 20
+[26-Oct-2024 12:24:32 UTC] PHP Warning:  Undefined array key "id" in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/load-table.php on line 18
+[26-Oct-2024 12:24:32 UTC] PHP Fatal error:  Uncaught Error: mysqli object is already closed in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/load-table.php:20
+Stack trace:
+#0 /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/load-table.php(20): mysqli_query(Object(mysqli), 'SELECT * FROM u...')
+#1 {main}
+  thrown in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/load-table.php on line 20
+[26-Oct-2024 12:31:38 UTC] PHP Warning:  Undefined array key "id" in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/load-table.php on line 18
+[26-Oct-2024 12:31:38 UTC] PHP Fatal error:  Uncaught Error: mysqli object is already closed in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/load-table.php:20
+Stack trace:
+#0 /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/load-table.php(20): mysqli_query(Object(mysqli), 'SELECT * FROM u...')
+#1 {main}
+  thrown in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/load-table.php on line 20
+[26-Oct-2024 12:32:05 UTC] PHP Warning:  Undefined array key "id" in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/save.php on line 41
+[26-Oct-2024 12:32:05 UTC] PHP Deprecated:  mysqli_real_escape_string(): Passing null to parameter #2 ($string) of type string is deprecated in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/save.php on line 41
+[26-Oct-2024 12:32:05 UTC] PHP Warning:  Undefined array key "image_old" in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/save.php on line 54
+[26-Oct-2024 12:32:05 UTC] PHP Warning:  unlink(uploads/): Is a directory in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/save.php on line 54
+[26-Oct-2024 12:32:05 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1 in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/save.php:59
+Stack trace:
+#0 /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/save.php(59): mysqli_query(Object(mysqli), 'UPDATE `users` ...')
+#1 {main}
+  thrown in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/save.php on line 59
+[26-Oct-2024 12:32:05 UTC] PHP Warning:  Undefined array key "id" in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/load-table.php on line 18
+[26-Oct-2024 12:32:05 UTC] PHP Fatal error:  Uncaught Error: mysqli object is already closed in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/load-table.php:20
+Stack trace:
+#0 /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/load-table.php(20): mysqli_query(Object(mysqli), 'SELECT * FROM u...')
+#1 {main}
+  thrown in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/load-table.php on line 20
+[26-Oct-2024 12:32:17 UTC] PHP Fatal error:  Uncaught Error: mysqli object is already closed in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/load-table.php:20
+Stack trace:
+#0 /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/load-table.php(20): mysqli_query(Object(mysqli), 'SELECT * FROM u...')
+#1 {main}
+  thrown in /home/gwwotmty/ecom.khalsagro.com/crud-test/Master/Customer/load-table.php on line 20
