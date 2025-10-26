@@ -103,7 +103,7 @@ class TeacherAttendanceController extends Controller
         if ($exists) {
             return response()->json([
                 'success' => false,
-                'message' => 'Attendance already exists for this Class,Section and date.'
+                'message' => 'Attendance already exists for this date.'
             ]);
         }
 
@@ -115,9 +115,12 @@ class TeacherAttendanceController extends Controller
         // ⚠️ Step 4: Leave reason required validation
         foreach ($leave as $teacherId) {
             if (empty($reasons[$teacherId])) {
+                   // Teacher name fetch karte hain
+            $teacher = TeacherCrud::find($teacherId);
+            $teacherName = $teacher ? $teacher->teacher_name : 'Unknown Teacher';
                 return response()->json([
                     'success' => false,
-                    'message' => "Please provide a reason for teacher ID: $teacherId (Leave)."
+                    'message' => "Please provide a reason for Teacher Name: {$teacherName} (Leave)."
                 ]);
             }
         }

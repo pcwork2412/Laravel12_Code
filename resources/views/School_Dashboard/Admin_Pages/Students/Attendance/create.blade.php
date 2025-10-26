@@ -48,11 +48,11 @@
                     <table class="table table-bordered" id="studentTable" style="display:none;">
                         <thead>
                             <tr>
-                                <th style="width:40px;"><input type="checkbox" id="selectAll"></th>
                                 <th>Roll</th>
                                 <th>Student Name</th>
                                 <th>Father Mobile</th>
-                                <th style="width:100px;">Leave</th>
+                                <th><input type="checkbox" id="selectAbsentAll"> Absents</th>
+                                <th><input type="checkbox" id="selectLeaveAll"> Leave</th>
                                 <th>Reason (if Leave)</th>
                             </tr>
                         </thead>
@@ -148,14 +148,15 @@
                         students.forEach(s => {
                             rows += `
                         <tr>
-                            <td>
-                                <input type="checkbox" class="absentCheckbox" name="absent[]" value="${s.id}">
-                            </td>
+                         
                                 <td>${s.student_uid ?? ''}</td>
                                 <td>${s.student_name}</td>
                             <td>${s.father_mobile ?? '-'}</td>
+                               <td>
+                                <input type="checkbox" class="absentCheckbox" name="absent[]" value="${s.id}"> Absent
+                            </td>
                         <td>
-                                <input type="checkbox" class="leaveCheckbox" name="leave[]" value="${s.id}">
+                                <input type="checkbox" class="leaveCheckbox" name="leave[]" value="${s.id}"> Leave
                                     </td>
                                     <td>
                                     <input type="text" 
@@ -174,7 +175,8 @@
                         $('#studentTable, #submitAttendance').show();
 
                         // 🧼 Step 9: Reset "Select All" checkbox
-                        $('#selectAll').prop('checked', false);
+                        $('#selectAbsentAll').prop('checked', false);
+                        $('#selectLeaveAll').prop('checked', false);
                     })
                     .fail(function() {
                         // ❌ Error handling
@@ -192,8 +194,11 @@
 
 
             // Select all / deselect all for absent checkboxes
-            $(document).on('change', '#selectAll', function() {
+            $(document).on('change', '#selectAbsentAll', function() {
                 $('.absentCheckbox').prop('checked', $(this).prop('checked'));
+            });
+            $(document).on('change', '#selectLeaveAll', function() {
+                $('.leaveCheckbox').prop('checked', $(this).prop('checked'));
             });
 
             // 🟢 Attendance form submit event

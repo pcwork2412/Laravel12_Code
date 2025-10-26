@@ -150,12 +150,16 @@ class StudentAttendanceController extends Controller
     $leave   = $request->leave ?? [];
     $reasons = $request->reason ?? [];
 
-    // ⚠️ Step 4: Leave reason required validation
+     // ⚠️ Step 4: Validate Leave reason
     foreach ($leave as $studentId) {
         if (empty($reasons[$studentId])) {
+            // Student name fetch karte hain
+            $student = Crud::find($studentId);
+            $studentName = $student ? $student->student_name : 'Unknown Student';
+
             return response()->json([
                 'success' => false,
-                'message' => "Please provide a reason for student ID: $studentId (Leave)."
+                'message' => "Please provide a reason for student Name: {$studentName} (Leave)."
             ]);
         }
     }
