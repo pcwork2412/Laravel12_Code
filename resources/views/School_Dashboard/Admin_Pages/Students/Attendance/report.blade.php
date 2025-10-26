@@ -10,25 +10,20 @@
 
 <style>
     .attendance-container {
-        /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
         min-height: 100vh;
         padding: 2rem 0;
+        background: #f5f7fa;
     }
     
     .attendance-card {
         background: #ffffff;
         border-radius: 20px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
         overflow: hidden;
-        transition: transform 0.3s ease;
     }
-/*     
-    .attendance-card:hover {
-        transform: translateY(-5px);
-    } */
     
     .card-header-custom {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
         color: white;
         padding: 2rem;
         border-radius: 20px 20px 0 0;
@@ -44,7 +39,7 @@
     }
     
     .header-subtitle {
-        opacity: 0.9;
+        opacity: 0.95;
         font-size: 0.95rem;
     }
     
@@ -72,13 +67,13 @@
     
     .btn-print {
         background: white;
-        color: #667eea;
+        color: #4F46E5;
         border-color: white;
     }
     
     .btn-print:hover {
-        background: #f8f9fa;
-        color: #667eea;
+        background: #F9FAFB;
+        color: #4338CA;
     }
     
     .btn-list {
@@ -88,14 +83,15 @@
     }
     
     .btn-list:hover {
-        background: white;
-        color: #764ba2;
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
     }
     
     .student-info-card {
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%);
         border-radius: 15px;
         margin: 2rem 0;
+        border: 1px solid #C7D2FE;
     }
     
     .info-item {
@@ -106,20 +102,20 @@
     .info-icon {
         width: 50px;
         height: 50px;
-        background: white;
+        background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         margin: 0 auto 1rem;
         font-size: 1.5rem;
-        color: #667eea;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+        color: white;
+        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
     }
     
     .info-label {
         font-size: 0.85rem;
-        color: #6c757d;
+        color: #6B7280;
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.5px;
@@ -129,15 +125,16 @@
     .info-value {
         font-size: 1.1rem;
         font-weight: 700;
-        color: #2d3748;
+        color: #1F2937;
     }
     
     .month-selector {
-        background: #f8f9fa;
+        background: #F9FAFB;
         padding: 1.5rem;
         border-radius: 15px;
         margin-bottom: 2rem;
         text-align: center;
+        border: 1px solid #E5E7EB;
     }
     
     .month-input-wrapper {
@@ -147,11 +144,17 @@
         background: white;
         padding: 0.75rem 1.5rem;
         border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        border: 1px solid #E5E7EB;
+        cursor: pointer;
+        transition: all 0.3s ease;
     }
-    
+    .month-input-wrapper:hover {
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+        border-color: #4F46E5;
+    }
     .month-input-wrapper i {
-        color: #667eea;
+        color: #4F46E5;
         font-size: 1.25rem;
     }
     
@@ -159,25 +162,25 @@
         border: none;
         outline: none;
         font-weight: 600;
-        color: #2d3748;
+        color: #1F2937;
         font-size: 1rem;
     }
     
     .calendar-table {
         border-radius: 15px;
         overflow: hidden;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.06);
     }
     
     .calendar-table thead {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
     }
     
     .calendar-table thead th {
-       padding: 1rem 1rem;
+         padding: 1rem 1rem;
         font-weight: 700;
         text-transform: uppercase;
-        font-size: 0.9rem;
+        font-size: 1rem;
         letter-spacing: 0.8px;
         border: rgb(187, 186, 186) 1px solid;
         position: relative;
@@ -195,79 +198,60 @@
     
     .calendar-table thead th i {
         margin-right: 0.5rem;
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
     
     .calendar-table tbody td {
         padding: 1.5rem 0.75rem;
-        font-weight: 700;
+        font-weight: 600;
         font-size: 1.1rem;
-        border: 2px solid #e2e8f0;
+        border: 2px solid #F3F4F6;
         transition: all 0.3s ease;
-        position: relative;
         background: white;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        color: #374151;
     }
     
     .calendar-table tbody td:hover {
-        background: #f8f9fa;
+        background: #F9FAFB;
         transform: scale(1.05);
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
         z-index: 10;
     }
     
     .calendar-table tbody td.bg-success {
-        background: linear-gradient(135deg, #48bb78 0%, #38a169 100%) !important;
+        background: linear-gradient(135deg, #10B981 0%, #059669 100%) !important;
         color: white;
-        box-shadow: 0 4px 15px rgba(72, 187, 120, 0.4) !important;
-        border-color: #38a169;
+        box-shadow: 0 3px 12px rgba(16, 185, 129, 0.3) !important;
+        border-color: #059669;
     }
     
     .calendar-table tbody td.bg-success:hover {
         transform: scale(1.08);
-        box-shadow: 0 6px 20px rgba(72, 187, 120, 0.5) !important;
+        box-shadow: 0 5px 18px rgba(16, 185, 129, 0.4) !important;
     }
     
     .calendar-table tbody td.bg-danger {
-        background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%) !important;
+        background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%) !important;
         color: white;
-        box-shadow: 0 4px 15px rgba(245, 101, 101, 0.4) !important;
-        border-color: #e53e3e;
+        box-shadow: 0 3px 12px rgba(239, 68, 68, 0.3) !important;
+        border-color: #DC2626;
     }
     
     .calendar-table tbody td.bg-danger:hover {
         transform: scale(1.08);
-        box-shadow: 0 6px 20px rgba(245, 101, 101, 0.5) !important;
+        box-shadow: 0 5px 18px rgba(239, 68, 68, 0.4) !important;
     }
     
     .calendar-table tbody td.bg-warning {
-        background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%) !important;
+        background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%) !important;
         color: white;
-        box-shadow: 0 4px 15px rgba(237, 137, 54, 0.4) !important;
-        border-color: #dd6b20;
+        box-shadow: 0 3px 12px rgba(245, 158, 11, 0.3) !important;
+        border-color: #D97706;
     }
     
     .calendar-table tbody td.bg-warning:hover {
         transform: scale(1.08);
-        box-shadow: 0 6px 20px rgba(237, 137, 54, 0.5) !important;
-    }
-    
-    .calendar-table tbody td::before {
-        content: '';
-        position: absolute;
-        top: -2px;
-        left: -2px;
-        right: -2px;
-        bottom: -2px;
-        border-radius: 8px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        z-index: -1;
-    }
-    
-    .calendar-table tbody td:hover::before {
-        opacity: 0.1;
+        box-shadow: 0 5px 18px rgba(245, 158, 11, 0.4) !important;
     }
     
     .legend-section {
@@ -282,8 +266,21 @@
         padding: 0.75rem 1.5rem;
         border-radius: 12px;
         font-weight: 600;
-        margin: 0 0.5rem;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        margin: 0 0.5rem 0.5rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        color: white;
+    }
+    
+    .legend-badge.bg-success {
+        background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    }
+    
+    .legend-badge.bg-danger {
+        background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+    }
+    
+    .legend-badge.bg-warning {
+        background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
     }
     
     .legend-badge i {
@@ -291,10 +288,11 @@
     }
     
     .summary-section {
-        background: #f8f9fa;
+        background: #F9FAFB;
         border-radius: 15px;
         padding: 2rem;
         margin-top: 2rem;
+        border: 1px solid #E5E7EB;
     }
     
     .summary-item {
@@ -302,13 +300,14 @@
         padding: 1.5rem;
         background: white;
         border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
         transition: all 0.3s ease;
+        border: 1px solid #F3F4F6;
     }
     
     .summary-item:hover {
         transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     }
     
     .summary-icon {
@@ -323,23 +322,27 @@
     }
     
     .summary-icon.present {
-        background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        background: linear-gradient(135deg, #10B981 0%, #059669 100%);
         color: white;
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
     }
     
     .summary-icon.absent {
-        background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+        background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
         color: white;
+        box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
     }
     
     .summary-icon.leave {
-        background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+        background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
         color: white;
+        box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
     }
     
     .summary-icon.rate {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
         color: white;
+        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
     }
     
     .summary-value {
@@ -348,9 +351,25 @@
         margin-bottom: 0.5rem;
     }
     
+    .summary-value.text-success {
+        color: #10B981;
+    }
+    
+    .summary-value.text-danger {
+        color: #EF4444;
+    }
+    
+    .summary-value.text-warning {
+        color: #F59E0B;
+    }
+    
+    .summary-value.text-primary {
+        color: #4F46E5;
+    }
+    
     .summary-label {
         font-size: 0.9rem;
-        color: #6c757d;
+        color: #6B7280;
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.5px;
@@ -442,10 +461,10 @@
 
                 <!-- Month Selector -->
                 <div class="month-selector">
-                    <form method="GET" action="{{ route('student_attendance.show', $student->id) }}">
-                        <div class="month-input-wrapper">
-                            <i class="bi bi-calendar3"></i>
-                            <input type="month" name="month" value="{{ $selectedMonth }}" 
+                    <label for="" class="fs-5 fw-bold">Select Month </label>
+                    <form method="GET" action="{{ route('student_attendance.show', $student->id) }}" id="monthForm">
+                      <div class="month-input-wrapper" onclick="document.getElementById('monthInput').showPicker()">
+                            <input type="month" name="month" id="monthInput" value="{{ $selectedMonth }}" 
                                    class="form-control-plaintext" onchange="this.form.submit()">
                             <i class="bi bi-chevron-down"></i>
                         </div>
@@ -587,23 +606,19 @@
 <script>
     document.getElementById('printReportBtn').addEventListener('click', () => {
         try {
-            // Get jsPDF
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             
-            // Student Data
             const studentName = "{{ $student->student_name }}";
             const studentEmail = "{{ $student->email_id }}";
             const studentId = "{{ $student->student_uid }}";
             const studentClass = "{{ $student->promoted_class_name ?? 'N/A' }}";
             const selectedMonth = "{{ $selectedMonth }}";
             
-            // Attendance data
             const attendanceData = @json($attendanceData);
             const daysInMonth = {{ $daysInMonth }};
             const firstDayOfWeek = {{ Carbon::createFromDate($year, $month, 1)->dayOfWeek }};
             
-            // Calculate summary
             let presentCount = 0;
             let absentCount = 0;
             let leaveCount = 0;
@@ -615,8 +630,7 @@
             const totalMarked = presentCount + absentCount + leaveCount;
             const attendanceRate = totalMarked > 0 ? Math.round((presentCount / totalMarked) * 100) : 0;
             
-            // PDF Title
-            doc.setFillColor(102, 126, 234);
+            doc.setFillColor(79, 70, 229);
             doc.rect(0, 0, 210, 35, 'F');
             doc.setTextColor(255, 255, 255);
             doc.setFontSize(20);
@@ -626,7 +640,6 @@
             doc.setFont(undefined, 'normal');
             doc.text('Track and monitor attendance with detailed calendar view', 105, 25, { align: 'center' });
             
-            // Student Information Table
             doc.setTextColor(0, 0, 0);
             doc.setFontSize(12);
             doc.setFont(undefined, 'bold');
@@ -638,7 +651,7 @@
                 body: [[studentName, studentEmail, studentClass, studentId]],
                 theme: 'grid',
                 headStyles: { 
-                    fillColor: [102, 126, 234],
+                    fillColor: [79, 70, 229],
                     textColor: [255, 255, 255],
                     fontStyle: 'bold',
                     halign: 'center'
@@ -650,25 +663,21 @@
                 margin: { left: 14, right: 14 }
             });
             
-            // Month
             const finalY = doc.lastAutoTable.finalY || 70;
             doc.setFontSize(11);
             doc.setFont(undefined, 'bold');
             doc.text(`Month: ${selectedMonth}`, 14, finalY + 10);
             
-            // Build calendar table data
             const calendarData = [];
             const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
             
             let day = 1;
             let currentWeek = [];
             
-            // Add empty cells before first day
             for (let i = 0; i < firstDayOfWeek; i++) {
                 currentWeek.push('');
             }
             
-            // Fill calendar days
             while (day <= daysInMonth) {
                 const status = attendanceData[day] || '';
                 const cellContent = status ? `${day}\n(${status})` : `${day}`;
@@ -681,7 +690,6 @@
                 day++;
             }
             
-            // Fill remaining cells in last week
             while (currentWeek.length > 0 && currentWeek.length < 7) {
                 currentWeek.push('');
             }
@@ -689,7 +697,6 @@
                 calendarData.push(currentWeek);
             }
             
-            // Attendance Calendar Table
             doc.setFontSize(12);
             doc.setFont(undefined, 'bold');
             doc.text('Attendance Calendar', 14, finalY + 20);
@@ -700,7 +707,7 @@
                 body: calendarData,
                 theme: 'grid',
                 headStyles: {
-                    fillColor: [102, 126, 234],
+                    fillColor: [79, 70, 229],
                     textColor: [255, 255, 255],
                     fontStyle: 'bold',
                     halign: 'center',
@@ -725,15 +732,15 @@
                     if (data.section === 'body' && data.cell.text[0]) {
                         const cellText = data.cell.text[0];
                         if (cellText.includes('(P)')) {
-                            data.cell.styles.fillColor = [72, 187, 120];
+                            data.cell.styles.fillColor = [16, 185, 129];
                             data.cell.styles.textColor = [255, 255, 255];
                             data.cell.styles.fontStyle = 'bold';
                         } else if (cellText.includes('(A)')) {
-                            data.cell.styles.fillColor = [245, 101, 101];
+                            data.cell.styles.fillColor = [239, 68, 68];
                             data.cell.styles.textColor = [255, 255, 255];
                             data.cell.styles.fontStyle = 'bold';
                         } else if (cellText.includes('(L)')) {
-                            data.cell.styles.fillColor = [237, 137, 54];
+                            data.cell.styles.fillColor = [245, 158, 11];
                             data.cell.styles.textColor = [255, 255, 255];
                             data.cell.styles.fontStyle = 'bold';
                         }
@@ -742,27 +749,22 @@
                 margin: { left: 14, right: 14 }
             });
             
-            // Legend
             const legendY = doc.lastAutoTable.finalY + 10;
             doc.setFontSize(10);
             doc.setFont(undefined, 'normal');
             
-            // Present legend
-            doc.setFillColor(72, 187, 120);
+            doc.setFillColor(16, 185, 129);
             doc.rect(40, legendY - 3, 8, 5, 'F');
             doc.text('Present (P)', 50, legendY);
             
-            // Absent legend
-            doc.setFillColor(245, 101, 101);
+            doc.setFillColor(239, 68, 68);
             doc.rect(85, legendY - 3, 8, 5, 'F');
             doc.text('Absent (A)', 95, legendY);
             
-            // Leave legend
-            doc.setFillColor(237, 137, 54);
+            doc.setFillColor(245, 158, 11);
             doc.rect(130, legendY - 3, 8, 5, 'F');
             doc.text('Leave (L)', 140, legendY);
             
-            // Summary Table
             doc.setFontSize(12);
             doc.setFont(undefined, 'bold');
             doc.text('Attendance Summary', 14, legendY + 15);
@@ -773,7 +775,7 @@
                 body: [[presentCount, absentCount, leaveCount, `${attendanceRate}%`]],
                 theme: 'grid',
                 headStyles: {
-                    fillColor: [102, 126, 234],
+                    fillColor: [79, 70, 229],
                     textColor: [255, 255, 255],
                     fontStyle: 'bold',
                     halign: 'center'
@@ -784,15 +786,14 @@
                     fontStyle: 'bold'
                 },
                 columnStyles: {
-                    0: { textColor: [72, 187, 120] },
-                    1: { textColor: [245, 101, 101] },
-                    2: { textColor: [237, 137, 54] },
-                    3: { textColor: [102, 126, 234] }
+                    0: { textColor: [16, 185, 129] },
+                    1: { textColor: [239, 68, 68] },
+                    2: { textColor: [245, 158, 11] },
+                    3: { textColor: [79, 70, 229] }
                 },
                 margin: { left: 14, right: 14 }
             });
             
-            // Save PDF
             doc.save(`Student_Attendance_${studentName}_${selectedMonth}.pdf`);
             
         } catch (err) {

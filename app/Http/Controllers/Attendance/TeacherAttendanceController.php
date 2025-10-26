@@ -17,10 +17,14 @@ class TeacherAttendanceController extends Controller
     {
         // 🧠 Step 2: AJAX request handle
         if ($request->ajax()) {
-
             // ✅ Fetch all attendance records with relations
-            $data = TeacherAttendance::with(['teacher'])
-                ->latest();
+              $data = TeacherAttendance::with(['teacher'])->latest();
+
+        // ✅ Date filter apply
+        $date = $request->attendance_date ?? now()->toDateString();
+        $data->where('date', $date);
+
+        // ✅ Return DataTable
             return DataTables::of($data)
                 ->addIndexColumn()
 
@@ -70,6 +74,63 @@ class TeacherAttendanceController extends Controller
         }
         // 🖥️ Step 3: Return the index view
         return view('school_dashboard.admin_pages.teachers.attendance.index');
+    }
+    public function report(Request $request)
+    {
+        // 🧠 Step 2: AJAX request handle
+        if ($request->ajax()) {
+            // ✅ Fetch all attendance records with relations
+              $data = TeacherAttendance::with(['teacher'])->latest();
+
+        // ✅ Date filter apply
+        $date = $request->attendance_date ?? now()->toDateString();
+        $data->where('date', $date);
+
+        // ✅ Return DataTable
+            return DataTables::of($data)
+                ->addIndexColumn()
+
+                // 🧩 Teacher Name Column
+                ->addColumn('teacher_name', function ($row) {
+                    return $row->teacher->teacher_name ?? 'N/A';
+                })
+
+                // 🧩 Date Column
+                ->editColumn('date', function ($row) {
+                    return \Carbon\Carbon::parse($row->date)->format('d M Y');
+                })
+                // edit reason agr null hai to "-" hojaye
+                ->editColumn('reason', function ($row) {
+                    return $row->reason ?? '-';
+                })
+
+                // 🧩 Status Badge Column
+                ->addColumn('status_badge', function ($row) {
+                    $color = match ($row->status) {
+                        'Present' => 'success',
+                        'Absent' => 'danger',
+                        'Leave' => 'warning',
+                        default => 'secondary'
+                    };
+                    return "<span class='badge bg-$color p-2 fw-normal fs-6'>$row->status</span>";
+                })
+
+                // 🧩 Action Buttons Column
+                ->addColumn('action', function ($row) {
+                    return '
+                        <button class="btn btn-sm btn-warning text-white viewTeacherAttendanceBtn" data-id="' . $row->teacher_id . '">
+                            <i class="fas fa-eye"></i> View Full Report
+                        </button>
+                      
+                    ';
+                })
+
+                // ⚙️ Allow HTML in columns
+                ->rawColumns(['status_badge', 'action'])
+                ->make(true);
+        }
+        // 🖥️ Step 3: Return the index view
+        return view('school_dashboard.admin_pages.teachers.attendance.reportlist');
     }
 
     /**

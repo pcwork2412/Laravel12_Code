@@ -4,12 +4,12 @@
         {{-- Attendance Table --}}
         <div class="card shadow-sm border-0 rounded-3">
             <div class="card-header d-flex justify-content-between bg-primary text-white">
-                <h3 class="mb-0"><i class="fas fa-calendar-check me-2"></i> Student Attendance Records</h3>
-                <div class="card-tools">
+                <h3 class="mb-0"><i class="fas fa-eye me-2"></i> View Student Attendance Report</h3>
+                {{-- <div class="card-tools">
                     <a href="{{ route('student_attendance.create') }}" class="btn btn-light">
                         <i class="fa fa-plus me-1"></i> Add Attendance
                     </a>
-                </div>
+                </div> --}}
             </div>
             <div class="card-body">
                 <div class="row d-flex justify-content-start align-items-center mb-3">
@@ -122,7 +122,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('student_attendance.index') }}",
+                    url: "{{ route('student_attendance.report') }}",
                     data: function(d) {
                         d.class_id = $('#classFilter').val();
                         d.section_id = $('#sectionFilter').val();
@@ -132,75 +132,75 @@
                 },
                 responsive: true,
                 // 🧩 Buttons config
-                dom: `
-             <"d-flex justify-content-between align-items-center "
-                <"col-auto"l>
-                <"col text-center"B>
-                <"col-auto"f>
-              >
-              t
-              t<'d-flex justify-content-between mt-2'<'col'i><'col-auto'p>>
+            //     dom: `
+            //  <"d-flex justify-content-between align-items-center "
+            //     <"col-auto"l>
+            //     <"col text-center"B>
+            //     <"col-auto"f>
+            //   >
+            //   t
+            //   t<'d-flex justify-content-between mt-2'<'col'i><'col-auto'p>>
                         
-             `,
+            //  `,
 
-                buttons: [{
-                        extend: 'copy',
-                        text: '<i class="fas fa-copy"></i> Copy',
-                        className: 'btn btn-sm btn-outline-primary',
-                        init: function(api, node, config) {
-                            $(node).removeClass('dt-button');
-                        },
-                        exportOptions: {
-                            columns: ':visible:not(:last-child)' // 👈 last column (action) exclude
-                        }
-                    },
-                    {
-                        extend: 'csv',
-                        text: '<i class="fas fa-file-csv"></i> CSV',
-                        className: 'btn btn-sm btn-outline-success',
-                        init: function(api, node, config) {
-                            $(node).removeClass('dt-button');
-                        },
-                        exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5] // 👈 sirf ye columns export honge
-                        }
-                    },
-                    {
-                        extend: 'excelHtml5',
-                        text: '<i class="fas fa-file-excel"></i> Excel',
-                        className: 'btn btn-sm btn-outline-success',
-                        title: 'Student Attendance Report',
-                        filename: 'attendance_report_' + new Date().toISOString().slice(0, 10),
-                        init: function(api, node, config) {
-                            $(node).removeClass('dt-button');
-                        },
-                        exportOptions: {
-                            columns: ':not(:last-child)' // 👈 last column (action) ko skip karega
-                        }
-                    },
-                    {
-                        extend: 'pdfHtml5',
-                        text: '<i class="fas fa-file-pdf"></i> PDF',
-                        className: 'btn btn-sm btn-outline-danger',
-                        init: function(api, node, config) {
-                            $(node).removeClass('dt-button');
-                        },
-                        exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5] // 👈 sirf ye columns export honge
-                        }
-                    },
-                    {
-                        extend: 'print',
-                        text: '<i class="fas fa-print"></i> Print',
-                        className: 'btn btn-sm btn-outline-primary',
-                        init: function(api, node, config) {
-                            $(node).removeClass('dt-button');
-                        },
-                        exportOptions: {
-                            columns: ':visible:not(:last-child)' // 👈 last column (action) exclude
-                        }
-                    }
-                ],
+                // buttons: [{
+                //         extend: 'copy',
+                //         text: '<i class="fas fa-copy"></i> Copy',
+                //         className: 'btn btn-sm btn-outline-primary',
+                //         init: function(api, node, config) {
+                //             $(node).removeClass('dt-button');
+                //         },
+                //         exportOptions: {
+                //             columns: ':visible:not(:last-child)' // 👈 last column (action) exclude
+                //         }
+                //     },
+                //     {
+                //         extend: 'csv',
+                //         text: '<i class="fas fa-file-csv"></i> CSV',
+                //         className: 'btn btn-sm btn-outline-success',
+                //         init: function(api, node, config) {
+                //             $(node).removeClass('dt-button');
+                //         },
+                //         exportOptions: {
+                //             columns: [0, 1, 2, 3, 4, 5] // 👈 sirf ye columns export honge
+                //         }
+                //     },
+                //     {
+                //         extend: 'excelHtml5',
+                //         text: '<i class="fas fa-file-excel"></i> Excel',
+                //         className: 'btn btn-sm btn-outline-success',
+                //         title: 'Student Attendance Report',
+                //         filename: 'attendance_report_' + new Date().toISOString().slice(0, 10),
+                //         init: function(api, node, config) {
+                //             $(node).removeClass('dt-button');
+                //         },
+                //         exportOptions: {
+                //             columns: ':not(:last-child)' // 👈 last column (action) ko skip karega
+                //         }
+                //     },
+                //     {
+                //         extend: 'pdfHtml5',
+                //         text: '<i class="fas fa-file-pdf"></i> PDF',
+                //         className: 'btn btn-sm btn-outline-danger',
+                //         init: function(api, node, config) {
+                //             $(node).removeClass('dt-button');
+                //         },
+                //         exportOptions: {
+                //             columns: [0, 1, 2, 3, 4, 5] // 👈 sirf ye columns export honge
+                //         }
+                //     },
+                //     {
+                //         extend: 'print',
+                //         text: '<i class="fas fa-print"></i> Print',
+                //         className: 'btn btn-sm btn-outline-primary',
+                //         init: function(api, node, config) {
+                //             $(node).removeClass('dt-button');
+                //         },
+                //         exportOptions: {
+                //             columns: ':visible:not(:last-child)' // 👈 last column (action) exclude
+                //         }
+                //     }
+                // ],
                 order: [
                     [0, 'desc']
                 ],

@@ -85,13 +85,16 @@ Route::middleware(['role:admin,teacher'])->group(function () {
     // *********** Attendance Routes
     
 Route::resource('/student_attendance', StudentAttendanceController::class);
-Route::get('/attendance/fetch-sections', [StudentAttendanceController::class, 'fetchSections'])->name('attendance.fetchSections');
+
 Route::get('/attendance/fetch-students', [StudentAttendanceController::class, 'fetchStudents'])->name('attendance.fetchStudents');
 
+Route::get('/attendance/report-student', [StudentAttendanceController::class, 'report'])->name('student_attendance.report');
 
 
 Route::resource('/teacher_attendance', TeacherAttendanceController::class);
 Route::get('/attendance/fetch-teachers', [TeacherAttendanceController::class, 'fetchTeachers'])->name('attendance.fetchTeachers');
+
+Route::get('/attendance/report-teachers', [TeacherAttendanceController::class, 'report'])->name('teacher_attendance.report');
 
 
     // *********** Global Resuable Routes
@@ -119,7 +122,7 @@ Route::middleware('role:admin')->group(function () {
 });
 
 
-require __DIR__ . '/auth.php';
+// require __DIR__ . '/auth.php';
 require __DIR__ . '/dashboard_routes/admin_routes.php';
 require __DIR__ . '/dashboard_routes/teacher_routes.php';
 require __DIR__ . '/dashboard_routes/student_routes.php';

@@ -272,11 +272,19 @@
                             <a href="{{ route('teacher_attendance.create') }}"><i
                                     class="fa-solid fa-plus-circle"style="font-size:18px;"></i>&nbsp;&nbsp;Teacher Attedance</a>
                         </li>
-                        {{-- <li>
-                            <a href="{{ route('students.classwiseIdForm') }}"><i
-                                    class="fa-solid fa-users"style="font-size:18px;"></i>&nbsp;&nbsp;Generate Class
-                                Wise</a>
-                        </li> --}}
+                            {{-- Student Report --}}
+        <li>
+            <a href="{{ route('student_attendance.report') }}">
+                <i class="fa-solid fa-calendar-days" style="font-size:18px;"></i>&nbsp;&nbsp;Student Report
+            </a>
+        </li>
+
+        {{-- Teacher Report --}}
+        <li>
+            <a href="{{ route('teacher_attendance.report') }}">
+                <i class="fa-solid fa-calendar-check" style="font-size:18px;"></i>&nbsp;&nbsp;Teacher Report
+            </a>
+        </li>
                     </ul>
                 </li>
 
