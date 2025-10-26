@@ -75,6 +75,9 @@ class StudentAttendanceController extends Controller
                 // 🧩 Action Buttons Column
                 ->addColumn('action', function ($row) {
                     return '
+                        <button class="btn btn-sm btn-warning text-white viewBtn" data-id="' . $row->student_id . '">
+                            <i class="fas fa-eye"></i>
+                        </button>
                         <button class="btn btn-sm btn-info editBtn" data-id="'.$row->id.'">
                             <i class="fas fa-edit"></i>
                         </button>
@@ -189,10 +192,48 @@ class StudentAttendanceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(StudentAttendance $studentAttendance)
-    {
-        //
+       public function show(Request $request, $id)
+{
+    $student = Crud::findOrFail($id);
+
+    // 🗓 Select month from input or current month
+    $selectedMonth = $request->get('month') ?? now()->format('Y-m');
+
+    // Parse month + year from the input
+    $date = \Carbon\Carbon::createFromFormat('Y-m', $selectedMonth);
+    $month = $date->month;
+    $year = $date->year;
+
+    // 🎯 Get attendance for selected month
+    $attendance = StudentAttendance::where('student_id', $id)
+        ->whereMonth('date', $month)
+        ->whereYear('date', $year)
+        ->get(['date', 'status']);
+
+    // 🗂️ Convert to [day => status] array
+    $attendanceData = [];
+    foreach ($attendance as $record) {
+        $day = \Carbon\Carbon::parse($record->date)->day;
+        // P = Present, A = Absent, L = Leave
+        $status = match(strtolower($record->status)) {
+            'present' => 'P',
+            'absent' => 'A',
+            'leave' => 'L',
+            default => '-'
+        };
+        $attendanceData[$day] = $status;
     }
+
+    // 🔹 Pass data to view
+    return view('school_dashboard.admin_pages.students.attendance.report', [
+        'student' => $student,
+        'attendanceData' => $attendanceData,
+        'selectedMonth' => $selectedMonth,
+        'month' => $month,
+        'year' => $year,
+    ]);
+}
+
 
     /**
      * Show the form for editing the specified resource.

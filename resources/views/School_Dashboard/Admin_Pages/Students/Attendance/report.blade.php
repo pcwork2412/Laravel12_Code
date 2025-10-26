@@ -22,11 +22,11 @@
         overflow: hidden;
         transition: transform 0.3s ease;
     }
-    
-    /* .attendance-card:hover {
+/*     
+    .attendance-card:hover {
         transform: translateY(-5px);
     } */
-
+    
     .card-header-custom {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
@@ -92,10 +92,9 @@
         color: #764ba2;
     }
     
-    .teacher-info-card {
+    .student-info-card {
         background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         border-radius: 15px;
-        /* padding: 0.7rem; */
         margin: 2rem 0;
     }
     
@@ -178,7 +177,7 @@
        padding: 1rem 1rem;
         font-weight: 700;
         text-transform: uppercase;
-        font-size: 1rem;
+        font-size: 0.9rem;
         letter-spacing: 0.8px;
         border: rgb(187, 186, 186) 1px solid;
         position: relative;
@@ -200,9 +199,9 @@
     }
     
     .calendar-table tbody td {
-        padding: 1.75rem 0.7rem;
+        padding: 1.5rem 0.75rem;
         font-weight: 700;
-        font-size: 1.25rem;
+        font-size: 1.1rem;
         border: 2px solid #e2e8f0;
         transition: all 0.3s ease;
         position: relative;
@@ -377,7 +376,7 @@
                     <div>
                         <h1 class="header-title">
                             <i class="bi bi-calendar-check"></i>
-                            Teacher Monthly Attendance
+                            Student Monthly Attendance
                         </h1>
                         <p class="header-subtitle mb-0">
                             <i class="bi bi-info-circle"></i>
@@ -390,7 +389,7 @@
                             <i class="bi bi-printer-fill"></i>
                             Print Report
                         </button>
-                        <a href="{{route('teacher_attendance.index')}}" class="btn btn-modern btn-list">
+                        <a href="{{route('student_attendance.index')}}" class="btn btn-modern btn-list">
                             <i class="bi bi-list-ul"></i>
                             Attendance List
                         </a>
@@ -399,34 +398,43 @@
             </div>
 
             <div class="p-4">
-                <!-- Teacher Info -->
-                <div class="teacher-info-card">
+                <!-- Student Info -->
+                <div class="student-info-card">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="info-item">
                                 <div class="info-icon">
                                     <i class="bi bi-person-fill"></i>
                                 </div>
-                                <div class="info-label">Teacher Name</div>
-                                <div class="info-value">{{ $teacher->teacher_name }}</div>
+                                <div class="info-label">Student Name</div>
+                                <div class="info-value">{{ $student->student_name }}</div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="info-item">
                                 <div class="info-icon">
                                     <i class="bi bi-envelope-fill"></i>
                                 </div>
                                 <div class="info-label">Email Address</div>
-                                <div class="info-value">{{ $teacher->email }}</div>
+                                <div class="info-value">{{ $student->email_id }}</div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="bi bi-book-fill"></i>
+                                </div>
+                                <div class="info-label">Class</div>
+                                <div class="info-value">{{ $student->promoted_class_name ?? 'N/A' }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
                             <div class="info-item">
                                 <div class="info-icon">
                                     <i class="bi bi-credit-card-fill"></i>
                                 </div>
-                                <div class="info-label">Teacher ID</div>
-                                <div class="info-value">{{ $teacher->teacher_id }}</div>
+                                <div class="info-label">Student ID</div>
+                                <div class="info-value">{{ $student->student_uid }}</div>
                             </div>
                         </div>
                     </div>
@@ -434,7 +442,7 @@
 
                 <!-- Month Selector -->
                 <div class="month-selector">
-                    <form method="GET" action="{{ route('teacher_attendance.show', $teacher->id) }}">
+                    <form method="GET" action="{{ route('student_attendance.show', $student->id) }}">
                         <div class="month-input-wrapper">
                             <i class="bi bi-calendar3"></i>
                             <input type="month" name="month" value="{{ $selectedMonth }}" 
@@ -579,13 +587,15 @@
 <script>
     document.getElementById('printReportBtn').addEventListener('click', () => {
         try {
+            // Get jsPDF
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             
-            // Teacher Data
-            const teacherName = "{{ $teacher->teacher_name }}";
-            const teacherEmail = "{{ $teacher->email }}";
-            const teacherId = "{{ $teacher->teacher_id }}";
+            // Student Data
+            const studentName = "{{ $student->student_name }}";
+            const studentEmail = "{{ $student->email_id }}";
+            const studentId = "{{ $student->student_uid }}";
+            const studentClass = "{{ $student->promoted_class_name ?? 'N/A' }}";
             const selectedMonth = "{{ $selectedMonth }}";
             
             // Attendance data
@@ -611,21 +621,21 @@
             doc.setTextColor(255, 255, 255);
             doc.setFontSize(20);
             doc.setFont(undefined, 'bold');
-            doc.text('Teacher Monthly Attendance Report', 105, 15, { align: 'center' });
+            doc.text('Student Monthly Attendance Report', 105, 15, { align: 'center' });
             doc.setFontSize(10);
             doc.setFont(undefined, 'normal');
             doc.text('Track and monitor attendance with detailed calendar view', 105, 25, { align: 'center' });
             
-            // Teacher Information Table
+            // Student Information Table
             doc.setTextColor(0, 0, 0);
             doc.setFontSize(12);
             doc.setFont(undefined, 'bold');
-            doc.text('Teacher Information', 14, 45);
+            doc.text('Student Information', 14, 45);
             
             doc.autoTable({
                 startY: 50,
-                head: [['Teacher Name', 'Email', 'Teacher ID']],
-                body: [[teacherName, teacherEmail, teacherId]],
+                head: [['Student Name', 'Email', 'Class', 'Student ID']],
+                body: [[studentName, studentEmail, studentClass, studentId]],
                 theme: 'grid',
                 headStyles: { 
                     fillColor: [102, 126, 234],
@@ -635,7 +645,7 @@
                 },
                 bodyStyles: { 
                     halign: 'center',
-                    fontSize: 10
+                    fontSize: 9
                 },
                 margin: { left: 14, right: 14 }
             });
@@ -783,7 +793,7 @@
             });
             
             // Save PDF
-            doc.save(`Teacher_Attendance_${teacherName}_${selectedMonth}.pdf`);
+            doc.save(`Student_Attendance_${studentName}_${selectedMonth}.pdf`);
             
         } catch (err) {
             console.error(err);

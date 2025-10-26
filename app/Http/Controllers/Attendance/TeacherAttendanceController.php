@@ -152,42 +152,47 @@ class TeacherAttendanceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, $id)
-    {
-        $teacher = \App\Models\Teacher\TeacherCrud::findOrFail($id);
+public function show(Request $request, $id)
+{
+    $teacher = TeacherCrud::findOrFail($id);
 
-        // 🗓 Select month from input or current month
-        $selectedMonth = $request->get('month') ?? now()->format('Y-m');
+    // 🗓 Select month from input or current month
+    $selectedMonth = $request->get('month') ?? now()->format('Y-m');
 
-        // Parse month + year from the input
-        $date = \Carbon\Carbon::createFromFormat('Y-m', $selectedMonth);
-        $month = $date->month;
-        $year = $date->year;
+    // Parse month + year from the input
+    $date = \Carbon\Carbon::createFromFormat('Y-m', $selectedMonth);
+    $month = $date->month;
+    $year = $date->year;
 
-        // 🎯 Get attendance for selected month
-        $attendance = \App\Models\Attendance\TeacherAttendance::where('teacher_id', $id)
-            ->whereMonth('date', $month)
-            ->whereYear('date', $year)
-            ->get(['date', 'status']);
+    // 🎯 Get attendance for selected month
+    $attendance = TeacherAttendance::where('teacher_id', $id)
+        ->whereMonth('date', $month)
+        ->whereYear('date', $year)
+        ->get(['date', 'status']);
 
-        // 🗂️ Convert to [day => status] array
-        $attendanceData = [];
-        foreach ($attendance as $record) {
-            $day = \Carbon\Carbon::parse($record->date)->day;
-            $status = strtolower($record->status) === 'present' ? 'P' : 'A';
-            $attendanceData[$day] = $status;
-        }
-
-        // 🔹 Pass data to view
-        return view('school_dashboard.admin_pages.teachers.attendance.report', [
-            'teacher' => $teacher,
-            'attendanceData' => $attendanceData,
-            'selectedMonth' => $selectedMonth,
-            'month' => $month,
-            'year' => $year,
-        ]);
+    // 🗂️ Convert to [day => status] array
+    $attendanceData = [];
+    foreach ($attendance as $record) {
+        $day = \Carbon\Carbon::parse($record->date)->day;
+        // P = Present, A = Absent, L = Leave
+        $status = match(strtolower($record->status)) {
+            'present' => 'P',
+            'absent' => 'A',
+            'leave' => 'L',
+            default => '-'
+        };
+        $attendanceData[$day] = $status;
     }
 
+    // 🔹 Pass data to view
+    return view('school_dashboard.admin_pages.teachers.attendance.report', [
+        'teacher' => $teacher,
+        'attendanceData' => $attendanceData,
+        'selectedMonth' => $selectedMonth,
+        'month' => $month,
+        'year' => $year,
+    ]);
+}
 
     /**
      * Show the form for editing the specified resource.
