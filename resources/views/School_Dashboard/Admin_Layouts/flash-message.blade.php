@@ -3,7 +3,7 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
                 {{-- Success and Error Messages --}}
-                @if (session('success'))
+                {{-- @if (session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         {{ session('success') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -14,7 +14,7 @@
                         {{ session('error') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                @endif
+                @endif --}}
 @if (session('success'))
 <script>
 document.addEventListener("DOMContentLoaded", function () {
@@ -69,4 +69,19 @@ document.addEventListener("DOMContentLoaded", function () {
     }).showToast();
 });
 </script>
+@endif
+{{-- ✅ Success Message --}}
+@if (session('success'))
+    <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
+        <strong>✅ सफलता!</strong> {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
+{{-- ✅ Error Message --}}
+@if (session('error'))
+    <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
+        {!! session('error') !!}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 @endif

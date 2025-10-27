@@ -574,6 +574,7 @@
         </style>
     @endpush
     @push('scripts')
+    
         <script src="{{ asset('pos/assets/js/CustomJS/Global/global.js') }}"></script>
         <script src="{{ asset('pos/assets/js/CustomJS/Students/studentajax.js') }}"></script>
     @endpush

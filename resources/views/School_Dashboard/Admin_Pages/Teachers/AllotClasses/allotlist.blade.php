@@ -160,10 +160,9 @@
                 <i class="fa-solid fa-chalkboard-teacher me-2"></i>Allotted Teachers List
             </h3>
             <!-- 🔹 Button to trigger modal -->
-            <button type="button" id="teacherAllotBtn" class="btn btn-primary" data-bs-toggle="modal"
-                data-bs-target="#teacherAllotModal">
+            <a href="{{route('admin_teachers_allot.create')}}" class="btn btn-primary">
                 <i class="fa-solid fa-plus-circle me-1"></i> Allot Teacher
-            </button>
+            </a>
         </div>
     </div>
     <div class="card shadow-sm border-0 rounded-1">

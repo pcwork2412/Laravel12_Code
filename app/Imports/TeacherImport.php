@@ -2,72 +2,85 @@
 
 namespace App\Imports;
 
-use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Concerns\ToCollection;
-use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use App\Models\Teacher\TeacherCrud;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Ramsey\Uuid\Uuid;
 
 class TeacherImport implements ToModel, WithHeadingRow
 {
-    /**
-    * @param Collection $collection
-    */
-     public function model(array $row)
-    {   
-        $teacherid = null;
-        $password = null;
+    public $successCount = 0;
+    public $errorDetails = [];
 
-        // 1. Required fields check
-        if (empty($row['teacher_name']) || empty($row['email'])) {
-            throw new \Exception("Teacher name और Email खाली नहीं हो सकते!");
-        }
-        // 2. DOB parse
-        $dob = null;
-        if (!empty($row['dob'])) {
-            try {
-                $dob = Carbon::parse($row['dob'])->format('Y-m-d');
-            } catch (\Exception $e) {
-                throw new \Exception("DOB का format गलत है!");
+    public function model(array $row)
+    {
+        try {
+            // 🔹 Validate required fields
+            if (empty($row['teacher_name']) || empty($row['email'])) {
+                throw new \Exception("Teacher name या email खाली नहीं हो सकते।");
             }
-        }   
-        $img=null;
-          if (isset($row['image']) && !empty($row['image'])) {
-            $img = $row['image'];
-        } else {
-            $img = asset('pos/images/default_profile.jpg');
-        }
-        
-        
 
-         do {
-            $uuid = Uuid::uuid4()->toString();
-            $teacherid = 'TID' . substr(preg_replace('/[^0-9]/', '', $uuid), 0, 8);
-        } while (TeacherCrud::where('teacher_id', $teacherid)->exists());
-         do {
-            $uuid = Uuid::uuid4()->toString();
-            $password = 'TPW' . substr(preg_replace('/[^0-9]/', '', $uuid), 0, 8);
-        } while (TeacherCrud::where('teacher_id', bcrypt($password))->exists());
-        return new TeacherCrud([
-            'teacher_id'    => $teacherid,
-            'teacher_name'  => $row['teacher_name'],
-            'email'         => $row['email'],
-            'password'      => $password,
-            'qualification' => $row['qualification'],
-            'experience'    => $row['experience'],
-            'image'         => $img,
-            'role'          => 'teacher',
-            'status'        => 'pending', // default
-            'dob'           => $dob,
-            'gender'        => $row['gender'],
-            'mobile'        => $row['mobile'],
-            'address'       => $row['address'],
-            'city'          => $row['city'],
-            'state'         => $row['state'],
-            'pincode'       => $row['pincode'],
-            'documents'     => 'null',
-        ]);
+            // 🔹 Unique email check
+            if (TeacherCrud::where('email', $row['email'])->exists()) {
+                throw new \Exception("Email पहले से मौजूद है ({$row['email']})");
+            }
+
+            // 🔹 DOB parse
+            $dob = null;
+            if (!empty($row['dob'])) {
+                try {
+                    $dob = Carbon::parse($row['dob'])->format('Y-m-d');
+                } catch (\Exception $e) {
+                    throw new \Exception("DOB का format गलत है ({$row['dob']})");
+                }
+            }
+
+            // 🔹 Default image
+            $img = !empty($row['image'])
+                ? $row['image']
+                : asset('pos/images/default_profile.jpg');
+
+            // 🔹 Unique Teacher ID generate
+            do {
+                $uuid = Uuid::uuid4()->toString();
+                $teacherid = 'TID' . substr(preg_replace('/[^0-9]/', '', $uuid), 0, 8);
+            } while (TeacherCrud::where('teacher_id', $teacherid)->exists());
+
+            // 🔹 Random Password
+            $password = 'TPW' . substr(preg_replace('/[^0-9]/', '', Uuid::uuid4()->toString()), 0, 8);
+
+            // 🔹 Create record
+            TeacherCrud::create([
+                'teacher_id'    => $teacherid,
+                'teacher_name'  => $row['teacher_name'],
+                'email'         => $row['email'],
+                'password'      => bcrypt($password),
+                'qualification' => $row['qualification'] ?? null,
+                'experience'    => preg_replace('/[^0-9]/', '', $row['experience'] ?? 0),
+                'image'         => $img,
+                'role'          => 'teacher',
+                'status'        => 'pending',
+                'dob'           => $dob,
+                'gender'        => $row['gender'] ?? null,
+                'mobile'        => $row['mobile'] ?? null,
+                'address'       => $row['address'] ?? null,
+                'city'          => $row['city'] ?? null,
+                'state'         => $row['state'] ?? null,
+                'pincode'       => $row['pincode'] ?? null,
+                'documents'     => null,
+            ]);
+
+            $this->successCount++;
+
+        } catch (\Exception $e) {
+            // 🔸 Error capture
+            $this->errorDetails[] = [
+                'row'    => $row['email'] ?? 'Unknown',
+                'reason' => $e->getMessage(),
+            ];
+            Log::error('Teacher Import Error: ' . $e->getMessage());
+        }
     }
 }

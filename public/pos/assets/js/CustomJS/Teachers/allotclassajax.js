@@ -115,7 +115,7 @@ $(document).ready(function () {
                     close: true,
                 }).showToast();
 
-                allotTable.ajax.reload();
+                allotTable.ajax.reload(null, false);
             },
             error: function (xhr) {
                 form.find('button[type="submit"]')
@@ -296,7 +296,7 @@ $(document).ready(function () {
                     success: function (res) {
                         if (res.status === "success") {
                             Swal.fire("Deleted!", res.message, "success");
-                            allotTable.ajax.reload();
+                            allotTable.ajax.reload(null, false);
                             $("#teacherAllotForm")[0].reset();
                         } else {
                             Swal.fire(

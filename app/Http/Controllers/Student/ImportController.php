@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Imports\StudentsImport;
 use App\Models\Teacher\TeacherAllotment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -39,20 +40,36 @@ class ImportController extends Controller
     }
 
     public function import(Request $request)
-    {
-        $request->validate([
-            'file' => 'required|mimes:xlsx,xls,csv'
-        ]);
+{
+    $request->validate([
+        'file' => 'required|mimes:xlsx,xls,csv'
+    ]);
 
-        try {
-            Excel::import(new StudentsImport, $request->file('file'));
-            return back()->with('success', 'Students imported successfully!');
-        } catch (\Exception $e) {
-            $errorMessage = config('app.debug')
-                ? 'Import failed: ' . $e->getMessage()   // ✅ Dev mode (debug = true)
-                : 'Import failed! Please try again later.'; // ✅ Production mode (debug = false)
+    $import = new StudentsImport();
 
-            return back()->with('error', $errorMessage);
-        }
+    Excel::import($import, $request->file('file'));
+
+    $totalSuccess = $import->successCount;
+    $totalErrors = count($import->errorDetails);
+
+    // Error messages combine करें
+    $errorMessages = '';
+    foreach ($import->errorDetails as $err) {
+        $errorMessages .= "⛔ {$err['row']}: {$err['reason']}<br>";
     }
+
+    if ($totalErrors > 0) {
+        return back()->with([
+            'error' => "   Import completed with some errors:
+    <ul style='margin-top:5px;'>
+        <li>✅ Saved: {$totalSuccess}</li>
+        <li>❌ Errors: {$totalErrors}</li>
+        <li>⚠️ {$errorMessages}</li>
+    </ul>"
+        ]);
+    }
+
+    return back()->with('success', "✅ Import successful! Total records saved: {$totalSuccess}");
+}
+
 }
