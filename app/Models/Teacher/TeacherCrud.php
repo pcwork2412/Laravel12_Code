@@ -5,12 +5,15 @@ namespace App\Models\Teacher;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TeacherCrud extends Authenticatable
 {
     use HasFactory;
-    
-    protected $table = 'teacher_cruds';
+        use SoftDeletes;
+
+        protected $table = 'teacher_cruds';
+        protected $dates = ['deleted_at'];
     protected $fillable =[
         'teacher_id',
         'teacher_name',

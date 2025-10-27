@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 use Ramsey\Uuid\Uuid;
+use Yajra\DataTables\DataTables as DataTablesDataTables;
 use Yajra\DataTables\Facades\DataTables; // ✅ Correct Facade
 
 
@@ -139,9 +140,11 @@ class CrudController extends Controller
                         return '<a href="' . route('students.show', $row->id) . '" class="btn btn-success btn-sm fs-6 " title="View">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <button class="btn btn-sm fs-6  btn-info attendenceStudentBtn" data-id="' . $row->id . '"><i class="fa fa-user"></i></button>
-                            <button class="btn btn-sm fs-6  btn-warning editStudentBtn" data-id="' . $row->id . '"><i class="fa fa-pencil"></i></button>
-                            <button class="btn btn-sm fs-6  btn-danger deleteStudentBtn" data-id="' . $row->id . '"><i class="fa fa-trash"></i></button>';
+                            <a href="' . route('student_attendance.show', $row->id) . '" class="btn btn-info btn-sm fs-6 attendenceStudentBtn" title="Attendance Report">
+                               <i class="fa fa-user"></i>
+                            </a>
+                            <button class="btn btn-sm fs-6  btn-warning editStudentBtn" data-id="' . $row->id . '" title="Edit"><i class="fa fa-pencil"></i></button>
+                            <button class="btn btn-sm fs-6  btn-danger deleteStudentBtn" data-id="' . $row->id . '" title="Delete"><i class="fa fa-trash"></i></button>';
                     })
                     ->rawColumns(['checkbox', 'student_name', 'image', 'actions'])
                     ->make(true);
@@ -541,64 +544,118 @@ class CrudController extends Controller
         return view($view, compact('student'));
     }
 
-
     public function destroy($id)
     {
         try {
-            // ✅ Student record uthao
             $student = Crud::findOrFail($id);
 
-            // ✅ Agar image hai toh delete karo
-            if ($student->image && Storage::disk('public')->exists($student->image)) {
-                Storage::disk('public')->delete($student->image);
-            }
-
-            // ✅ Student delete
-            $studentName = $student->student_name; // pehle store kar liya, warna delete ke baad null ho jayega
-            $student->delete();
+            $student->delete(); // ✅ Soft delete
 
             return response()->json([
-                'status'  => 'success',
-                'message' => "Student '{$studentName}' has been deleted successfully!",
-            ], 200);
+                'status' => 'success',
+                'message' => "छात्र '{$student->student_name}' को Soft Delete कर दिया गया है!"
+            ]);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json([
-                'status'  => 'error',
-                'message' => 'Student not found. Please refresh the page and try again.',
+                'status' => 'error',
+                'message' => 'Student record नहीं मिला!'
             ], 404);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
-                'message' => 'Unexpected server error occurred while deleting student.',
-                'debug'   => config('app.debug') ? $e->getMessage() : null,
+                'status' => 'error',
+                'message' => 'कुछ गड़बड़ हो गई: ' . $e->getMessage()
             ], 500);
         }
     }
 
-
     public function bulkDelete(Request $request)
     {
-        try {
-            $ids = $request->ids;
+        $ids = $request->ids;
+        Crud::whereIn('id', $ids)->delete();
+        return response()->json(['success' => true, 'message' => count($ids) . ' students soft deleted!']);
+    }
+    public function trashed(Request $request)
+    {
+        if ($request->ajax()) {
+            $students = Crud::onlyTrashed()->select(['id','student_name','student_uid','promoted_class_name','section','deleted_at']);
 
-            if (empty($ids)) {
-                return response()->json(['success' => false, 'message' => 'कोई रिकॉर्ड चयन नहीं किया गया।']);
-            }
-
-            Crud::whereIn('id', $ids)->delete();
-
-            return response()->json([
-                'success' => true,
-                'message' => count($ids) . ' students सफलतापूर्वक delete किए गए!'
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error: ' . $e->getMessage()
-            ]);
+            return DataTables::of($students)
+                ->addIndexColumn()
+                 ->editColumn('deleted_at', function ($row) {
+            return $row->deleted_at ? $row->deleted_at->format('D, d M Y') : '';
+        })
+                ->addColumn('actions', function ($row) {
+                    return '
+                    <button class="btn btn-sm btn-success restore-btn" data-id="' . $row->id . '">Restore</button>
+                    <button class="btn btn-sm btn-danger force-del-btn" data-id="' . $row->id . '">Permanent Delete</button>
+                ';
+                })
+                ->rawColumns(['actions'])
+                ->make(true);
         }
+
+        
+        return view('School_Dashboard.Admin_Pages.students.crud.trashed');
     }
 
+
+
+    public function restore($id)
+    {
+        $student = Crud::onlyTrashed()->findOrFail($id);
+        $student->restore();
+
+        return response()->json(['success' => true, 'message' => "{$student->student_name} restored successfully!"]);
+    }
+
+    public function forceDelete($id)
+    {
+        $student = Crud::onlyTrashed()->findOrFail($id);
+
+        if ($student->image && Storage::disk('public')->exists($student->image)) {
+            Storage::disk('public')->delete($student->image);
+        }
+
+        $student->forceDelete();
+        return response()->json(['success' => true, 'message' => "{$student->student_name} permanently deleted!"]);
+    }
+      // Bulk Restore
+    public function bulkRestore(Request $request)
+    {
+        $ids = $request->ids;
+
+        $students = Crud::onlyTrashed()->whereIn('id', $ids)->get();
+
+        foreach ($students as $student) {
+            $student->restore();
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => count($students) . " students restored successfully!"
+        ]);
+    }
+
+    // Bulk Permanent Delete
+    public function bulkforceDelete(Request $request)
+    {
+        $ids = $request->ids;
+
+        $students = Crud::onlyTrashed()->whereIn('id', $ids)->get();
+
+        foreach ($students as $student) {
+            // Delete image if exists
+            if ($student->image && Storage::disk('public')->exists($student->image)) {
+                Storage::disk('public')->delete($student->image);
+            }
+            $student->forceDelete();
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => count($students) . " students permanently deleted!"
+        ]);
+    }
 
     public function downloadPdf()
     {

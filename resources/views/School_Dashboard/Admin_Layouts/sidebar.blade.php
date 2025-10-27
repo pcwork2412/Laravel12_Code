@@ -288,17 +288,6 @@
                     </ul>
                 </li>
 
-                {{-- ID CARD TEMPLATE --}}
-                {{-- <li class="submenu">
-                    <a href="#"><i class="fa-solid fa-layer-group" style="font-size:18px;"></i>
-                        <span>ID Card Template</span> <span class="menu-arrow"></span></a>
-                    <ul style="display: none;">
-                        <li>
-                            <a href="{{ route('students.idcardtemplate') }}"><i class="fa-solid fa-file-pen" style="font-size:18px;"></i>&nbsp;&nbsp;Templates</a>
-                        </li>
-                    </ul>
-                </li> --}}
-
 
                 {{-- Add Gallery Images --}}
                 <div class=" bg-color">Website Section</div>
@@ -310,6 +299,22 @@
                             <a href="{{ route('gallery.index') }}"><i
                                     class="fa-solid fa-circle-plus fa-1x"style="font-size:18px;"></i>&nbsp;&nbsp;Add
                                 Image</a>
+                        </li>
+                    </ul>
+                </li>
+                {{-- Recycle Bin --}}
+                <div class=" bg-color">Recycle Bin</div>
+                <li class="submenu">
+                    <a href="#"><i class="bi bi-trash-fill fa-1x"style="font-size:18px;"></i>
+                        <span>Manage Deleted Data</span> <span class="menu-arrow"></span></a>
+                    <ul style="display: none;">
+                        <li>
+                            <a href="{{ route('students.trashed') }}"><i
+                                    class="bi bi-person fa-1x"style="font-size:18px;"></i>&nbsp;&nbsp;Students Data</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('teachers.trashed') }}"><i
+                                    class="bi bi-person fa-1x"style="font-size:18px;"></i>&nbsp;&nbsp;Teachers Data</a>
                         </li>
                     </ul>
                 </li>

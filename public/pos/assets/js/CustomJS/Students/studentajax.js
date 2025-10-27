@@ -14,14 +14,19 @@ $(document).ready(function () {
     var table = $("#studentTable").DataTable({
         processing: true,
         serverSide: true,
-        ajax:{
+        ajax: {
             url: $("#studentTable").data("url"), // URL from data attribute
-             data: function (d) {
-            d.class_id = $('#classFilter').val(); // pass selected class to server
-        }
+            data: function (d) {
+                d.class_id = $("#classFilter").val(); // pass selected class to server
+            },
         },
         columns: [
-            { data: 'checkbox', name: 'checkbox', orderable: false, searchable: false },
+            {
+                data: "checkbox",
+                name: "checkbox",
+                orderable: false,
+                searchable: false,
+            },
 
             {
                 data: "image",
@@ -48,95 +53,100 @@ $(document).ready(function () {
             console.error("DataTable Ajax Error:", xhr.responseText);
         },
     });
+
     // Reload table when class changes
-$('#classFilter').on('change', function () {
-    table.ajax.reload();
-});
- // ✅ Select All functionality
-$('#select_all').on('click', function () {
-    var checked = this.checked;
-    $('.student_checkbox').each(function () {
-        this.checked = checked;
+    $("#classFilter").on("change", function () {
+        table.ajax.reload();
     });
-});
-
-// ✅ Uncheck master if any checkbox is unchecked
-$(document).on('click', '.student_checkbox', function () {
-    if ($('.student_checkbox:checked').length == $('.student_checkbox').length) {
-        $('#select_all').prop('checked', true);
-    } else {
-        $('#select_all').prop('checked', false);
-    }
-});
-
-// ✅ Delete Selected functionality
-$('#deleteSelected').on('click', function () {
-    var selected = [];
-    $('.student_checkbox:checked').each(function () {
-        selected.push($(this).val());
-    });
-
-    if (selected.length === 0) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'No Students Selected',
-            text: 'Please select at least one student to delete.',
-            confirmButtonColor: '#3085d6',
+    // ✅ Select All functionality
+    $("#select_all").on("click", function () {
+        var checked = this.checked;
+        $(".student_checkbox").each(function () {
+            this.checked = checked;
         });
-        return;
-    }
+    });
 
-    Swal.fire({
-        title: 'Are you sure?',
-        text: 'You are about to delete ' + selected.length + ' students. This action cannot be undone!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Yes, delete them!',
-        cancelButtonText: 'Cancel'
-    }).then((result) => {
-        if (result.isConfirmed) {
-
-            $.ajax({
-                url: "/students/bulk-delete",
-                type: "POST",
-                data: {
-                    ids: selected,
-                    _token: $('meta[name="csrf-token"]').attr('content') // ✅ ensure CSRF token
-                },
-                success: function (response) {
-                    if (response.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Deleted!',
-                            text: response.message,
-                            confirmButtonColor: '#3085d6',
-                        });
-                        table.ajax.reload(null, false); // ✅ reload DataTable
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: response.message || 'Something went wrong.',
-                            confirmButtonColor: '#3085d6',
-                        });
-                    }
-                },
-                error: function (xhr) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Server Error!',
-                        text: 'Something went wrong on the server. Please check logs or contact admin.',
-                        confirmButtonColor: '#3085d6',
-                    });
-                }
-            });
+    // ✅ Uncheck master if any checkbox is unchecked
+    $(document).on("click", ".student_checkbox", function () {
+        if (
+            $(".student_checkbox:checked").length ==
+            $(".student_checkbox").length
+        ) {
+            $("#select_all").prop("checked", true);
+        } else {
+            $("#select_all").prop("checked", false);
         }
     });
-});
 
+    // ✅ Delete Selected functionality
+    $("#deleteSelected").on("click", function () {
+        var selected = [];
+        $(".student_checkbox:checked").each(function () {
+            selected.push($(this).val());
+        });
 
+        if (selected.length === 0) {
+            Swal.fire({
+                icon: "warning",
+                title: "No Students Selected",
+                text: "Please select at least one student to delete.",
+                confirmButtonColor: "#3085d6",
+            });
+            return;
+        }
+
+        Swal.fire({
+            title: "Are you sure?",
+            text:
+                "You are about to delete " +
+                selected.length +
+                " students. This action cannot be undone!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete them!",
+            cancelButtonText: "Cancel",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "/students/bulkdelete",
+                    type: "POST",
+                    data: {
+                        ids: selected,
+                        _token: $('meta[name="csrf-token"]').attr("content"), // ✅ ensure CSRF token
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Deleted!",
+                                text: response.message,
+                                confirmButtonColor: "#3085d6",
+                            });
+                            table.ajax.reload(null, false); // ✅ reload DataTable
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Error!",
+                                text:
+                                    response.message || "Something went wrong.",
+                                confirmButtonColor: "#3085d6",
+                            });
+                        }
+                    },
+                    error: function (xhr) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Server Error!",
+                            text: "Something went wrong on the server. Please check logs or contact admin.",
+                            confirmButtonColor: "#3085d6",
+                        });
+                    },
+                });
+            }
+        });
+    });
 
     // Add button
     $("#addStudentBtn").on("click", function () {
@@ -365,5 +375,38 @@ $('#deleteSelected').on('click', function () {
                 });
             }
         });
+    });
+
+    // AJAX ke data ko print ke liye copy karna
+    // ✅ Print button
+    $("#printTable").on("click", function () {
+        let tableData = table.rows({ search: "applied" }).data();
+        let tbody = "";
+        let counter = 1; // Serial number start from 1
+
+        tableData.each(function (row) {
+            tbody += `<tr>
+                <td>${counter}</td>
+                <td>${row.student_uid ?? ""}</td>
+                <td>${row.image ?? "N/A"}</td>
+                <td>${row.student_name ?? ""}</td>
+                <td>${row.promoted_class_name ?? ""}</td>
+                <td>${row.section ?? ""}</td>
+                <td>${row.father_name ?? ""}</td>
+                <td>${row.father_mobile ?? ""}</td>
+            </tr>`;
+
+            counter = counter + 1;
+        });
+
+        $("#printTableContent tbody").html(tbody);
+
+        let printContents = document.getElementById("printableArea").innerHTML;
+        let originalContents = document.body.innerHTML;
+
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+        // location.reload();
     });
 });

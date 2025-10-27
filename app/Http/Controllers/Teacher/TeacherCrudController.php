@@ -46,8 +46,8 @@ class TeacherCrudController extends Controller
             return DataTables::of($query)
                 ->addIndexColumn()
                 ->addColumn('checkbox', function ($row) {
-    return '<input type="checkbox" class="staff_checkbox" value="'.$row->id.'">';
-})
+                    return '<input type="checkbox" class="staff_checkbox" value="' . $row->id . '">';
+                })
                 // ✅ Name column or Teacher ID
                 ->addColumn('teacher_name', function ($row) {
                     return $row->teacher_name . '<br><small class="text-center text-danger fw-bold">(' . $row->teacher_id . ')</small>';
@@ -74,6 +74,9 @@ class TeacherCrudController extends Controller
                     $viewUrl = route('teachers.show', $row->id);
                     return '
                 <a href="' . $viewUrl . '" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
+                <a href="' . route('teacher_attendance.show', $row->id) . '" class="btn btn-info btn-sm fs-6 attendenceTeacherBtn" title="Attendance Report">
+                               <i class="fa fa-user"></i>
+                            </a>
                 <button class="btn btn-warning btn-sm editTeacherBtn" data-id="' . $row->id . '"><i class="fa fa-pencil text-white"></i></button>
                 <button class="btn btn-danger btn-sm deleteTeacherBtn" data-id="' . $row->id . '"><i class="fa fa-trash"></i></button>
             ';
@@ -253,49 +256,30 @@ class TeacherCrudController extends Controller
      * Remove the specified resource from storage.
      */
     // Delete teacher
-    public function destroy($id)
-    {
+   // 🗑️ Soft Delete (Already Exists)
+public function destroy($id)
+{
+    try {
         $teacher = TeacherCrud::findOrFail($id);
-        if (!$teacher) {
-            return response()->json(['status' => false, 'message' => 'Teacher not found!'], 404);
-        }
 
-
-        if ($teacher->image && Storage::disk('public')->exists($teacher->image)) {
-            Storage::disk('public')->delete($teacher->image);
-        }
-        if ($teacher->documents && Storage::disk('public')->exists($teacher->documents)) {
-            Storage::disk('public')->delete($teacher->documents);
-        }
-
-        $teacher->delete();
-
+        $teacher->delete(); // Soft delete
         return response()->json([
-            'status' => 'success',
-            'message' => "Teacher '{$teacher->teacher_name}' deleted successfully!"
+            'status' => true,
+            'message' => "Teacher '{$teacher->teacher_name}' has been soft deleted!"
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => false,
+            'message' => $e->getMessage()
         ]);
     }
-
-    
-public function downloadPdf()
-{
-    $teachers = TeacherCrud::all();
-    // dd($teachers);
-    $pdf = Pdf::loadView('school_dashboard.admin_pages.teachers.teachercrud.pdf.teacherlist', compact('teachers'));
-    return $pdf->download('teacher_data.pdf');
 }
 
-    
-public function export()
-{
-    return Excel::download(new TeachersExport, 'teacher-list.xlsx');
-}
-
+// 🗑️ Bulk Soft Delete (Already Exists)
 public function bulkDelete(Request $request)
 {
     try {
         $ids = $request->ids;
-
         if (empty($ids)) {
             return response()->json(['success' => false, 'message' => 'No staff selected for deletion.']);
         }
@@ -304,11 +288,9 @@ public function bulkDelete(Request $request)
 
         return response()->json([
             'success' => true,
-            'message' => count($ids) . ' staff members have been successfully deleted.'
+            'message' => count($ids) . ' teachers soft deleted successfully!'
         ]);
-
     } catch (\Throwable $e) {
-        Log::error('Bulk staff delete error: ' . $e->getMessage());
         return response()->json([
             'success' => false,
             'message' => 'Error: ' . $e->getMessage()
@@ -316,4 +298,121 @@ public function bulkDelete(Request $request)
     }
 }
 
+// 🧾 Show Trashed Records (For Yajra)
+public function trashed(Request $request)
+{
+    if ($request->ajax()) {
+        $teachers = TeacherCrud::onlyTrashed()->select(['id', 'teacher_name','qualification','mobile','deleted_at']);
+
+        return datatables()->of($teachers)
+            ->addIndexColumn()
+             ->editColumn('deleted_at', function ($row) {
+            return $row->deleted_at ? $row->deleted_at->format('D, d M Y') : '';
+        })
+            ->addColumn('checkbox', function ($row) {
+                return '<input type="checkbox" class="row-checkbox" value="' . $row->id . '">';
+            })
+            ->addColumn('actions', function ($row) {
+                return '
+                    <button class="btn btn-sm btn-success restore-btn" data-id="' . $row->id . '">Restore</button>
+                    <button class="btn btn-sm btn-danger force-del-btn" data-id="' . $row->id . '">Permanent Delete</button>
+                ';
+            })
+            ->rawColumns(['checkbox', 'actions'])
+            ->make(true);
+    }
+
+    return view('School_Dashboard.Admin_Pages.teachers.teachercrud.trashed');
+}
+
+
+// 🔁 Restore Single Teacher
+public function restore($id)
+{
+    try {
+        $teacher = TeacherCrud::onlyTrashed()->findOrFail($id);
+        $teacher->restore();
+
+        return response()->json(['success' => true, 'message' => "Teacher '{$teacher->teacher_name}' restored successfully!"]);
+    } catch (\Exception $e) {
+        return response()->json(['success' => false, 'message' => $e->getMessage()]);
+    }
+}
+
+// 🔁 Restore All Teachers
+// 🧩 Bulk Restore
+public function restoreAll(Request $request)
+{
+    $ids = $request->ids;
+    if (empty($ids)) {
+        return response()->json(['success' => false, 'message' => 'No teachers selected for restore.']);
+    }
+
+    $restored = TeacherCrud::onlyTrashed()->whereIn('id', $ids)->restore();
+
+    return response()->json(['success' => true, 'message' => "$restored teachers restored successfully!"]);
+}
+
+
+
+// 💀 Force Delete (Single)
+public function forceDelete($id)
+{
+    try {
+        $teacher = TeacherCrud::onlyTrashed()->findOrFail($id);
+
+        if ($teacher->image && Storage::disk('public')->exists($teacher->image)) {
+            Storage::disk('public')->delete($teacher->image);
+        }
+        if ($teacher->documents && Storage::disk('public')->exists($teacher->documents)) {
+            Storage::disk('public')->delete($teacher->documents);
+        }
+
+        $teacher->forceDelete();
+
+        return response()->json(['success' => true, 'message' => "Teacher '{$teacher->teacher_name}' permanently deleted!"]);
+    } catch (\Exception $e) {
+        return response()->json(['success' => false, 'message' => $e->getMessage()]);
+    }
+}
+
+// 💀 Force Delete All
+public function forceDeleteAll(Request $request)
+{
+    $ids = $request->ids;
+    if (empty($ids)) {
+        return response()->json(['success' => false, 'message' => 'No teachers selected for permanent delete.']);
+    }
+
+    $teachers = TeacherCrud::onlyTrashed()->whereIn('id', $ids)->get();
+    foreach ($teachers as $teacher) {
+        if ($teacher->image && Storage::disk('public')->exists($teacher->image)) {
+            Storage::disk('public')->delete($teacher->image);
+        }
+        if ($teacher->documents && Storage::disk('public')->exists($teacher->documents)) {
+            Storage::disk('public')->delete($teacher->documents);
+        }
+        $teacher->forceDelete();
+    }
+
+    return response()->json(['success' => true, 'message' => count($ids) . ' teachers permanently deleted!']);
+}
+
+
+
+    public function downloadPdf()
+    {
+        $teachers = TeacherCrud::all();
+        // dd($teachers);
+        $pdf = Pdf::loadView('school_dashboard.admin_pages.teachers.teachercrud.pdf.teacherlist', compact('teachers'));
+        return $pdf->download('teacher_data.pdf');
+    }
+
+
+    public function export()
+    {
+        return Excel::download(new TeachersExport, 'teacher-list.xlsx');
+    }
+
+   
 }

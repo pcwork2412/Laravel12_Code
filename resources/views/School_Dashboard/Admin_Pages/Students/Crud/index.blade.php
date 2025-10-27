@@ -485,11 +485,37 @@
                         {{-- Action buttons --}}
                         <div>
                             <button id="deleteSelected" class="btn btn-danger">
-                                <i class="bi bi-trash-fill me-1"></i> Delete
+                                <i class="bi bi-trash-fill me-1"></i> Delete Selected 
                             </button>
+                            {{-- <a href="{{ route('students.trashed') }}"  class="btn btn-secondary">
+                                <i class="bi bi-file-earmark-pdf-fill me-1"></i> trash
+                            </a> --}}
                             <a href="{{ route('students.download.pdf') }}" id="printBtn" class="btn btn-secondary">
-                                <i class="bi bi-printer-fill me-1"></i> Print
+                                <i class="bi bi-file-earmark-pdf-fill me-1"></i> PDF
                             </a>
+                            <button id="printTable" class="btn btn-warning">
+                                <i class="bi bi-printer-fill me-1"></i> Print
+                            </button>
+
+                            <div id="printableArea" style="display:none;">
+                                <table id="printTableContent" border="1" cellpadding="5" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Student UID</th>
+                                            <th>Image</th>
+                                            <th>Name</th>
+                                            <th>Class</th>
+                                            <th>Section</th>
+                                            <th>Father Name</th>
+                                            <th>Mobile</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+
+
                             <button id="filterBtn" class="btn btn-info" data-bs-toggle="modal"
                                 data-bs-target="#importStudentsModal">
                                 <i class="bi bi-upload me-1"></i> Import
@@ -528,7 +554,25 @@
             </div>
         </div>
         {{-- Table Section End --}}
+       
     @endsection
+    @push('styles')
+         <style>
+          #printTableContent {
+              border: #ccc 1px solid;
+              border-collapse: collapse;
+            }
+            #printTableContent th, #printTableContent td {
+              border: #ccc 1px solid;
+              padding: 8px;
+              text-align: left;
+          }
+          #printTableContent tr:nth-child(even) {
+              background-color: #f2f2f2;
+              
+          }
+        </style>
+    @endpush
     @push('scripts')
         <script src="{{ asset('pos/assets/js/CustomJS/Global/global.js') }}"></script>
         <script src="{{ asset('pos/assets/js/CustomJS/Students/studentajax.js') }}"></script>

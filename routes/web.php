@@ -20,8 +20,8 @@ use Symfony\Component\Finder\Glob;
 
 // ---------------- Admin Register ----------------
 Route::middleware('guest.role')->prefix('admin')->group(function () {
-Route::get('/register', [AdminRegisterController::class, 'showRegisterForm'])->name('admin.register.form');
-Route::post('/register', [AdminRegisterController::class, 'register'])->name('admin.register');
+    Route::get('/register', [AdminRegisterController::class, 'showRegisterForm'])->name('admin.register.form');
+    Route::post('/register', [AdminRegisterController::class, 'register'])->name('admin.register');
 });
 
 
@@ -32,39 +32,43 @@ Route::post('/register', [AdminRegisterController::class, 'register'])->name('ad
 
 // ---------------- Admin Login ----------------
 Route::middleware('guest.role')->prefix('admin')->group(function () {
-    Route::get('/login', [AdminAuthController::class,'showLoginForm'])->name('admin.login');
-    Route::post('/login', [AdminAuthController::class,'login'])->name('admin.login.submit');
+    Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
+    Route::post('/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
 });
-Route::post('/admin/logout', [AdminAuthController::class,'logout'])->name('admin.logout');
+Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
 // ---------------- Teacher Login ----------------
 Route::middleware('guest.role')->prefix('teacher')->group(function () {
-    Route::get('/login', [TeacherAuthController::class,'showLoginForm'])->name('teacher.login');
-    Route::post('/login', [TeacherAuthController::class,'login'])->name('teacher.login.submit');
+    Route::get('/login', [TeacherAuthController::class, 'showLoginForm'])->name('teacher.login');
+    Route::post('/login', [TeacherAuthController::class, 'login'])->name('teacher.login.submit');
 });
-Route::post('/teacher/logout', [TeacherAuthController::class,'logout'])->name('teacher.logout');
+Route::post('/teacher/logout', [TeacherAuthController::class, 'logout'])->name('teacher.logout');
 
 // ---------------- Student Login ----------------
 Route::middleware('guest.role')->prefix('student')->group(function () {
-    Route::get('/login', [StudentAuthController::class,'showLoginForm'])->name('student.login');
-    Route::post('/login', [StudentAuthController::class,'login'])->name('student.login.submit');
+    Route::get('/login', [StudentAuthController::class, 'showLoginForm'])->name('student.login');
+    Route::post('/login', [StudentAuthController::class, 'login'])->name('student.login.submit');
 });
-Route::post('/student/logout', [StudentAuthController::class,'logout'])->name('student.logout');
+Route::post('/student/logout', [StudentAuthController::class, 'logout'])->name('student.logout');
 
 Route::middleware(['role:admin,teacher'])->group(function () {
+    Route::get('/students/data/print', [CrudController::class, 'downloadPdf'])->name('students.download.pdf');
+    Route::get('/students/data/export', [CrudController::class, 'export'])->name('students.export');
+    Route::post('/students/bulkdelete', [CrudController::class, 'bulkDelete'])->name('students.bulk.delete');
+
+    Route::get('/students/trashed', [CrudController::class, 'trashed'])->name('students.trashed');
+    Route::post('/students/restore/{id}', [CrudController::class, 'restore'])->name('students.restore');
+    Route::delete('/students/forcedelete/{id}', [CrudController::class, 'forceDelete'])->name('students.forcedelete');
+
+    Route::post('/students/bulk-restore', [CrudController::class,'bulkRestore']);
+Route::delete('/students/bulk-delete', [CrudController::class,'bulkforceDelete']);
+
     Route::resource('students', CrudController::class);
 
 
 
-    Route::get('/students/data/print', [CrudController::class, 'downloadPdf'])->name('students.download.pdf');
 
 
-    Route::get('/students/data/export', [CrudController::class, 'export'])->name('students.export');
-
-    Route::post('/students/bulk-delete', [CrudController::class, 'bulkDelete'])
-    ->name('students.bulk.delete');
-
-   
     // ***********Import Routes
     Route::get('students/show/importform', [ImportController::class, 'importForm'])->name('students.import.form');
     Route::post('students/store/importdata', [ImportController::class, 'import'])->name('students.import.data');
@@ -79,37 +83,49 @@ Route::middleware(['role:admin,teacher'])->group(function () {
     Route::get('/get-students/{sectionId}', [MarksAllotTableController::class, 'getStudents']);
     // Check Student Marks
     Route::get('/check-student-marks/{student_id}', [MarksAllotTableController::class, 'checkStudentMarks'])->name('marks.check');
-    
+
     Route::get('/get-section-list/{class_id}', [CrudController::class, 'getSections']);
-    
+
     // *********** Attendance Routes
-    
-Route::resource('/student_attendance', StudentAttendanceController::class);
 
-Route::get('/attendance/fetch-students', [StudentAttendanceController::class, 'fetchStudents'])->name('attendance.fetchStudents');
+    Route::resource('/student_attendance', StudentAttendanceController::class);
 
-Route::get('/attendance/report-student', [StudentAttendanceController::class, 'report'])->name('student_attendance.report');
+    Route::get('/attendance/fetch-students', [StudentAttendanceController::class, 'fetchStudents'])->name('attendance.fetchStudents');
+
+    Route::get('/attendance/report-student', [StudentAttendanceController::class, 'report'])->name('student_attendance.report');
 
 
-Route::resource('/teacher_attendance', TeacherAttendanceController::class);
-Route::get('/attendance/fetch-teachers', [TeacherAttendanceController::class, 'fetchTeachers'])->name('attendance.fetchTeachers');
+    Route::resource('/teacher_attendance', TeacherAttendanceController::class);
+    Route::get('/attendance/fetch-teachers', [TeacherAttendanceController::class, 'fetchTeachers'])->name('attendance.fetchTeachers');
 
-Route::get('/attendance/report-teachers', [TeacherAttendanceController::class, 'report'])->name('teacher_attendance.report');
+    Route::get('/attendance/report-teachers', [TeacherAttendanceController::class, 'report'])->name('teacher_attendance.report');
 
 
     // *********** Global Resuable Routes
     Route::get('/get-global-sections/{classId}', [GlobalController::class, 'getGlobalSections']);
     Route::get('/get-global-students/{sectionId}', [GlobalController::class, 'getGlobalStudents']);
 
-        Route::resource('teachers', TeacherCrudController::class);
+    // 🧾 Trashed Records
+Route::get('/teachers/trashed', [TeacherCrudController::class, 'trashed'])->name('teachers.trashed');
 
-            Route::get('/teachers/data/print', [TeacherCrudController::class, 'downloadPdf'])->name('teachers.download.pdf');
+// 🔁 Restore Routes
+Route::post('/teachers/restore/{id}', [TeacherCrudController::class, 'restore'])->name('teachers.restore');
+Route::post('/teachers/restore-all', [TeacherCrudController::class, 'restoreAll'])->name('teachers.restoreAll');
+
+// 💀 Force Delete Routes
+Route::delete('/teachers/force-delete/{id}', [TeacherCrudController::class, 'forceDelete'])->name('teachers.forceDelete');
+Route::delete('/teachers/force-delete-all', [TeacherCrudController::class, 'forceDeleteAll'])->name('teachers.forceDeleteAll');
+
+// 🧩 Resource CRUD
+Route::resource('teachers', TeacherCrudController::class);
 
 
-        Route::get('/teachers/data/export', [TeacherCrudController::class, 'export'])->name('teachers.export');
+    Route::get('/teachers/data/print', [TeacherCrudController::class, 'downloadPdf'])->name('teachers.download.pdf');
 
-        Route::post('/staff/bulk-delete', [TeacherCrudController::class, 'bulkDelete'])->name('staff.bulk.delete');
 
+    Route::get('/teachers/data/export', [TeacherCrudController::class, 'export'])->name('teachers.export');
+
+    Route::post('/staff/bulk-delete', [TeacherCrudController::class, 'bulkDelete'])->name('staff.bulk.delete');
 });
 
 

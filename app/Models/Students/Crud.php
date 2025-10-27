@@ -9,12 +9,17 @@ use App\Models\Masters\SubjectMaster;
 use App\Models\Students\MarksAllotTable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Crud extends Authenticatable
 {
     use HasFactory;
+    use SoftDeletes;
+    
     protected $table = 'cruds';
+    protected $dates = ['deleted_at'];
+
     protected $fillable = [
         'class_id',
         'section_id',
@@ -49,7 +54,7 @@ class Crud extends Authenticatable
         'account_number',
         'ifsc_code',
     ];
-       public function classModel()
+    public function classModel()
     {
         return $this->belongsTo(StdClass::class, 'class_id');
     }
@@ -58,12 +63,13 @@ class Crud extends Authenticatable
     {
         return $this->belongsTo(Section::class, 'section_id');
     }
-    public function marks() {
+    public function marks()
+    {
         return $this->hasMany(MarksAllotTable::class, 'student_id');
     }
-    public function subject(){
+    public function subject()
+    {
         return $this->hasMany(SubjectMaster::class, 'subject_name');
     }
     protected $hidden = ['password'];
-
 }

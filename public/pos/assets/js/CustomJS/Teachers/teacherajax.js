@@ -21,7 +21,7 @@ $(document).ready(function () {
             },
             { data: "teacher_name", name: "teacher_name" },
             // { data: "role", name: "role" },
-            { data: "status", name: "status" },
+            // { data: "status", name: "status" },
             // { data: "dob", name: "dob" },
             // { data: "gender", name: "gender" },
             // { data: "email", name: "email" },
@@ -44,6 +44,8 @@ $(document).ready(function () {
         order: [[2, "asc"]],
         responsive: true,
     });
+
+
   // Select All functionality
 $('#select_all').on('click', function () {
     $('.staff_checkbox').prop('checked', this.checked);
@@ -55,13 +57,15 @@ $(document).on('click', '.staff_checkbox', function () {
 });
 
 // Bulk action based on dropdown
-$('#entries').on('change', function () {
-    var action = $(this).val();
-    var selected = $('.staff_checkbox:checked').map(function () {
-        return $(this).val();
-    }).get();
-
-    if (action === 'Delete') {
+$('#deleteSelected').on('click', function () {
+    // var action = $(this).val();
+    // var selected = $('.staff_checkbox:checked').map(function () {
+    //     return $(this).val();
+    // }).get();
+       var selected = [];
+        $(".staff_checkbox:checked").each(function () {
+            selected.push($(this).val());
+        });
 
         if (selected.length === 0) {
             Swal.fire({
@@ -100,7 +104,7 @@ $('#entries').on('change', function () {
                                 text: response.message,
                                 confirmButtonColor: '#3085d6'
                             });
-                    teacherTable.ajax.reload(null, false);
+                        teacherTable.ajax.reload(null, false);
                         } else {
                             Swal.fire({
                                 icon: 'error',
@@ -125,7 +129,6 @@ $('#entries').on('change', function () {
                 $('#entries').val('Select Action'); // Reset dropdown
             }
         });
-    }
 });
 
 
@@ -293,4 +296,38 @@ $('#entries').on('change', function () {
             }
         });
     });
+
+
+    
+  // ✅ Print button for Teachers
+$('#printTeacher').on('click', function () {
+    let tableData = teacherTable.rows({ search: 'applied' }).data(); // teacherTable = DataTable instance
+    let tbody = '';
+    let counter = 1; // Serial number start from 1
+
+    tableData.each(function(row) {
+        tbody += `<tr>
+            <td>${counter}</td> <!-- Serial Number -->
+            <td>${row.image ?? 'N/A'}</td> <!-- HTML img from server-side -->
+            <td>${row.teacher_name ?? ''}</td>
+            <td>${row.status ?? ''}</td>
+            <td>${row.mobile ?? ''}</td>
+            <td>${row.qualification ?? ''}</td>
+            <td>${row.experience ?? ''}</td>
+            <td>${row.documents ?? ''}</td>
+        </tr>`;
+
+        counter = counter + 1;
+    });
+
+    $('#printTeacherContent tbody').html(tbody);
+
+    let printContents = document.getElementById('printableTeacherArea').innerHTML;
+    let originalContents = document.body.innerHTML;
+
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+    // location.reload(); // Restore DataTable
+});
 });

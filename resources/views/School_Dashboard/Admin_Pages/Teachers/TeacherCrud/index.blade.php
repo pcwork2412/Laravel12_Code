@@ -46,7 +46,7 @@
                                 <div class="col-md-6 mb-3">
                                     <label>Profile Image:</label>
                                     <input type="file" class="form-control" name="image" id="image">
-                                   <div id="previewBox"
+                                    <div id="previewBox"
                                         style="display:none; width:100px; height:100px; overflow:hidden; border:1px solid #ccc; border-radius:8px;">
                                         <img id="previewImage" class="img-thumbnail mt-2" alt="Preview"
                                             style="width:100%; height:100%; object-fit:contain;">
@@ -201,18 +201,39 @@
                 <div class="card shadow-sm border-0 mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         {{-- Select option --}}
-                        <div>
-                            <label for="entries" class="form-label me-2 fw-semibold">Select Action</label>
-                            <select id="entries" class="form-select d-inline-block w-auto ">
-                                <option value="Select Action">Select Action</option>
-                                <option value="Delete">Delete</option>
-                            </select>
-                        </div>
+                        <button id="deleteSelected" class="btn btn-danger">
+                            <i class="bi bi-trash-fill me-1"></i> Delete Selected
+                        </button>
                         {{-- Action buttons --}}
                         <div>
                             <a href="{{ route('teachers.download.pdf') }}" id="printBtn" class="btn btn-secondary">
-                                <i class="bi bi-printer-fill me-1"></i> Print
+                                <i class="bi bi-file-earmark-pdf-fill me-1"></i> PDF
                             </a>
+                             {{-- <a href="{{ route('teachers.trashed') }}"  class="btn btn-secondary">
+                                <i class="bi bi-file-earmark-pdf-fill me-1"></i> trash
+                            </a> --}}
+                            <button id="printTeacher" class="btn btn-warning">
+                                <i class="bi bi-printer-fill me-1"></i> Print
+                            </button>
+
+                            <div id="printableTeacherArea" style="display:none;">
+                                <table id="printTeacherContent" border="1" cellpadding="5" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>S.No</th>
+                                            <th>Image</th>
+                                            <th>Teacher Name</th>
+                                            <th>Email</th>
+                                            <th>Phone</th>
+                                            <th>Class Assigned</th>
+                                            <th>Subjects</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+
+
                             <button id="filterBtn" class="btn btn-info" data-bs-toggle="modal"
                                 data-bs-target="#importTeachersModal">
                                 <i class="bi bi-upload me-1"></i> Import
@@ -237,7 +258,7 @@
                                         <th>Image</th>
                                         <th>Name</th>
                                         {{-- <th>Role</th> --}}
-                                        <th>Status</th>
+                                        {{-- <th>Status</th> --}}
                                         {{-- <th>DOB</th>
                                         <th>Gender</th>
                                         <th>Email</th> --}}
@@ -258,6 +279,26 @@
         </div>
         {{-- Teacher Table Section End --}}
     @endsection
+    @push('styles')
+        <style>
+            #printTeacherContent {
+                border: #ccc 1px solid;
+                border-collapse: collapse;
+            }
+
+            #printTeacherContent th,
+            #printTeacherContent td {
+                border: #ccc 1px solid;
+                padding: 8px;
+                text-align: left;
+            }
+
+            #printTeacherContent tr:nth-child(even) {
+                background-color: #f2f2f2;
+
+            }
+        </style>
+    @endpush
     @push('scripts')
         <script src="{{ asset('pos/assets/js/CustomJS/Teachers/teacherajax.js') }}"></script>
     @endpush

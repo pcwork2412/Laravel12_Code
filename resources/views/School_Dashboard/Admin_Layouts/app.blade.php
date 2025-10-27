@@ -116,6 +116,11 @@
         <div class="page-wrapper">
             <div class="content container-fluid">
                 @include('School_Dashboard.Admin_Layouts.flash-message')
+                {{-- <button id="smartBackBtn" class="btn btn-outline-secondary btn-sm">
+    <i class="fa fa-arrow-left me-1"></i> Back
+</button> --}}
+
+
                 @yield('content')
             </div>
         </div>
@@ -148,9 +153,9 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
     <!-- ✅ DataTables Buttons JS -->
-<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
@@ -164,8 +169,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
     <!-- CDN: html2canvas + jsPDF (UMD). NOTE: order matters (html2canvas first) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -185,6 +190,44 @@
 
     <!-- Custom App JS -->
     <script src="{{ asset('pos/assets/js/app.js') }}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let currentUrl = window.location.href;
+            let historyStack = JSON.parse(sessionStorage.getItem("pageHistory")) || [];
+
+            // ✅ अगर नया पेज है तो stack में जोड़ो
+            if (historyStack.length === 0 || historyStack[historyStack.length - 1] !== currentUrl) {
+                historyStack.push(currentUrl);
+                sessionStorage.setItem("pageHistory", JSON.stringify(historyStack));
+            }
+            // OR
+            //    if (!historyStack.includes(currentUrl)) {
+            //     historyStack.push(currentUrl);
+            //     sessionStorage.setItem("pageHistory", JSON.stringify(historyStack));
+            // }
+
+            // 🔙 जब user back बटन दबाए तो पिछला पेज दिखाओ
+            const backButton = document.querySelector("#smartBackBtn");
+            if (backButton) {
+                backButton.addEventListener("click", function() {
+                    let stack = JSON.parse(sessionStorage.getItem("pageHistory")) || [];
+
+                    if (stack.length > 1) {
+                        // current URL हटाओ
+                        stack.pop();
+                        // previous URL निकालो
+                        let prevUrl = stack.pop();
+                        sessionStorage.setItem("pageHistory", JSON.stringify(stack));
+                        window.location.href = prevUrl;
+                    } else {
+                        // fallback अगर कुछ नहीं है
+                        window.location.href = "{{ route('admin.dashboard') }}";
+                    }
+                });
+            }
+        });
+    </script>
+
 
     @stack('scripts')
 </body>
