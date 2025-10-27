@@ -1,0 +1,130 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('cruds', function (Blueprint $table) {
+            $table->string('role')->default('student')->after('id'); // after id, optional
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending')->after('role');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('cruds', function (Blueprint $table) {
+            $table->dropColumn(['role', 'status']);
+        });
+    }
+};
+
+
+
+
+
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('teacher_allotments', function (Blueprint $table) {
+             $table->foreign('teacher_id')
+                  ->references('id')->on('teacher_cruds')
+                  ->onDelete('cascade');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('teacher_allotments', function (Blueprint $table) {
+            $table->dropForeign(['teacher_id']);
+        });
+    }
+};
+
+
+
+
+
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('cruds', function (Blueprint $table) {
+            $table->softDeletes();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('cruds', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
+    }
+};
+
+
+
+
+
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('teacher_cruds', function (Blueprint $table) {
+        $table->softDeletes();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('teacher_cruds', function (Blueprint $table) {
+        $table->dropSoftDeletes();
+        });
+    }
+};

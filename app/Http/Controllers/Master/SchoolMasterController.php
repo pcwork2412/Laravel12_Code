@@ -57,7 +57,7 @@ class SchoolMasterController extends Controller
         'school_logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         'school_tagline' => 'required|string|max:255',
         'school_session' => 'required|regex:/^[0-9]{4}-[0-9]{4}$/',
-        'school_principal_sign' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'school_principal_sign' => 'required|image|mimes:png|max:2048',
     ]);
 
     // ✅ Duplicate check
@@ -115,7 +115,7 @@ class SchoolMasterController extends Controller
         'school_tagline'        => 'required|string|max:255',
         'school_session'        => 'required|regex:/^[0-9]{4}-[0-9]{4}$/',
         'school_logo'           => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        'school_principal_sign' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'school_principal_sign' => 'nullable|image|mimes:png|max:2048',
     ]);
 
     $schoolMaster = SchoolMaster::findOrFail($id);

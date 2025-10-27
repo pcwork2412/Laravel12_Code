@@ -18,6 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('main_section_id');
             $table->json('sub_class_ids')->nullable();   // Multiple sub-classes
             $table->json('sub_section_ids')->nullable(); // Multiple sub-sections
+
+          
             $table->timestamps();
         });
     }

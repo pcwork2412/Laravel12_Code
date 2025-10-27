@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('cruds', function (Blueprint $table) {
             $table->id();
+            $table->string('role')->default('student');
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->unsignedBigInteger('class_id');
             $table->unsignedBigInteger('section_id');
             $table->string('student_uid', 50)->unique();
@@ -45,11 +47,11 @@ return new class extends Migration
             $table->string('bank_name_branch')->nullable();
             $table->string('account_number')->nullable();
             $table->string('ifsc_code')->nullable();
-
+            
             $table->foreign('class_id')->references('id')->on('std_classes')->onDelete('cascade');
-            $table->foreign('section_id')->references('id')->on('sections')->onDelete('cascade');
-
-
+            $table->foreign('section_id')->references('id')->on('sections')->onDelete('cascade');            
+            
+            $table->softDeletes();
             $table->timestamps();
         });
     }

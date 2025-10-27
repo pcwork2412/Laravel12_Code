@@ -139,7 +139,7 @@
                                     <div class="mb-3">
                                         <label for="mother_mobile" class="form-label fw-semibold">Mother's
                                             Mobile No.</label>
-                                        <input type="text" id="mother_mobile" value="{{ old('mother_mobile') }}"
+                                        <input type="number" id="mother_mobile" value="{{ old('mother_mobile') }}"
                                             name="mother_mobile" class="form-control rounded-3"
                                             placeholder="Enter Mother's Mobile No.">
                                     </div>
@@ -148,7 +148,7 @@
                                     <div class="">
                                         <label for="father_mobile" class="form-label fw-semibold">Father's
                                             Mobile No.</label>
-                                        <input type="text" id="father_mobile" value="{{ old('father_mobile') }}"
+                                        <input type="number" id="father_mobile" value="{{ old('father_mobile') }}"
                                             name="father_mobile" class="form-control rounded-3"
                                             placeholder="Enter Father's Mobile No.">
                                     </div>
@@ -208,7 +208,7 @@
                                         <label for="whatsapp_mobile" class="form-label fw-semibold">WhatsApp
                                             Mobile
                                             No.</label>
-                                        <input type="text" id="whatsapp_mobile" value="{{ old('whatsapp_mobile') }}"
+                                        <input type="number" id="whatsapp_mobile" value="{{ old('whatsapp_mobile') }}"
                                             name="whatsapp_mobile" class="form-control rounded-3"
                                             placeholder="Enter WhatsApp Mobile No.">
                                     </div>
@@ -218,7 +218,7 @@
                                         <label for="alternate_mobile" class="form-label fw-semibold">Alternate
                                             Mobile
                                             No.</label>
-                                        <input type="text" id="alternate_mobile"
+                                        <input type="number" id="alternate_mobile"
                                             value="{{ old('alternate_mobile') }}" name="alternate_mobile"
                                             class="form-control rounded-3" placeholder="Enter Alternate Mobile No.">
                                     </div>

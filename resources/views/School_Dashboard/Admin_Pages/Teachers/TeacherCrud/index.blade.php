@@ -59,7 +59,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label for="mobile" class="form-label fw-semibold">Mobile</label>
-                                    <input type="text" id="mobile" name="mobile" class="form-control rounded-3"
+                                    <input type="number" id="mobile" name="mobile" class="form-control rounded-3"
                                         placeholder="Enter Mobile" required>
                                 </div>
                                 <div class="col-md-6">

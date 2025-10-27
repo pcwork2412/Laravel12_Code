@@ -45,7 +45,8 @@ $(document).ready(function () {
 
                 // Reset form
                 $("#studentForm")[0].reset();
-                $("#previewImg").attr("src", "").addClass("d-none");
+                 $("#previewBox").hide();
+            $("#previewImage").attr("src", "");
                 submitBtn.prop("disabled", false).html(originalText);
             },
             error: function (xhr) {

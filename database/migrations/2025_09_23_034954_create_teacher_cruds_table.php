@@ -30,6 +30,8 @@ return new class extends Migration
             $table->string('qualification');
             $table->integer('experience')->nullable();
             $table->string('documents')->nullable();
+            $table->softDeletes();
+
             $table->timestamps();
         });
     }

@@ -31,22 +31,50 @@ public function import(Request $request)
     $totalErrors = count($import->errorDetails);
 
     // Combine error messages
-    $errorMessages = '';
-    foreach ($import->errorDetails as $err) {
+      // Error messages combine करें
+  $errorMessages = '';
+$maxToShow = '20'; // कितने error दिखाने हैं
+foreach ($import->errorDetails as $index => $err) {
+    if ($index < $maxToShow) {
         $errorMessages .= "⛔ {$err['row']}: {$err['reason']}<br>";
     }
+}
+if ($totalErrors > $maxToShow) {
+    $remaining = $totalErrors - $maxToShow;
+    $errorMessages .= "<b>...और {$remaining} और errors हैं।</b>";
+}
 
-    if ($totalErrors > 0) {
-        return back()->with([
-            'error' => "
-            <div>
-                <strong>Import completed with some errors:</strong>
-                <ul style='margin-top:5px;'>
-                    <li>✅ Saved: {$totalSuccess}</li>
-                    <li>❌ Errors: {$totalErrors}</li>
-                    <li>⚠️ {$errorMessages}</li>
-                </ul>
-            </div>"
+if ($totalErrors > 0) {
+    return back()->with([
+        
+        'error' => "
+            <div style='
+             max-height:150px;
+                overflow-y:auto;
+                scrollbar-width:thin;
+                scrollbar-color:#888 #f1f1f1;
+                border:1px solid #e0e0e0;
+                background:#fff;
+                box-shadow:0 0 8px rgba(0,0,0,0.05);
+                font-size:14px;
+                line-height:1.4;
+            '>
+                <div style='font-weight:bold; font-size:15px; color:#d9534f; margin-bottom:6px;'>
+                    📦 Import Completed with Some Errors
+                </div>
+                <div style='margin-bottom:6px;'>
+                    ✅ Saved: {$totalSuccess} <br>
+                    ❌ Errors: {$totalErrors}
+                </div>
+                <div style='
+                    border-top:1px solid #eee;
+                    margin-top:5px;
+                    padding-top:5px;
+                '>
+                    {$errorMessages}
+                </div>
+            </div>
+        "
         ]);
     }
 
