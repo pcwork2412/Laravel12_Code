@@ -2,7 +2,8 @@
 @section('content')
     @include('school_dashboard.admin_layouts.flash-message')
     <!-- 🔹 Modal -->
-    <div class="modal fade" id="teacherAllotModal" tabindex="-1" aria-labelledby="teacherAllotModalLabel" aria-hidden="true">
+    <div class="modal fade" id="teacherAllotModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="teacherAllotModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
@@ -104,10 +105,10 @@
         </div>
     </div>
 
-    
+
     <!-- Alloted Data View Modal -->
-    <div class="modal fade" id="allotedDataShowModal" tabindex="-1" aria-labelledby="allotedDataShowModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="allotedDataShowModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="allotedDataShowModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content border-0 shadow-lg rounded-3">
                 <div class="modal-header bg-primary text-white">
@@ -152,43 +153,42 @@
 
 
 
-<div class="container">
-    
-    {{-- ✅ Allotted Teachers List --}}
-    <div class="card shadow-sm rounded-2">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h3 class="mb-0 fw-bold text-primary">
-                <i class="fa-solid fa-chalkboard-teacher me-2"></i>Allotted Teachers List
-            </h3>
-            <!-- 🔹 Button to trigger modal -->
-            <a href="{{ route('admin_teachers_allot.create') }}" class="btn btn-primary">
-                <i class="fa-solid fa-plus-circle me-1"></i> Allot Teacher
-            </a>
+    <div class="container">
+        {{-- ✅ Allotted Teachers List --}}
+        <div class="card shadow-sm rounded-2">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="mb-0 fw-bold text-primary">
+                    <i class="fa-solid fa-chalkboard-teacher me-2"></i>Allotted Teachers List
+                </h3>
+                <!-- 🔹 Button to trigger modal -->
+                <a href="{{ route('admin_teachers_allot.create') }}" class="btn btn-primary">
+                    <i class="fa-solid fa-plus-circle me-1"></i> Allot Teacher
+                </a>
+            </div>
         </div>
-    </div>
-    <div class="card shadow-sm border-0 rounded-1">
-        <div class="card-body p-3">
-            <div class="table-responsive">
-                <table id="teacherAllotTable" class="table table-bordered table-striped align-middle">
-                    <thead class="table-dark">
-                        <tr>
-                            <th style="width: 5%">#</th>
-                            <th>Teacher</th>
-                            <th>Main Class</th>
-                            <th>Main Section</th>
-                            <th>View Allotted Classes / Sections</th>
+        <div class="card shadow-sm border-0 rounded-1">
+            <div class="card-body p-3">
+                <div class="table-responsive">
+                    <table id="teacherAllotTable" class="table table-bordered table-striped align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th style="width: 5%">#</th>
+                                <th>Teacher</th>
+                                <th>Main Class</th>
+                                <th>Main Section</th>
+                                <th>View Allotted Classes / Sections</th>
 
-                            {{-- <th>Sub Sections</th> --}}
-                            <th style="width: 10%">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                                {{-- <th>Sub Sections</th> --}}
+                                <th style="width: 10%">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
 
+                </div>
             </div>
         </div>
     </div>
-</div>
 @endsection
 @push('scripts')
     <script src="{{ asset('pos/assets/js/CustomJS/Global/global.js') }}"></script>

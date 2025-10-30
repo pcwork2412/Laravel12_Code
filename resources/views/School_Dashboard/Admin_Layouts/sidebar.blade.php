@@ -13,7 +13,7 @@
 
     .sidebar {
         width: 260px;
-        height: 100vh;
+        height: auto;
         overflow-y: auto;
         overflow-x: hidden;
         background: var(--sidebar-bg);
@@ -93,7 +93,9 @@
     /* Icons */
     .sidebar-menu a i,
     .sidebar-menu a .fa-solid,
-    .sidebar-menu a .bi {
+    .sidebar-menu a .bi,
+    .sidebar-menu a .fas,
+    .sidebar-menu a .far {
         margin-right: 12px;
         font-size: 18px;
         width: 20px;
@@ -104,7 +106,9 @@
 
     .sidebar-menu a:hover i,
     .sidebar-menu a:hover .fa-solid,
-    .sidebar-menu a:hover .bi {
+    .sidebar-menu a:hover .bi,
+    .sidebar-menu a:hover .fas,
+    .sidebar-menu a:hover .far {
         opacity: 1;
         transform: scale(1.1);
     }
@@ -169,7 +173,7 @@
                 <!-- Dashboard -->
                 <li>
                     <a href="{{ route('admin.dashboard') }}" class="menu-link">
-                        <i class="bi bi-speedometer2"></i>
+                        <i class="fas fa-tachometer-alt"></i>
                         <span>Admin Dashboard</span>
                     </a>
                 </li>
@@ -178,26 +182,26 @@
                 <div class="section-header">Masters Section</div>
                 <li class="submenu">
                     <a href="javascript:void(0);" class="submenu-toggle">
-                        <i class="la la-cogs"></i>
+                        <i class="fas fa-cog"></i>
                         <span>Masters Section</span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>
                         <li>
                             <a href="{{ url('class_name') }}" class="menu-link">
-                                <i class="la la-graduation-cap"></i>
+                                <i class="fas fa-chalkboard"></i>
                                 <span>Add Classes Master</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ url('school_name') }}" class="menu-link">
-                                <i class="fa-solid fa-building"></i>
+                                <i class="fas fa-school"></i>
                                 <span>Add School Master</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ url('subject_name') }}" class="menu-link">
-                                <i class="fa-solid fa-book"></i>
+                                <i class="fas fa-book-open"></i>
                                 <span>Add Subjects Master</span>
                             </a>
                         </li>
@@ -208,7 +212,7 @@
                 <div class="section-header">Student Section</div>
                 <li>
                     <a href="{{ route('students.index') }}" class="menu-link">
-                        <i class="la la-users"></i>
+                        <i class="fas fa-user-graduate"></i>
                         <span>Student</span>
                     </a>
                 </li>
@@ -216,26 +220,26 @@
                 <!-- Student ID Card -->
                 <li class="submenu">
                     <a href="javascript:void(0);" class="submenu-toggle">
-                        <i class="la la-id-card"></i>
+                        <i class="fas fa-id-badge"></i>
                         <span>Student ID Card</span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>
                         <li>
                             <a href="{{ route('students.singleIdForm') }}" class="menu-link">
-                                <i class="fa-solid fa-user"></i>
+                                <i class="fas fa-user"></i>
                                 <span>Generate Individual</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('students.classwiseIdForm') }}" class="menu-link">
-                                <i class="fa-solid fa-users"></i>
+                                <i class="fas fa-users"></i>
                                 <span>Generate Class Wise</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('students.idCardHistoryData') }}" class="menu-link">
-                                <i class="fa-solid fa-id-card"></i>
+                                <i class="fas fa-history"></i>
                                 <span>ID Card Reports</span>
                             </a>
                         </li>
@@ -245,20 +249,20 @@
                 <!-- Allot Marks -->
                 <li class="submenu">
                     <a href="javascript:void(0);" class="submenu-toggle">
-                        <i class="fa-solid fa-pencil-alt"></i>
+                        <i class="fas fa-edit"></i>
                         <span>Allot Marks</span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>
                         <li>
                             <a href="{{ route('marks.create') }}" class="menu-link">
-                                <i class="fa-solid fa-circle-plus"></i>
+                                <i class="fas fa-plus-circle"></i>
                                 <span>Add Marks</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('marks.index') }}" class="menu-link">
-                                <i class="fa-solid fa-rectangle-list"></i>
+                                <i class="fas fa-list-alt"></i>
                                 <span>Marks List</span>
                             </a>
                         </li>
@@ -268,20 +272,20 @@
                 <!-- Print Marksheet -->
                 <li class="submenu">
                     <a href="javascript:void(0);" class="submenu-toggle">
-                        <i class="fa-solid fa-print"></i>
+                        <i class="fas fa-print"></i>
                         <span>Print Marksheet</span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>
                         <li>
                             <a href="{{ route('marksheet.student.form') }}" class="menu-link">
-                                <i class="fa-solid fa-user"></i>
+                                <i class="fas fa-file-alt"></i>
                                 <span>Individual Marksheet</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('marksheet.form') }}" class="menu-link">
-                                <i class="fa-solid fa-users"></i>
+                                <i class="fas fa-file-invoice"></i>
                                 <span>Classwise Marksheet</span>
                             </a>
                         </li>
@@ -291,26 +295,26 @@
                 <!-- Students Request -->
                 <li class="submenu">
                     <a href="javascript:void(0);" class="submenu-toggle">
-                        <i class="fa-solid fa-warning"></i>
+                        <i class="fas fa-exclamation-triangle"></i>
                         <span>Students All Request</span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>
                         <li>
                             <a href="{{ route('admin.student.pending.list') }}" class="menu-link">
-                                <i class="fa-solid fa-rectangle-list"></i>
+                                <i class="fas fa-clock"></i>
                                 <span>Pending List</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('admin.student.approve.list') }}" class="menu-link">
-                                <i class="fa-solid fa-rectangle-list"></i>
+                                <i class="fas fa-check-circle"></i>
                                 <span>Approved List</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('admin.student.reject.list') }}" class="menu-link">
-                                <i class="fa-solid fa-rectangle-list"></i>
+                                <i class="fas fa-times-circle"></i>
                                 <span>Rejected List</span>
                             </a>
                         </li>
@@ -321,7 +325,7 @@
                 <div class="section-header">Teacher Section</div>
                 <li>
                     <a href="{{ route('teachers.index') }}" class="menu-link">
-                        <i class="la la-users"></i>
+                        <i class="fas fa-chalkboard-teacher"></i>
                         <span>Teacher</span>
                     </a>
                 </li>
@@ -329,26 +333,26 @@
                 <!-- Teacher ID Card -->
                 <li class="submenu">
                     <a href="javascript:void(0);" class="submenu-toggle">
-                        <i class="la la-id-card"></i>
+                        <i class="fas fa-id-card"></i>
                         <span>Teacher ID Card</span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>
                         <li>
                             <a href="{{ route('teachers.allIdCardForm') }}" class="menu-link">
-                                <i class="fa-solid fa-users"></i>
+                                <i class="fas fa-users-cog"></i>
                                 <span>Generate All</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('teachers.singleIdForm') }}" class="menu-link">
-                                <i class="fa-solid fa-user"></i>
+                                <i class="fas fa-user-tie"></i>
                                 <span>Generate Individual</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('teachers.idCardHistoryData') }}" class="menu-link">
-                                <i class="fa-solid fa-id-card"></i>
+                                <i class="fas fa-history"></i>
                                 <span>ID Card Reports</span>
                             </a>
                         </li>
@@ -358,20 +362,20 @@
                 <!-- Class Allotment -->
                 <li class="submenu">
                     <a href="javascript:void(0);" class="submenu-toggle">
-                        <i class="la la-chalkboard-teacher"></i>
+                        <i class="fas fa-tasks"></i>
                         <span>Class Allotment</span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>
                         <li>
                             <a href="{{ route('admin_teachers_allot.create') }}" class="menu-link">
-                                <i class="fa-solid fa-circle-plus"></i>
+                                <i class="fas fa-user-plus"></i>
                                 <span>Allot Classes</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('admin_teachers_allot.index') }}" class="menu-link">
-                                <i class="fa-solid fa-rectangle-list"></i>
+                                <i class="fas fa-clipboard-list"></i>
                                 <span>Alloted Classes List</span>
                             </a>
                         </li>
@@ -382,32 +386,32 @@
                 <div class="section-header">Attendance Section</div>
                 <li class="submenu">
                     <a href="javascript:void(0);" class="submenu-toggle">
-                        <i class="la la-id-card"></i>
+                        <i class="fas fa-calendar-check"></i>
                         <span>Manage Attendance</span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>
                         <li>
                             <a href="{{ route('student_attendance.create') }}" class="menu-link">
-                                <i class="fa-solid fa-plus-circle"></i>
+                                <i class="fas fa-user-check"></i>
                                 <span>Student Attendance</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('student_attendance.report') }}" class="menu-link">
-                                <i class="fa-solid fa-calendar-days"></i>
+                                <i class="fas fa-chart-bar"></i>
                                 <span>Student Report</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('teacher_attendance.create') }}" class="menu-link">
-                                <i class="fa-solid fa-plus-circle"></i>
+                                <i class="fas fa-user-shield"></i>
                                 <span>Teacher Attendance</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('teacher_attendance.report') }}" class="menu-link">
-                                <i class="fa-solid fa-calendar-check"></i>
+                                <i class="fas fa-chart-line"></i>
                                 <span>Teacher Report</span>
                             </a>
                         </li>
@@ -418,14 +422,14 @@
                 <div class="section-header">Website Section</div>
                 <li class="submenu">
                     <a href="javascript:void(0);" class="submenu-toggle">
-                        <i class="fa-solid fa-images"></i>
+                        <i class="fas fa-images"></i>
                         <span>Add Gallery Images</span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>
                         <li>
                             <a href="{{ route('gallery.index') }}" class="menu-link">
-                                <i class="fa-solid fa-circle-plus"></i>
+                                <i class="fas fa-camera"></i>
                                 <span>Add Image</span>
                             </a>
                         </li>
@@ -436,20 +440,20 @@
                 <div class="section-header">Recycle Bin</div>
                 <li class="submenu">
                     <a href="javascript:void(0);" class="submenu-toggle">
-                        <i class="bi bi-trash-fill"></i>
+                        <i class="fas fa-trash-restore"></i>
                         <span>Manage Deleted Data</span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>
                         <li>
                             <a href="{{ route('students.trashed') }}" class="menu-link">
-                                <i class="bi bi-person"></i>
+                                <i class="fas fa-user-times"></i>
                                 <span>Students Data</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('teachers.trashed') }}" class="menu-link">
-                                <i class="bi bi-person"></i>
+                                <i class="fas fa-user-slash"></i>
                                 <span>Teachers Data</span>
                             </a>
                         </li>

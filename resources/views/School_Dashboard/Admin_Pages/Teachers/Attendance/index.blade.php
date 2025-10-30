@@ -36,7 +36,7 @@
             </div>
             {{-- End Card --}}
             <!-- Edit Attendance Modal -->
-            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
                 <div class="modal-dialog">
                     <form id="editAttendanceForm">
                         @csrf
