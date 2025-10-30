@@ -1,6 +1,9 @@
 $(document).ready(function () {
     // Bootstrap Modal Initialization
-    let modal = new bootstrap.Modal(document.getElementById("galleryModal"));
+    let modal = new bootstrap.Modal(document.getElementById("galleryModal"), {
+        backdrop: "static",
+        keyboard: false,
+    });
     let table = $("#galleryTable").DataTable({
         processing: true,
         serverSide: true,

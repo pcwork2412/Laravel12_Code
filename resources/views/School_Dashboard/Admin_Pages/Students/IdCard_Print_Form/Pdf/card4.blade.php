@@ -40,15 +40,11 @@
             font-family: 'Poppins';
             font-style: normal;
             font-weight: 400;
-            src: url('file://{{ public_path('pos/fonts/Poppins-Regular.ttf') }}') format('truetype');
+            src: url(asset('pos/fonts/Poppins-Regular.ttf') format('truetype'));
+            /* src: url('file://{{ public_path('pos/fonts/Poppins-Regular.ttf') }}') format('truetype'); */
         }
 
-        @font-face {
-            font-family: 'Rosemartin';
-            /* font-style: normal;
-            font-weight: 400; */
-            src: url('file://{{ public_path('pos/fonts/Rosemartin.otf') }}') format('truetype');
-        }
+       
 
         /*
         @font-face {
@@ -112,40 +108,47 @@
 
         .header {
             width: 100%;
-            height: 42px;
+            min-height: 62px;
+            overflow: hidden;
             /* border: #000 solid 1px; */
         }
 
 
         .logo-head {
+            min-width: 138px;
+            max-width: 140px;
+            min-height: 46px;
+            max-height: 48px;
             float: left;
-            margin-top: 12px;
-            margin-right: 15px;
-            margin-left: 15px;
-            /* margin: 5px; */
-            width: 90px;
-            height: 25px;
+            text-align: center;
+            padding-top: 12px;
+            /* padding-right: 10px;
+            padding-left: 10px; */
+            /* padding: 5px; */
             /* border: #000 solid 1px; */
             /* background-image: url({{ $base64Profile }}); */
-            background-size: 100% 100%;
+            /* background-size: 100% 100%;
             background-repeat: no-repeat;
-            background-position: center center;
-            /* overflow: hidden; */
+            background-position: top center; */
+            overflow: hidden;
         }
 
         .logo-head img {
-            width: 100%;
-            height: 150%;
-            object-fit: cover;
+            min-width: 85%;
+            max-width: 90%;
+            min-height: 20%;
+            max-height: 21%;
+            object-fit: contain;
         }
 
 
         .headline {
-            width: 190px;
-            height: 30px;
-            max-height: 30px;
+            min-width: 170px;
+            max-width: 180px;
+            min-height: 33px;
+            max-height: 35px;
             /* border: #000 solid 1px; */
-            margin-top: 10px;
+            padding-top: 10px;
             font-size: 13px;
             float: right;
             font-weight: 600;
@@ -170,8 +173,10 @@
         }
 
         .address {
-            width: 50%;
-            height: 30px;
+            max-width: 50%;
+            min-height: 42px;
+            max-height: 42px;
+            margin-top: 3px;
             float: left;
             /* border: #000 1px solid; */
             font-size: 8px;
@@ -179,16 +184,28 @@
             color: #ffffff;
             text-transform: capitalize;
             text-align: center;
+            overflow: hidden;
         }
-
+        
+        .detail-section {
+            max-width: 100%;
+            min-height: 98px;
+            max-height: 98px;
+            margin-top: 5px;
+            /* border: #000 solid 1px; */
+            overflow: hidden;
+        }
         .profile {
+            /* border: #000 1px solid; */
             float: left;
-            margin-top: 15px;
-            margin-right: 15px;
-            margin-left: 20px;
+            padding: 15px;
+            padding-right: 15px;
+            padding-left: 20px;
             border-radius: 5px;
-            width: 72px;
-            height: 72px;
+            min-width: 22%;
+            max-width: 23%;
+            min-height: 50px;
+            max-height: 52px;
             /* border: #1D57AE solid 1px; */
             /* background-image: url({{ $base64Profile }});
             background-size: 100% 100%;
@@ -198,19 +215,23 @@
         }
 
         .profile img {
-            width: 100%;
-            height: 100%;
+           min-width: 100%;
+            max-width: 100%;
+            min-height: 30%;
+            max-height: 30%;
             object-fit: contain;
+            border-radius: 5px;
         }
 
+
         .detail-section table {
-            width: 100%;
+            width: 60%;
             font-size: 12px;
             /* letter-spacing: 0.09rem; */
             /* text-align: start; */
-            float: left;
+            float: right;
             /* border: #000 solid 1px; */
-
+            overflow: hidden;
         }
 
         .detail-section table .table-head {
@@ -281,13 +302,6 @@
             text-align: center;
         }
 
-
-        .detail-section {
-            width: 62%;
-            height: 120px;
-            float: right;
-            margin-top: 5px;
-        }
 
         .header-right-back {
             width: 38%;
@@ -396,10 +410,13 @@
         }
 
         .back-detail-bottomright {
-            min-width: 52%;
-            max-width: 52%;
+            max-height: 55px;
+            min-height: 52px;
+            min-width: 50%;
+            max-width: 50%;
             /* border: #000 solid 1px; */
             float: right;
+            overflow: hidden;
         }
 
         .school-table-back {
@@ -532,15 +549,15 @@
                     }
                 @endphp
 
-                <div class="profile">
-                    @if ($base64Profile)
-                        <img src="{{ $base64Profile }}" alt="Profile">
-                    @else
-                        <img src="{{ $base64DProfile }}" alt="Default">
-                    @endif
-                </div>
 
-                <div class="detail-section">
+<div class="detail-section">
+                    <div class="profile">
+                        @if ($base64Profile)
+                            <img src="{{ $base64Profile }}" alt="Profile">
+                        @else
+                            <img src="{{ $base64DProfile }}" alt="Default">
+                        @endif
+                    </div>
                     {{-- <div class="profile"></div> --}}
                     <table class="detail-table">
 
@@ -555,20 +572,20 @@
                             <td>:</td>
                             <td class="table-body">{{ $stdData->student_name }}</td>
                         </tr>
-                        <tr>
-                            <td class="table-head">Father/Guardian</td>
+                          <tr>
+                            <td class="table-head">Dob</td>
                             <td>:</td>
-                            <td class="table-body">{{ $stdData->father_name }}</td>
+                            <td class="table-body">{{ $stdData->dob }}</td>
                         </tr>
                         <tr>
-                            <td class="table-head">Class</td>
-                            <td>:</td>
-                            <td class="table-body">{{ $stdData->promoted_class_name }}</td>
-                        </tr>
-                        <tr>
-                            <td class="table-head">Phone No</td>
+                            <td class="table-head">Mobile No.</td>
                             <td>:</td>
                             <td class="table-body">{{ $stdData->father_mobile }}</td>
+                        </tr>
+                        <tr>
+                            <td class="table-head">Class & Sec</td>
+                            <td>:</td>
+                            <td class="table-body">{{ $stdData->promoted_class_name }}-{{ $stdData->section }}</td>
                         </tr>
 
                     </table>
@@ -596,7 +613,7 @@
                     {{-- Header RIght --}}
                     <div class="header-right-back ">
                         <p>Session : <span>{{ $schoolData['school_session'] }}</span></p>
-                        <p>Joined : <span>{{ date('d-m-Y') }}</span></p>
+                        <p>Print Date : <span>{{ date('d-m-Y') }}</span></p>
                     </div>
                 </div>
                 <div class="terms-back">
@@ -621,7 +638,7 @@
                             <tr>
                                 <td class="table-head-back">Phone</td>
                                 <td>:</td>
-                                <td class="table-body-back">{{ $stdData->father_mobile }}</td>
+                                <td class="table-body-back">+91 9012863339</td>
                             </tr>
 
                             <tr>

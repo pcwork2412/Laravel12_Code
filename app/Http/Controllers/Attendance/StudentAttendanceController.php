@@ -214,7 +214,6 @@ class StudentAttendanceController extends Controller
         // 🚫 Step 2: Check if attendance already exists
         $exists = StudentAttendance::where('date', $request->date)
             ->where('section_id', $request->section_id)
-            ->where('class_id', $request->class_id)
             ->exists();
 
         if ($exists) {

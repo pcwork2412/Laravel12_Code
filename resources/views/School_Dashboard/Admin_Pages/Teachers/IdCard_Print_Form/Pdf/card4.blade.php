@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>ID Card PDF</title>
-
     @php
+        // $path = public_path('pos/images/idcard.svg');
         $path = public_path('pos/assets/img/idcard_pdf/idcard-front.png');
         $type = pathinfo($path, PATHINFO_EXTENSION);
         $data = file_get_contents($path);
@@ -18,6 +18,17 @@
         $type = pathinfo($path, PATHINFO_EXTENSION);
         $data = file_get_contents($path);
         $base64BgImgBack = 'data:image/' . $type . ';base64,' . base64_encode($data);
+        // Profile Image
+        $path = public_path('pos/assets/img/profiles/user.jpg');
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        $data = file_get_contents($path);
+        $base64Profile = 'data:image/' . $type . ';base64,' . base64_encode($data);
+    @endphp
+    @php
+        // Id Card Front Layout Img in SVG
+        // $path = public_path('pos/images/idcard-front.svg');
+        // $svgData = file_get_contents($path);
+        // $base64BgImgFront = 'data:image/svg+xml;base64,' . base64_encode($svgData);
     @endphp
 
     <style>
@@ -29,15 +40,11 @@
             font-family: 'Poppins';
             font-style: normal;
             font-weight: 400;
-            src: url('file://{{ public_path('pos/fonts/Poppins-Regular.ttf') }}') format('truetype');
+            src: url(asset('pos/fonts/Poppins-Regular.ttf') format('truetype'));
+            /* src: url('file://{{ public_path('pos/fonts/Poppins-Regular.ttf') }}') format('truetype'); */
         }
 
-        @font-face {
-            font-family: 'Rosemartin';
-            /* font-style: normal;
-            font-weight: 400; */
-            src: url('file://{{ public_path('pos/fonts/Rosemartin.otf') }}') format('truetype');
-        }
+       
 
         /*
         @font-face {
@@ -73,7 +80,7 @@
             width: 327.36px;
             border: #1D57AE solid 1px;
             background-image: url({{ $base64BgImgFront }});
-
+            /* background-image: url('{{ asset('pos/images/idcard-front.svg') }}'); */
             background-size: 100% 100%;
             background-repeat: no-repeat;
             background-position: center center;
@@ -90,7 +97,6 @@
             width: 327.36px;
             border: #1D57AE solid 1px;
             background-image: url({{ $base64BgImgBack }});
-
             background-size: 100% 100%;
             background-repeat: no-repeat;
             background-position: center center;
@@ -102,45 +108,55 @@
 
         .header {
             width: 100%;
-            height: 42px;
+            min-height: 62px;
+            overflow: hidden;
             /* border: #000 solid 1px; */
         }
 
 
         .logo-head {
+            min-width: 138px;
+            max-width: 140px;
+            min-height: 46px;
+            max-height: 48px;
             float: left;
-            /* margin-top: 5px; */
-            margin-right: 15px;
-            margin-left: 15px;
-            /* margin: 5px; */
-            width: 100px;
-            height: 38px;
+            text-align: center;
+            padding-top: 12px;
+            /* padding-right: 10px;
+            padding-left: 10px; */
+            /* padding: 5px; */
             /* border: #000 solid 1px; */
-
-            background-size: 100% 100%;
+            /* background-image: url({{ $base64Profile }}); */
+            /* background-size: 100% 100%;
             background-repeat: no-repeat;
-            background-position: center center;
-            /* overflow: hidden; */
+            background-position: top center; */
+            overflow: hidden;
         }
 
         .logo-head img {
-            width: 100%;
-            height: 150%;
-            object-fit: cover;
+            min-width: 85%;
+            max-width: 90%;
+            min-height: 20%;
+            max-height: 21%;
+            object-fit: contain;
         }
 
 
         .headline {
-            width: 190px;
+            min-width: 170px;
+            max-width: 180px;
+            min-height: 33px;
+            max-height: 35px;
             /* border: #000 solid 1px; */
-            margin-top: 10px;
-            font-size: 14px;
+            padding-top: 10px;
+            font-size: 13px;
             float: right;
             font-weight: 600;
             /* letter-spacing: 0.1rem; */
             color: #ffffff;
             text-transform: uppercase;
             text-align: center;
+            overflow: hidden;
         }
 
 
@@ -157,8 +173,10 @@
         }
 
         .address {
-            width: 50%;
-            height: 30px;
+            max-width: 50%;
+            min-height: 42px;
+            max-height: 42px;
+            margin-top: 3px;
             float: left;
             /* border: #000 1px solid; */
             font-size: 8px;
@@ -166,38 +184,54 @@
             color: #ffffff;
             text-transform: capitalize;
             text-align: center;
+            overflow: hidden;
         }
-
+        
+        .detail-section {
+            max-width: 100%;
+            min-height: 98px;
+            max-height: 98px;
+            margin-top: 5px;
+            /* border: #000 solid 1px; */
+            overflow: hidden;
+        }
         .profile {
+            /* border: #000 1px solid; */
             float: left;
-            margin-top: 15px;
-            margin-right: 15px;
-            margin-left: 20px;
+            padding: 15px;
+            padding-right: 15px;
+            padding-left: 20px;
             border-radius: 5px;
-            width: 77px;
-            height: 82px;
-            border: #1D57AE solid 1px;
-
+            min-width: 22%;
+            max-width: 23%;
+            min-height: 50px;
+            max-height: 52px;
+            /* border: #1D57AE solid 1px; */
+            /* background-image: url({{ $base64Profile }});
             background-size: 100% 100%;
             background-repeat: no-repeat;
-            background-position: center center;
-            */ overflow: hidden;
+            background-position: center center; */
+            overflow: hidden;
         }
 
         .profile img {
-            width: 100%;
-            height: 100%;
+           min-width: 100%;
+            max-width: 100%;
+            min-height: 30%;
+            max-height: 30%;
             object-fit: contain;
+            border-radius: 5px;
         }
 
+
         .detail-section table {
-            width: 100%;
+            width: 60%;
             font-size: 12px;
             /* letter-spacing: 0.09rem; */
             /* text-align: start; */
-            float: left;
+            float: right;
             /* border: #000 solid 1px; */
-
+            overflow: hidden;
         }
 
         .detail-section table .table-head {
@@ -268,13 +302,6 @@
             text-align: center;
         }
 
-
-        .detail-section {
-            width: 62%;
-            height: 120px;
-            float: right;
-            margin-top: 5px;
-        }
 
         .header-right-back {
             width: 38%;
@@ -360,6 +387,7 @@
 
 
         .school-detail-back {
+            margin-top: 30px;
             /* min-width: 100%; */
             max-width: 100%;
             height: 58px;
@@ -382,10 +410,13 @@
         }
 
         .back-detail-bottomright {
-            min-width: 52%;
-            max-width: 52%;
+            max-height: 55px;
+            min-height: 52px;
+            min-width: 50%;
+            max-width: 50%;
             /* border: #000 solid 1px; */
             float: right;
+            overflow: hidden;
         }
 
         .school-table-back {
@@ -469,7 +500,7 @@
             margin: auto;
             z-index: 999;
             background: #ffffff;
-
+            background-image: url({{ $base64Qr }});
             background-size: 85% 85%;
             background-repeat: no-repeat;
             background-position: center center;
@@ -482,7 +513,7 @@
 </head>
 
 <body>
-    @foreach ($teachers as $index => $teachData)
+    @foreach ($teachers as $index => $stdData)
         <div class="size-box-height"></div>
         <div class="main-box">
             <div class="idcardfront">
@@ -496,36 +527,65 @@
                         {{-- <div class="subheadline">Slogoan Here</div> --}}
                     </div>
                 </div>
+                @php
+                    // Default Profile Image
+                    $path = public_path('pos/assets/img/profiles/user.jpg');
+                    if (file_exists($path)) {
+                        $type = pathinfo($path, PATHINFO_EXTENSION);
+                        $data = file_get_contents($path);
+                        $base64DProfile = 'data:image/' . $type . ';base64,' . base64_encode($data);
+                    }
 
-                <div class="profile">
+                    $base64Profile = null;
 
-                </div>
+                    if (!empty($stdData->image)) {
+                        $fullPath = storage_path('app/public/' . $stdData->image);
 
-                <div class="detail-section">
+                        if (file_exists($fullPath)) {
+                            $type = pathinfo($fullPath, PATHINFO_EXTENSION);
+                            $data = file_get_contents($fullPath);
+                            $base64Profile = 'data:image/' . $type . ';base64,' . base64_encode($data);
+                        }
+                    }
+                @endphp
+
+
+<div class="detail-section">
+                    <div class="profile">
+                        @if ($base64Profile)
+                            <img src="{{ $base64Profile }}" alt="Profile">
+                        @else
+                            <img src="{{ $base64DProfile }}" alt="Default">
+                        @endif
+                    </div>
                     {{-- <div class="profile"></div> --}}
                     <table class="detail-table">
+
                         <tr>
-                            <td class="table-head">Reg No</td>
+                            <td class="table-head">Teacher ID</td>
                             <td>:</td>
-                            <td class="table-body">5443</td>
+                            <td class="table-body">{{ $stdData->teacher_id }}</td>
                         </tr>
 
                         <tr>
-                            <td class="table-head">Student ID</td>
+                            <td class="table-head">Teacher Name</td>
                             <td>:</td>
-                            <td class="table-body">{{ $teachData->teacher_id }}</td>
+                            <td class="table-body">{{ $stdData->teacher_name }}</td>
                         </tr>
-
-                        <tr>
-                            <td class="table-head">Student Name</td>
+                          <tr>
+                            <td class="table-head">Dob</td>
                             <td>:</td>
-                            <td class="table-body">{{ $teachData->teacher_name }}</td>
+                            <td class="table-body">{{ $stdData->dob }}</td>
                         </tr>
-
                         <tr>
-                            <td class="table-head">Phone No</td>
+                            <td class="table-head">Mobile No.</td>
                             <td>:</td>
-                            <td class="table-body">{{ $teachData->mobile }}</td>
+                            <td class="table-body">{{ $stdData->mobile }}</td>
+                        </tr>
+                        <tr>
+                            <td class="table-head">Experience</td>
+                            <td>:</td>
+                            <td class="table-body">{{ $stdData->experience }}</td>
                         </tr>
 
                     </table>
@@ -553,16 +613,16 @@
                     {{-- Header RIght --}}
                     <div class="header-right-back ">
                         <p>Session : <span>{{ $schoolData['school_session'] }}</span></p>
-                        <p>Joined : <span>{{ date('d-m-Y') }}</span></p>
+                        <p>Print Date : <span>{{ date('d-m-Y') }}</span></p>
                     </div>
                 </div>
                 <div class="terms-back">
                     <ul>
                         <li>Lorem ipsum dolor sit amet. ipsum dolor sit amet consectetur adipisicing elit. Ut, placeat.
-                            ipsum dolor sit amet consectetur ipsum dolor sit amet. ipsum dolor sit ametdolor sit amet
-                            consectetur adipisicing elit adipisicing elit. </li>
-                        <li>Lorem ipsum dolor sit amet consectetur adipisicing elit.Lorem ipsum dolor sit amet
-                            adipisicing elit. </li>
+                            </li>
+                        <li>Lorem ipsum dolor sit amet. ipsum dolor sit amet consectetur adipisicing elit.Lorem ipsum dolor sit amet
+                             </li>
+                        
                     </ul>
                 </div>
                 <div class="school-detail-back">
@@ -571,25 +631,27 @@
                             <tr>
                                 <td class="table-head-back">Mail</td>
                                 <td>:</td>
-                                <td class="table-body-back">{{ $teachData->email }}</td>
+                                <td class="table-body-back">info@techrlp.co.in
+
+</td>
                             </tr>
                             <tr>
                                 <td class="table-head-back">Phone</td>
                                 <td>:</td>
-                                <td class="table-body-back">{{ $teachData->mobile }}</td>
+                                <td class="table-body-back">+91 9012863339</td>
                             </tr>
 
                             <tr>
                                 <td class="table-head-back">Website</td>
                                 <td>:</td>
-                                <td class="table-body-back">{{ $teachData->teacher_id }}</td>
+                                <td class="table-body-back">https://techrlp.co.in</td>
                             </tr>
 
                         </table>
                     </div>
                     <div class="back-detail-bottomright">
                         <div class="logo-back">
-                            {{-- <img src="{{ $schoolData['school_logo'] }}"> --}}
+                            <img src="{{ $schoolData['school_logo'] }}">
 
                             {{-- <p>Logo Here</p>
                             <p>Slogoan Here</p> --}}

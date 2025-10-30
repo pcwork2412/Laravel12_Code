@@ -35,9 +35,9 @@ $(document).ready(function () {
                 searchable: false,
             },
             // { data: "student_uid", name: "student_uid" },
-            { data: "student_name", name: "student_name" },
-            { data: "promoted_class_name", name: "promoted_class_name" },
-            { data: "section", name: "section" },
+            { data: "student_name", name: "student_name",searchable: true },
+            { data: "promoted_class_name", name: "promoted_class_name" ,searchable: true},
+            { data: "section", name: "section" ,searchable: true},
             { data: "father_name", name: "father_name" },
             { data: "father_mobile", name: "father_mobile" },
             {

@@ -104,55 +104,56 @@
         </div>
     </div>
 
-    {{-- Alloted Data View Model --}}
-   <!-- Alloted Data View Modal -->
-<div class="modal fade" id="allotedDataShowModal" tabindex="-1" aria-labelledby="allotedDataShowModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content border-0 shadow-lg rounded-3">
-            <div class="modal-header bg-primary text-white">
-                <h3 class="modal-title fw-bold" id="allotedDataShowModalLabel">
-                    <i class="fa fa-layer-group me-2"></i> Teacher Name: <span id="teacherNameText"></span>
-                </h3>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body bg-light">
-                <!-- Summary Info -->
-                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
-                    <h5 class="mb-0 text-secondary">
-                        <i class="fa fa-chalkboard me-2"></i> Total Classes:
-                        <span id="totalClassesText" class="fw-bold text-dark">0</span>
-                    </h5>
-                    <h5 class="mb-0 text-secondary">
-                        <i class="fa fa-list me-2"></i> Total Sections:
-                        <span id="totalSectionsText" class="fw-bold text-dark">0</span>
-                    </h5>
-                    <h5 class="mb-0 text-secondary">
-                        <i class="fa fa-users me-2"></i> Total Students:
-                        <span id="totalTeachersText" class="fw-bold text-dark">0</span>
-                    </h5>
+    
+    <!-- Alloted Data View Modal -->
+    <div class="modal fade" id="allotedDataShowModal" tabindex="-1" aria-labelledby="allotedDataShowModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg rounded-3">
+                <div class="modal-header bg-primary text-white">
+                    <h3 class="modal-title fw-bold" id="allotedDataShowModalLabel">
+                        <i class="fa fa-layer-group me-2"></i> Teacher Name: <span id="teacherNameText"></span>
+                    </h3>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
 
-                <!-- Dynamic Cards Container -->
-                <div id="allotedCardsContainer" class="row gy-3">
-                    <!-- Cards will be injected here -->
-                </div>
-            </div>
+                <div class="modal-body bg-light">
+                    <!-- Summary Info -->
+                    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+                        <h5 class="mb-0 text-secondary">
+                            <i class="fa fa-chalkboard me-2"></i> Total Classes:
+                            <span id="totalClassesText" class="fw-bold text-dark">0</span>
+                        </h5>
+                        <h5 class="mb-0 text-secondary">
+                            <i class="fa fa-list me-2"></i> Total Sections:
+                            <span id="totalSectionsText" class="fw-bold text-dark">0</span>
+                        </h5>
+                        <h5 class="mb-0 text-secondary">
+                            <i class="fa fa-users me-2"></i> Total Students:
+                            <span id="totalTeachersText" class="fw-bold text-dark">0</span>
+                        </h5>
+                    </div>
 
-            <div class="modal-footer bg-white border-top">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="fa fa-times me-1"></i> Close
-                </button>
+                    <!-- Dynamic Cards Container -->
+                    <div id="allotedCardsContainer" class="row gy-3">
+                        <!-- Cards will be injected here -->
+                    </div>
+                </div>
+
+                <div class="modal-footer bg-white border-top">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fa fa-times me-1"></i> Close
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 
 
-
+<div class="container">
+    
     {{-- ✅ Allotted Teachers List --}}
     <div class="card shadow-sm rounded-2">
         <div class="card-header d-flex justify-content-between align-items-center">
@@ -160,7 +161,7 @@
                 <i class="fa-solid fa-chalkboard-teacher me-2"></i>Allotted Teachers List
             </h3>
             <!-- 🔹 Button to trigger modal -->
-            <a href="{{route('admin_teachers_allot.create')}}" class="btn btn-primary">
+            <a href="{{ route('admin_teachers_allot.create') }}" class="btn btn-primary">
                 <i class="fa-solid fa-plus-circle me-1"></i> Allot Teacher
             </a>
         </div>
@@ -187,6 +188,7 @@
             </div>
         </div>
     </div>
+</div>
 @endsection
 @push('scripts')
     <script src="{{ asset('pos/assets/js/CustomJS/Global/global.js') }}"></script>

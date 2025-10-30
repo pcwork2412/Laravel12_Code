@@ -1,20 +1,20 @@
 @extends('School_Dashboard.Admin_Layouts.app')
 
 @section('content')
-    <div class="card tab-box my-4 shadow-sm">
+    <div class="container">
+        <div class="card tab-box my-4 shadow-sm">
         <div class="card-header bg-primary text-white d-flex align-items-center">
             <div class="col-md-8">
                 <h3 class="mb-0"><i class="fa fa-users"></i> Generate Teacher ID Card</h3>
             </div>
             <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                <a href="{{ route('teachers.index') }}" class="btn btn-white"><i
-                        class="fa fa-list me-2"></i>Teacher List</a>
+                <a href="{{ route('teachers.index') }}" class="btn btn-white"><i class="fa fa-list me-2"></i>Teacher List</a>
             </div>
         </div>
         <div class="card-body  rounded-3">
             @php
             @endphp
-            <form action="{{ route('teachers.genIdCardAll') }}" method="POST" class="row g-3">
+            <form action="{{ route('teachers.genIdAll') }}" method="POST" target="_blank" class="row g-3">
                 @csrf
 
                 <div class="col-md-4">
@@ -32,7 +32,8 @@
             </form>
         </div>
     </div>
-    @if (session('error'))
+    </div>
+    {{-- @if (session('error'))
         <div class="alert alert-danger">
             {{ session('error') }}
         </div>
@@ -46,6 +47,6 @@
                 @endforeach
             </ul>
         </div>
-    @endif
+    @endif --}}
 
 @endsection

@@ -6,7 +6,8 @@
 
         </div>
     </div>
-    <form id="teacherCreateForm" enctype="multipart/form-data">
+ <div class="container">
+       <form id="teacherCreateForm" enctype="multipart/form-data">
         @csrf
         <div class="modal-content shadow-sm rounded-3 border-0"
             style="background: linear-gradient(145deg, #ffffff, #f8f9fa);">
@@ -107,6 +108,7 @@
             </div>
         </div>
     </form>
+ </div>
     {{-- End --}}
 @endsection
 

@@ -174,7 +174,8 @@
         </div>
         <!-- End Teacher Import Modal -->
 
-        {{-- Teacher Table Section --}}
+      <div class="container">
+          {{-- Teacher Table Section --}}
         <div class="row">
             <div class="col-12">
                 <div class="card shadow-sm border-0 mb-4">
@@ -278,6 +279,7 @@
             </div>
         </div>
         {{-- Teacher Table Section End --}}
+      </div>
     @endsection
     @push('styles')
         <style>

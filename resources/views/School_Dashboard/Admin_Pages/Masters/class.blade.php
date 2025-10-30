@@ -5,7 +5,8 @@
     data-url="{{ route('master-class.deleteMultiple') }}">
     <i class="fa fa-trash"></i> Delete Selected
 </button> --}}
-    <div class="card shadow-sm mb-3">
+   <div class="container">
+     <div class="card shadow-sm mb-3">
         <div class="card-body bg-white">
             {{-- Add New Section Button --}}
             <div class="d-flex justify-content-between align-items-center">
@@ -27,62 +28,7 @@
             </div>
         </div>
     </div>
-    {{-- View All Sections Model --}}
-    <!-- Modal -->
-<!-- ✅ View All Sections Modal -->
-<!-- ✅ View All Sections Modal -->
-<div class="modal fade" id="sectionsShowModal" tabindex="-1" aria-labelledby="sectionsShowModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-content border-0 shadow-lg rounded-3">
-      <div class="modal-header bg-primary text-white">
-        <h3 class="modal-title fw-bold" id="sectionsShowModalLabel">
-          <i class="fa fa-layer-group me-2"></i> Class: <span id="classNameText"></span>
-        </h3>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-
-      <div class="modal-body bg-light">
-        <!-- Summary Info -->
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h4 class="mb-0 text-secondary">
-            <i class="fa fa-list me-2"></i> Total Sections: 
-            <span id="totalSectionsText" class="fw-bold text-dark">0</span>
-          </h4>
-          <h4 class="mb-0 text-secondary">
-            <i class="fa fa-users me-2"></i> Total Students: 
-            <span id="totalStudentsText" class="fw-bold text-dark">0</span>
-          </h4>
-        </div>
-
-        <!-- Sections Table -->
-        <div class="table-responsive">
-          <table class="table table-bordered border-2 table-hover align-middle mb-0">
-            <thead class="table-primary">
-              <tr>
-                <th style="width: 60px;">#</th>
-                <th>Section Name</th>
-                <th>Total Students in Section</th>
-              </tr>
-            </thead>
-            <tbody id="sectionListBody">
-              <tr>
-                <td colspan="3" class="text-center text-muted py-3">
-                  <!-- Section details will be loaded here dynamically -->
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="modal-footer bg-white border-top">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          <i class="fa fa-times me-1"></i> Close
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+  
 
 
     {{-- Table Section Start --}}
@@ -98,7 +44,8 @@
                             <th>#</th>
                             <th>Class Name</th>
                             <th>No. of Sections</th>
-                            <th>Total Students Count<br><span style="font-size: 14px; font-weight:normal;">(View Section-Wise Count)</span></th>
+                            <th>Total Students Count<br><span style="font-size: 14px; font-weight:normal;">(View
+                                    Section-Wise Count)</span></th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -110,7 +57,8 @@
                                 <td>{{ $cl->sections->count() }}</td>
                                 <td>
                                     {{-- {{ $cl->sections->sum(function($section) { return $section->students->count(); }) }} --}}
-                                    <button class="btn btn-outline-info showAllSectionsBtn" title="View All Sections" data-id="{{ $cl->id }}">
+                                    <button class="btn btn-outline-info showAllSectionsBtn" title="View All Sections"
+                                        data-id="{{ $cl->id }}">
                                         <i class="fa fa-eye"></i> View All Sections
                                     </button>
                                 </td>
@@ -136,6 +84,7 @@
     </div>
     {{-- Table Section End --}}
 
+   </div>
     {{-- Modal Section Start --}}
     <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="classModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -180,6 +129,61 @@
         </div>
     </div>
     {{-- Modal Section End --}}
+      <!-- ✅ View All Sections Modal -->
+    <div class="modal fade" id="sectionsShowModal" tabindex="-1" aria-labelledby="sectionsShowModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg rounded-3">
+                <div class="modal-header bg-primary text-white">
+                    <h3 class="modal-title fw-bold" id="sectionsShowModalLabel">
+                        <i class="fa fa-layer-group me-2"></i> Class: <span id="classNameText"></span>
+                    </h3>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body bg-light">
+                    <!-- Summary Info -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="mb-0 text-secondary">
+                            <i class="fa fa-list me-2"></i> Total Sections:
+                            <span id="totalSectionsText" class="fw-bold text-dark">0</span>
+                        </h4>
+                        <h4 class="mb-0 text-secondary">
+                            <i class="fa fa-users me-2"></i> Total Students:
+                            <span id="totalStudentsText" class="fw-bold text-dark">0</span>
+                        </h4>
+                    </div>
+
+                    <!-- Sections Table -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered border-2 table-hover align-middle mb-0">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th style="width: 60px;">#</th>
+                                    <th>Section Name</th>
+                                    <th>Total Students in Section</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sectionListBody">
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted py-3">
+                                        <!-- Section details will be loaded here dynamically -->
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="modal-footer bg-white border-top">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fa fa-times me-1"></i> Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('scripts')

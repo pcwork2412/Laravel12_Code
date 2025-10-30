@@ -2065,7 +2065,7 @@ table.dataTable thead > tr > td.sorting {
 	position: relative;
 }
 .activity-list::before {
-	background: #ddd;
+	/* background: #ddd; */
 	bottom: 0;
 	content: "";
 	left: 23px;

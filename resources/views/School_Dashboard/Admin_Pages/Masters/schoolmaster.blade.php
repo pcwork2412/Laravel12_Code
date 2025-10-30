@@ -5,7 +5,8 @@
     data-url="{{ route('master-class.deleteMultiple') }}">
     <i class="fa fa-trash"></i> Delete Selected
 </button> --}}
-    <div class="card shadow-sm mb-3">
+   <div class="container">
+     <div class="card shadow-sm mb-3">
         <div class="card-body bg-white">
             {{-- Add New Section Button --}}
             <div class="d-flex justify-content-between align-items-center">
@@ -53,6 +54,7 @@
         </div>
     </div>
     {{-- Table Section End --}}
+   </div>
 
     {{-- Modal Section Start --}}
     <div class="modal fade" id="schoolModal" tabindex="-1" aria-labelledby="schoolModalLabel" aria-hidden="true">

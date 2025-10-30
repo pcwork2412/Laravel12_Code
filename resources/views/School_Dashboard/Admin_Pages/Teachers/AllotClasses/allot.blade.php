@@ -14,7 +14,8 @@
         </div>
     @endif
 
-    {{-- ✅ Allot Teacher Card --}}
+   <div class="container">
+     {{-- ✅ Allot Teacher Card --}}
     <div class="card border-1 shadow-md rounded-1 overflow-hidden">
         <div class="card-header text-white bg-primary d-flex justify-content-between align-items-center">
             <h3 class="mb-0 fw-bold"><i class="bi bi-person-plus-fill me-2"></i>Allot Teacher</h3>
@@ -120,6 +121,7 @@
             </form>
         </div>
     </div>
+   </div>
 @endsection
 
 @push('scripts')

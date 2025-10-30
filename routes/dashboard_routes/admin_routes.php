@@ -31,11 +31,28 @@ Route::middleware(['role:admin'])->group(function () {
 
 
     // ************Generate Students ID Card Single/Classwise  Routes ************ \\
-    Route::get('students/show/classwiseform', [SchoolIdCardController::class, 'classwiseIdForm'])->name('students.classwiseIdForm');
-    Route::get('students/show/singleform', [SchoolIdCardController::class, 'singleIdForm'])->name('students.singleIdForm');
-    Route::post('students/store/generate/classwise/idcard', [SchoolIdCardController::class, 'genIdCardClasswise'])->name('students.genIdCardClasswise');
-    Route::post('students/store/generate/single/idcard', [SchoolIdCardController::class, 'genIdCardSingle'])->name('students.genIdCardSingle');
+    // Route::get('students/show/classwiseform', [SchoolIdCardController::class, 'classwiseIdForm'])->name('students.classwiseIdForm');
+    // Route::get('students/show/singleform', [SchoolIdCardController::class, 'singleIdForm'])->name('students.singleIdForm');
+    // Route::post('students/store/generate/classwise/idcard', [SchoolIdCardController::class, 'genIdCardClasswise'])->name('students.genIdCardClasswise');
+    // Route::post('students/store/generate/single/idcard', [SchoolIdCardController::class, 'genIdCardSingle'])->name('students.genIdCardSingle');
+    // Add these routes in your web.php
 
+
+
+    Route::prefix('admin/students')->name('students.')->group(function () {
+
+        // Existing routes
+        Route::get('/classwise-id-form', [SchoolIdCardController::class, 'classwiseIdForm'])->name('classwiseIdForm');
+        Route::post('/generate-classwise-id', [SchoolIdCardController::class, 'genIdCardClasswise'])->name('genIdCardClasswise');
+
+        Route::get('/single-id-form', [SchoolIdCardController::class, 'singleIdForm'])->name('singleIdForm');
+        Route::post('/generate-single-id', [SchoolIdCardController::class, 'genIdCardSingle'])->name('genIdCardSingle');
+
+        // 🆕 New History Routes
+        Route::get('/id-card-history', [SchoolIdCardController::class, 'idCardHistory'])->name('idCardHistory');
+        Route::get('/id-card-history/data', [SchoolIdCardController::class, 'getIdCardHistoryData'])->name('idCardHistoryData');
+        Route::get('/id-card-history/details/{student_uid}', [SchoolIdCardController::class, 'getStudentHistoryDetails'])->name('studentHistoryDetails');
+    });
 
     //!Masters Routes
     // *****For Class Name
@@ -51,11 +68,21 @@ Route::middleware(['role:admin'])->group(function () {
 
 
     // ************Generate Teachers ID Card Single/All Routes ************ \\
-    Route::get('/admin/teachers/allidcardform', [TeacherIdCardController::class, 'allIdCardForm'])->name('teachers.allIdCardForm');
-    Route::post('/admin/teachers/generate/all/idcard', [TeacherIdCardController::class, 'genIdAll'])->name('teachers.genIdCardAll');
-    Route::get('/admin/teachers/singleform', [TeacherIdCardController::class, 'singleIdForm'])->name('teachers.singleIdForm');
-    Route::post('/admin/teachers/generate/single/idcard', [TeacherIdCardController::class, 'genIdCardSingle'])->name('teachers.genIdCardSingle');
+    // Teacher ID Card Routes
+    Route::prefix('admin/teachers')->name('teachers.')->group(function () {
 
+        // ✅ ID Card Generation Routes
+        Route::get('/all-id-form', [TeacherIdCardController::class, 'allIdCardForm'])->name('allIdCardForm');
+        Route::post('/generate-all-id', [TeacherIdCardController::class, 'genIdAll'])->name('genIdAll');
+
+        Route::get('/single-id-form', [TeacherIdCardController::class, 'singleIdForm'])->name('singleIdForm');
+        Route::post('/generate-single-id', [TeacherIdCardController::class, 'genIdCardSingle'])->name('genIdCardSingle');
+
+        // ✅ History Routes
+        Route::get('/id-card-history', [TeacherIdCardController::class, 'idCardHistory'])->name('idCardHistory');
+        Route::get('/id-card-history/data', [TeacherIdCardController::class, 'getIdCardHistoryData'])->name('idCardHistoryData');
+        Route::get('/id-card-history/details/{teacher_id}', [TeacherIdCardController::class, 'getTeacherHistoryDetails'])->name('teacherHistoryDetails');
+    });
     // ***********Import Routes
     Route::get('/admin/teachers/importform', [TeacherImportController::class, 'importForm'])->name('teachers.import.form');
     Route::post('/admin/teachers/importdata', [TeacherImportController::class, 'import'])->name('teachers.import.data');
@@ -85,7 +112,7 @@ Route::middleware(['role:admin'])->group(function () {
     Route::get('/marksheet/getstudents/{section_id}', [MarksheetController::class, 'individualgetStudents']);
 
 
-    
+
     // // Marks Allot Table
     // Route::resource('marks', MarksAllotTableController::class);
     // Route::post('/marks/{student_id}/update', [MarksAllotTableController::class, 'update']);

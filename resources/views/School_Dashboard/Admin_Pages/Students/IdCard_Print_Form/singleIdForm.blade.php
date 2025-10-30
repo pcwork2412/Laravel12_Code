@@ -1,7 +1,8 @@
 @extends('School_Dashboard.Admin_Layouts.app')
 
 @section('content')
-    <div class="card tab-box my-4 shadow-sm">
+   <div class="container">
+     <div class="card tab-box my-4 shadow-sm">
         <div class="card-header bg-primary text-white">
             <div class="row d-flex align-items-center">
                 <div class="col-md-8">
@@ -14,9 +15,8 @@
             </div>
         </div>
         <div class="card-body bg-light">
-            <form action="{{ route('students.genIdCardSingle') }}" method="POST" class="row g-3">
+            <form action="{{ route('students.genIdCardSingle') }}" method="POST" target="_blank" class="row g-3">
                 @csrf
-
                 <!-- Class -->
                 <div class="col-md-6">
                     <label class="form-label">Select Class</label>
@@ -72,8 +72,9 @@
 
         </div>
     </div>
+   </div>
 
-    {{-- Error Message --}}
+    {{-- Error Message
     @if (session('error'))
         <div class="alert alert-danger">
             {{ session('error') }}
@@ -88,7 +89,7 @@
                 @endforeach
             </ul>
         </div>
-    @endif
+    @endif --}}
 
 
 @endsection
