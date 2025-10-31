@@ -665,8 +665,14 @@ class CrudController extends Controller
         return $pdf->download('student_data.pdf');
     }
 
-    public function export()
+    public function export(Request $request)
     {
-        return Excel::download(new StudentsExport, 'student-list.xlsx');
+    $fields = $request->input('fields', []);
+
+    if (empty($fields)) {
+        return response()->json(['error' => 'Please select at least one field'], 400);
+    }
+
+    return Excel::download(new StudentsExport($fields), 'students_export.xlsx');
     }
 }

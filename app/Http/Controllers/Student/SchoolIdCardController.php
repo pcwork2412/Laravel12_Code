@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Models\IdCardHistory;
 use App\Models\Masters\SchoolMaster;
 use Illuminate\Http\Request;
 use App\Models\Masters\StdClass;
 use App\Models\Masters\Section;
 use App\Models\Students\Crud;
-use App\Models\IdCardHistory;
 use Barryvdh\Snappy\Facades\SnappyPdf;
 use Illuminate\Support\Facades\DB;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -97,22 +97,27 @@ class SchoolIdCardController extends Controller
 
             $base64Qr = $students->first()->qr_code ?? '';
 
-            // ✅ Generate PDF first - agar error aaye to history save nahi hogi
-            $pdf = SnappyPdf::loadView(
-                'school_dashboard.admin_pages.students.idcard_print_form.pdf.card4',
-                compact('students', 'base64Qr', 'schoolData')
-            )
-                ->setOption('page-size', 'A4')
-                ->setOption('margin-top', 0)
-                ->setOption('margin-bottom', 0)
-                ->setOption('margin-left', 0)
-                ->setOption('margin-right', 0)
-                ->setOption('print-media-type', true)
-                ->setOption('enable-local-file-access', true)
-                ->setOption('dpi', 400)
-                ->setOption('image-dpi', 400)
-                ->setOption('image-quality', 100)
-                ->setOption('footer-right', '[page] of [toPage]');
+          // FOR CLASSWISE ID CARD:
+$pdf = SnappyPdf::loadView(
+    'school_dashboard.admin_pages.students.idcard_print_form.pdf.card4',
+    compact('students', 'base64Qr', 'schoolData')
+)
+    ->setOption('page-size', 'A4')
+    ->setOption('orientation', 'Portrait')
+    ->setOption('margin-top', '0')
+    ->setOption('margin-bottom', '0')
+    ->setOption('margin-left', '0')
+    ->setOption('margin-right', '0')
+    ->setOption('dpi', 300)                    // ✅ Reduced from 400
+    ->setOption('image-dpi', 300)              // ✅ Reduced from 400
+    ->setOption('image-quality', 100)
+    ->setOption('enable-local-file-access', true)
+    ->setOption('print-media-type', true)
+    ->setOption('no-stop-slow-scripts', true)  // ✅ Added
+    ->setOption('javascript-delay', 1000)      // ✅ Added
+    ->setOption('zoom', 1.0)                   // ✅ Added
+    ->setOption('disable-smart-shrinking', false) // ✅ Added
+    ->setOption('footer-right', '[page] of [toPage]');
 
             // ✅ History Save - ONLY after successful PDF generation
             $actionType = $request->action;
@@ -210,23 +215,27 @@ class SchoolIdCardController extends Controller
                 'school_principal_sign' => $this->imageToBase64($schlMaster->school_principal_sign),
             ];
 
-            // ✅ Generate PDF first - agar error aaye to history save nahi hogi
-            $pdf = SnappyPdf::loadView('school_dashboard.admin_pages.students.idcard_print_form.pdf.card4', compact('students', 'base64Qr', 'schoolData'))
-                ->setOption('margin-top', 0)
-                ->setOption('margin-bottom', 0)
-                ->setOption('margin-left', 0)
-                ->setOption('margin-right', 0)
-                ->setOption('page-width', '210mm')
-                ->setOption('page-height', '297mm')
-                ->setOption('viewport-size', '1280x1024')
-                ->setOption('zoom', 1.0)
-                ->setOption('print-media-type', true)
-                ->setOption('enable-local-file-access', true)
-                ->setOption('dpi', 400)
-                ->setOption('image-dpi', 400)
-                ->setOption('image-quality', 100)
-
-                ->setOption('footer-right', '[page] of [toPage]');
+            // FOR SINGLE ID CARD:
+$pdf = SnappyPdf::loadView(
+    'school_dashboard.admin_pages.students.idcard_print_form.pdf.card4',
+    compact('students', 'base64Qr', 'schoolData')
+)
+    ->setOption('page-size', 'A4')
+    ->setOption('orientation', 'Portrait')
+    ->setOption('margin-top', '5mm')
+    ->setOption('margin-bottom', '5mm')
+    ->setOption('margin-left', '5mm')
+    ->setOption('margin-right', '5mm')
+    ->setOption('dpi', 300)
+    ->setOption('image-dpi', 300)
+    ->setOption('image-quality', 100)
+    ->setOption('enable-local-file-access', true)
+    ->setOption('print-media-type', true)
+    ->setOption('no-stop-slow-scripts', true)
+    ->setOption('javascript-delay', 1000)
+    ->setOption('zoom', 1.0)
+    ->setOption('disable-smart-shrinking', false)
+    ->setOption('footer-right', '[page] of [toPage]');
 
 
             // ✅ History Save - ONLY after successful PDF generation

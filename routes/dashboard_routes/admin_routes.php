@@ -101,28 +101,23 @@ Route::middleware(['role:admin'])->group(function () {
 
 
 
-    //*********** Class wise marksheet Form Page/Download
-    Route::get('/marksheet/form', [MarksheetController::class, 'showFormClassWise'])->name('marksheet.form');
-    Route::post('/marksheet/generate', [MarksheetController::class, 'generate'])->name('marksheet.generate');
-    //*********** Individual Student marksheet Form Page/Download
-    Route::get('/marksheet/student/form', [MarksheetController::class, 'showStudentWise'])->name('marksheet.student.form');
-    Route::post('/marksheet/student', [MarksheetController::class, 'generateSeparate'])->name('marksheet.student.download');
-    // Get Fill From Data
-    Route::get('/marksheet/getsections/{class_id}', [MarksheetController::class, 'individualgetSections']);
-    Route::get('/marksheet/getstudents/{section_id}', [MarksheetController::class, 'individualgetStudents']);
-
-
-
-    // // Marks Allot Table
-    // Route::resource('marks', MarksAllotTableController::class);
-    // Route::post('/marks/{student_id}/update', [MarksAllotTableController::class, 'update']);
-    // Route::get('/marks/{student_id}/allotNowBtn', [MarksAllotTableController::class, 'allotNowBtn'])->name('marks.allotNowBtn');
-
-    // Route::get('/get-sections/{classId}', [MarksAllotTableController::class, 'getSections']);
-    // Route::get('/get-subjects/{classId}', [MarksAllotTableController::class, 'getSubjects']);
-    // Route::get('/get-students/{sectionId}', [MarksAllotTableController::class, 'getStudents']);
-    // // Check Student Marks
-    // Route::get('/check-student-marks/{student_id}', [MarksAllotTableController::class, 'checkStudentMarks'])->name('marks.check');
-
-    // Route::get('/get-section-list/{class_id}', [CrudController  ::class, 'getSections']);
+    // //*********** Class wise marksheet Form Page/Download
+    Route::prefix('admin/students')->group(function () {
+    
+    // ✅ Existing Marksheet Routes
+    Route::get('/marksheet/individual', [MarksheetController::class, 'showStudentWise'])->name('students.marksheet.individual');
+    Route::post('/marksheet/generate-separate', [MarksheetController::class, 'generateSeparate'])->name('students.marksheet.generateSeparate');
+    
+    Route::get('/marksheet/classwise', [MarksheetController::class, 'showFormClassWise'])->name('students.marksheet.classwise');
+    Route::post('/marksheet/generate', [MarksheetController::class, 'generate'])->name('students.marksheet.generate');
+    
+    // ✅ NEW: Marksheet History Routes
+    Route::get('/marksheet-history', [MarksheetController::class, 'getMarksheetHistoryData'])->name('students.marksheetHistoryData');
+    Route::get('/marksheet-history/details/{student_uid}', [MarksheetController::class, 'getStudentMarksheetDetails'])->name('students.marksheetHistoryDetails');
+    
+    // Helper routes
+    Route::get('/sections/{class_id}', [MarksheetController::class, 'individualgetSections'])->name('students.getSections');
+    Route::get('/students/{section_id}', [MarksheetController::class, 'individualgetStudents'])->name('students.getStudents');
+});
+   
 });

@@ -278,15 +278,21 @@
                     </a>
                     <ul>
                         <li>
-                            <a href="{{ route('marksheet.student.form') }}" class="menu-link">
+                            <a href="{{ route('students.marksheet.individual') }}" class="menu-link">
                                 <i class="fas fa-file-alt"></i>
                                 <span>Individual Marksheet</span>
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('marksheet.form') }}" class="menu-link">
+                            <a href="{{ route('students.marksheet.classwise') }}" class="menu-link">
                                 <i class="fas fa-file-invoice"></i>
                                 <span>Classwise Marksheet</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('students.marksheetHistoryData') }}" class="menu-link">
+                                <i class="fas fa-history"></i>
+                                <span>Marksheet Report</span>
                             </a>
                         </li>
                     </ul>

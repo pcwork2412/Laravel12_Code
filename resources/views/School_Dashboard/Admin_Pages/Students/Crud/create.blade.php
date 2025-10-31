@@ -6,7 +6,8 @@
 
         </div>
     </div>
-    <form id="studentForm" enctype="multipart/form-data">
+  <div class="container">
+      <form id="studentForm" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="student_id_dummy" id="student_id">
         <div class="modal-content shadow-sm rounded-3 border-0"
@@ -360,6 +361,7 @@
             </div>
         </div>
     </form>
+  </div>
     {{-- End --}}
 @endsection
 

@@ -8,17 +8,19 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>ID Card PDF</title>
     @php
-        // $path = public_path('pos/images/idcard.svg');
+        // Front Background
         $path = public_path('pos/assets/img/idcard_pdf/idcard-front.png');
         $type = pathinfo($path, PATHINFO_EXTENSION);
         $data = file_get_contents($path);
         $base64BgImgFront = 'data:image/' . $type . ';base64,' . base64_encode($data);
-        // Id Card Back Layout Img
+
+        // Back Background
         $path = public_path('pos/assets/img/idcard_pdf/idcard-back.png');
         $type = pathinfo($path, PATHINFO_EXTENSION);
         $data = file_get_contents($path);
         $base64BgImgBack = 'data:image/' . $type . ';base64,' . base64_encode($data);
-        // Profile Image
+
+        // Default Profile
         $path = public_path('pos/assets/img/profiles/user.jpg');
         $type = pathinfo($path, PATHINFO_EXTENSION);
         $data = file_get_contents($path);
@@ -30,29 +32,14 @@
         // $svgData = file_get_contents($path);
         // $base64BgImgFront = 'data:image/svg+xml;base64,' . base64_encode($svgData);
     @endphp
+    
 
     <style>
+        
         @page {
-            margin: 15px;
+            size: A4;
+            margin: 5mm;
         }
-
-        @font-face {
-            font-family: 'Poppins';
-            font-style: normal;
-            font-weight: 400;
-            src: url(asset('pos/fonts/Poppins-Regular.ttf') format('truetype'));
-            /* src: url('file://{{ public_path('pos/fonts/Poppins-Regular.ttf') }}') format('truetype'); */
-        }
-
-       
-
-        /*
-        @font-face {
-            font-family: 'Poppins';
-            font-style: normal;
-            font-weight: 700;
-            src: url('file://{{ public_path('pos/fonts/Poppins-bold.ttf') }}') format('truetype');
-        } */
 
         body {
             font-family: 'Poppins', sans-serif;
@@ -60,27 +47,24 @@
         }
 
         .size-box-height {
-            height: 20px;
+            height: 5.29mm;
         }
 
         .main-box {
             width: 70%;
-            height: 220px;
+            height: 58.23mm;
             margin: auto;
-            padding: 10px;
-            /* border: #ff0202 solid 1px; */
+            padding: 2.65mm;
         }
 
         .idcardfront {
-            margin: 5px;
+            margin: 1.32mm;
             align-content: center;
-
             float: left;
-            height: 211px;
-            width: 327.36px;
-            border: #1D57AE solid 1px;
+            height: 55.83mm;
+            width: 86.16mm;
+            border: #1D57AE solid 0.26mm;
             background-image: url({{ $base64BgImgFront }});
-            /* background-image: url('{{ asset('pos/images/idcard-front.svg') }}'); */
             background-size: 100% 100%;
             background-repeat: no-repeat;
             background-position: center center;
@@ -88,14 +72,13 @@
             overflow: hidden;
         }
 
-
         .idcardback {
-            margin: 5px;
+            margin: 1.32mm;
             align-content: center;
             float: left;
-            height: 211px;
-            width: 327.36px;
-            border: #1D57AE solid 1px;
+            height: 55.83mm;
+            width: 86.16mm;
+            border: #1D57AE solid 0.26mm;
             background-image: url({{ $base64BgImgBack }});
             background-size: 100% 100%;
             background-repeat: no-repeat;
@@ -104,32 +87,20 @@
             overflow: hidden;
         }
 
-
-
         .header {
             width: 100%;
-            min-height: 62px;
+            min-height: 16.40mm;
             overflow: hidden;
-            /* border: #000 solid 1px; */
         }
 
-
         .logo-head {
-            min-width: 138px;
-            max-width: 140px;
-            min-height: 46px;
-            max-height: 48px;
+            min-width: 36.51mm;
+            max-width: 37.04mm;
+            min-height: 12.17mm;
+            max-height: 12.70mm;
             float: left;
             text-align: center;
-            padding-top: 12px;
-            /* padding-right: 10px;
-            padding-left: 10px; */
-            /* padding: 5px; */
-            /* border: #000 solid 1px; */
-            /* background-image: url({{ $base64Profile }}); */
-            /* background-size: 100% 100%;
-            background-repeat: no-repeat;
-            background-position: top center; */
+            padding-top: 3.17mm;
             overflow: hidden;
         }
 
@@ -141,32 +112,25 @@
             object-fit: contain;
         }
 
-
         .headline {
-            min-width: 170px;
-            max-width: 180px;
-            min-height: 33px;
-            max-height: 35px;
-            /* border: #000 solid 1px; */
-            padding-top: 10px;
-            font-size: 13px;
+            min-width: 44.88mm;
+            max-width: 47.63mm;
+            min-height: 8.73mm;
+            max-height: 9.26mm;
+            padding-top: 2.65mm;
+            font-size: 3.44mm;
             float: right;
             font-weight: 600;
-            /* letter-spacing: 0.1rem; */
             color: #ffffff;
             text-transform: uppercase;
             text-align: center;
             overflow: hidden;
         }
 
-
-
         .subheadline {
-
-            padding-top: 3px;
-            font-size: 8px;
+            padding-top: 0.79mm;
+            font-size: 2.12mm;
             font-weight: 500;
-            /* letter-spacing: 0.1rem; */
             color: #ffffff;
             text-transform: uppercase;
             text-align: center;
@@ -174,338 +138,254 @@
 
         .address {
             max-width: 50%;
-            min-height: 42px;
-            max-height: 42px;
-            margin-top: 3px;
+            min-height: 11.11mm;
+            max-height: 11.11mm;
+            margin-top: 0.79mm;
             float: left;
-            /* border: #000 1px solid; */
-            font-size: 8px;
-            /* letter-spacing: 0.07rem; */
+            font-size: 2.12mm;
             color: #ffffff;
             text-transform: capitalize;
             text-align: center;
             overflow: hidden;
         }
-        
+
         .detail-section {
             max-width: 100%;
-            min-height: 98px;
-            max-height: 98px;
-            margin-top: 5px;
-            /* border: #000 solid 1px; */
+            min-height: 25.93mm;
+            max-height: 25.93mm;
+            margin-top: 1.32mm;
             overflow: hidden;
         }
+
         .profile {
-            /* border: #000 1px solid; */
             float: left;
-            padding: 15px;
-            padding-right: 15px;
-            padding-left: 20px;
-            border-radius: 5px;
+            padding: 3.97mm;
+            padding-right: 3.97mm;
+            padding-left: 5.29mm;
+            border-radius: 1.32mm;
             min-width: 22%;
             max-width: 23%;
-            min-height: 50px;
-            max-height: 52px;
-            /* border: #1D57AE solid 1px; */
-            /* background-image: url({{ $base64Profile }});
-            background-size: 100% 100%;
-            background-repeat: no-repeat;
-            background-position: center center; */
+            min-height: 13.23mm;
+            max-height: 13.76mm;
             overflow: hidden;
         }
 
         .profile img {
-           min-width: 100%;
+            min-width: 100%;
             max-width: 100%;
             min-height: 30%;
             max-height: 30%;
             object-fit: contain;
-            border-radius: 5px;
+            border: #1D57AE solid 0.26mm;
+            border-radius: 1.32mm;
         }
-
 
         .detail-section table {
             width: 60%;
-            font-size: 12px;
-            /* letter-spacing: 0.09rem; */
-            /* text-align: start; */
+            font-size: 3.17mm;
             float: right;
-            /* border: #000 solid 1px; */
             overflow: hidden;
+            margin: 0px;
+            padding: 0px ;
+            /* border: #000000 1px solid; */
+            border-collapse: collapse;
+            border-spacing: 0px;
+            /* display: block; */
         }
 
         .detail-section table .table-head {
             width: 43%;
             font-weight: 500;
-            font-size: 10px;
-            /* letter-spacing: 0.09rem; */
+            font-size: 2.65mm;
             color: #000000;
             text-transform: capitalize;
             text-align: start;
-            /* border: #000 solid 1px; */
+            /* border: #000000 1px solid; */
+            margin: 0px;
         }
-
+        
         .detail-section table .table-body {
-            font-size: 10px;
+            /* border: #000000 1px solid; */
+            font-size: 2.65mm;
             color: #525252;
-            /* font-weight: 600; */
-            /* letter-spacing: 0.09rem; */
             text-transform: capitalize;
             text-align: start;
+            margin: 0px;
         }
 
         .sign {
             float: right;
             width: 40%;
-            height: 40px;
-            /* border:#000 solid 1px; */
+            height: 9.5mm;
+            /* border: #000000 1px solid; */
+            overflow: hidden;
         }
 
         .sign .signature {
             max-width: 50%;
             min-width: 50%;
-            height: 20px;
-            /* border: #000 solid 1px; */
+            height: 5.29mm;
             margin: auto;
-            /* float: left; */
-        }
-
-        .sign .signature p {
-            font-size: 8px;
-            font-family: 'poppins', sans-serif;
-            font-weight: 700;
-            margin-top: -5px;
-            /* letter-spacing: 0.07rem; */
-            color: #000000;
-            text-transform: capitalize;
-            text-align: center;
         }
 
         .sign .signature img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            display: block;
+            /* border: #000000 1px solid; */
         }
 
+        .sign .signature p {
+            font-size: 2mm;
+            /* margin-top: -0.5mm; */
+            color: #000000;
+            text-transform: capitalize;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            /* line-height: 1; */
+        }
 
         .headline-back {
-            width: 177px;
-            /* border: #000 solid 1px; */
-            margin-top: 16px;
-            font-size: 13px;
+            width: 46.86mm;
+            margin-top: 4.23mm;
+            font-size: 3.44mm;
             float: left;
-            font-family: 'poppins', sans-serif;
-            font-weight: 700;
-            /* letter-spacing: 0.1rem; */
             color: #ffffff;
             text-transform: uppercase;
             text-align: center;
         }
 
-
         .header-right-back {
             width: 38%;
-            height: auto;
             float: right;
-            /* border:#000 solid 1px; */
-            padding-top: 18px;
-        }
-
-        .header-right-back span {
-            color: #525252;
+            padding-top: 4.76mm;
         }
 
         .header-right-back p {
-            /* border:#ff0000 solid 1px; */
             width: 100%;
-            /* float: right; */
-            font-size: 9px;
-
-            font-family: 'poppins', sans-serif;
+            font-size: 2.38mm;
             font-weight: 700;
-            color: #242424;
-            margin: 1px;
-            /* letter-spacing: 0.067rem; */
+            margin: 0.26mm;
             text-transform: capitalize;
             text-align: center;
         }
 
-        /* .header-right-back table {
-            margin-top: 10px;
-            width: 100%;
-            float: right;
-            
-        }
-        
-        .header-right-back table .table-head-back {
-            width: 44%;
-            height: auto;
-            font-family: 'poppins', sans-serif;
-            font-weight: 700;
-            font-size: 8px;
-            color: #000000;
-            text-align: end;
-        }
-        
-        .header-right-back table .table-body-back {
-            width: 43%;
-            height: auto;
-            font-size: 8px;
-             font-family: 'poppins', sans-serif;
-            font-weight: 700;
-            color: #3f3f3f;
-            letter-spacing: 0.09rem;
-            text-transform: capitalize;
-            text-align: start;
-        } */
-
         .terms-back {
             width: 100%;
-            margin-top: 55px;
-            /* border: #000 solid 1px; */
+            margin-top: 14.55mm;
         }
 
         .terms-back ul {
             margin: 0;
-            padding: 2px;
-            /* list-style-type: none; */
-            text-align: start;
-            margin-left: 20px;
+            padding: 0.53mm;
+            margin-left: 5.29mm;
         }
 
         .terms-back ul li {
-            font-size: 9px;
-            color: #5e5e5e;
-            padding: 2px;
-            font-family: 'popins', sans-serif;
-            font-weight: 700;
-            text-transform: capitalize;
-            text-align: start;
+            font-size: 2.38mm;
+            padding: 0.53mm;
             line-height: 0.9rem;
-            /* border: #000 solid 1px; */
         }
-
 
         .school-detail-back {
-            margin-top: 30px;
-            /* min-width: 100%; */
-            max-width: 100%;
-            height: 58px;
-            /* border: #000 solid 1px; */
-            font-size: 7px;
-            font-family: 'poppins', sans-serif;
-            font-weight: 700;
-            /* letter-spacing: 0.09rem; */
-            /* color: #000000; */
-            text-transform: capitalize;
+            margin-top: 7.94mm;
+            height: 14.5mm;
+            font-size: 1.85mm;
             text-align: start;
-        }
-
-        .back-detail-bottomleft {
-            float: left;
-            /* border: #000 solid 1px; */
-            max-width: 47%;
-            min-width: 47%;
-
-        }
-
-        .back-detail-bottomright {
-            max-height: 55px;
-            min-height: 52px;
-            min-width: 50%;
-            max-width: 50%;
-            /* border: #000 solid 1px; */
-            float: right;
+            /* border: #000000 1px solid; */
             overflow: hidden;
         }
 
-        .school-table-back {
-            width: 50%;
+        .back-detail-bottomleft {
+            max-height: 13mm;
+            min-height: 12.5mm;
+            min-width: 46%;
+            max-width: 47%;
             float: left;
-            margin-left: 5px;
-            /* border: #ff0000 solid 1px; */
-
+            overflow: hidden;
+            /* border: #000000 1px solid; */
+        }
+         .back-detail-bottomleft .school-table-back {
+            /* width: 50%; */
+            /* font-size: 3mm; */
+            /* float: right; */
+            overflow: hidden;
+            margin: 0px;
+            padding: 0px ;
+            /* border: #000000 1px solid; */
+            border-collapse: collapse;
+            border-spacing: 0px;
+            /* display: block; */
         }
 
-        .school-table-back .table-head-back {
-            /* font-weight: 500; */
-            width: auto;
-            font-size: 8px;
-            /* letter-spacing: 0.06rem; */
+        .back-detail-bottomleft .school-table-back .table-head-back {
+            margin: 0px;
+            padding-left: 3mm;
+            width: 41%;
+            font-weight: 500;
+            font-size: 2mm;
             color: #000000;
             text-transform: capitalize;
             text-align: start;
-            /* border: #000 solid 1px;   */
+            /* border: #000000 1px solid; */
         }
-
-        .school-table-back .table-body-back {
-            /* border: #000 solid 1px;   */
-            width: auto;
-            font-size: 7.5px;
+        
+        .detail-section table .table-body-back {
+            /* border: #000000 1px solid; */
+            font-size: 2mm;
             color: #525252;
-            /* font-weight: 600; */
-            /* letter-spacing: 0.06rem; */
             text-transform: capitalize;
             text-align: start;
+            margin: 0px;
+        }
+        .back-detail-bottomright {
+            max-height: 14.55mm;
+            min-height: 13.76mm;
+            min-width: 50%;
+            max-width: 50%;
+            float: right;
+            overflow: hidden;
+            /* border: #000000 1px solid; */
         }
 
         .logo-back {
             float: left;
-            width: 90px;
-            height: 40px;
-            margin-top: 15px;
-            /* border: #000 solid 1px; */
+            width: 23.81mm;
+            height: 10mm;
+            margin-top: 3.97mm;
             background-size: 100% 100%;
             background-repeat: no-repeat;
             background-position: center center;
             overflow: hidden;
         }
-
-        .logo-back img {
-            width: 100%;
+        .logo-back img{
+             width: 100%;
             height: 100%;
-            object-fit: cover;
-        }
-
-        .logo-back p {
-            font-size: 9px;
-            font-weight: 700;
-            /* letter-spacing: 0.09rem; */
-            color: #ffffff;
-            text-transform: uppercase;
-            text-align: center;
-        }
-
-        .logo-back p:nth-child(2) {
-            font-size: 7px;
-            font-weight: 700;
-            /* letter-spacing: 0.09rem; */
-            color: #ffffff;
-            text-transform: uppercase;
-            text-align: center;
+            object-fit: contain;
+            display: block;
+            overflow: hidden;
+            /* border: #000000 1px solid; */
         }
 
         .QR-back {
             float: right;
-            width: 70px;
-            height: 38px;
-            margin-top: 21px;
-            /* border: #000 solid 1px; */
-
+            width: 18.52mm;
+            height: 10.05mm;
+            margin-top: 5.55mm;
         }
 
         .QR-code {
-            width: 35px;
-            height: 35px;
+            width: 9mm;
+            height: 9mm;
             margin: auto;
-            z-index: 999;
             background: #ffffff;
             background-image: url({{ $base64Qr }});
             background-size: 85% 85%;
             background-repeat: no-repeat;
             background-position: center center;
             overflow: hidden;
-            /* border: #000 solid 1px; */
         }
     </style>
 
@@ -550,7 +430,7 @@
                 @endphp
 
 
-<div class="detail-section">
+                <div class="detail-section">
                     <div class="profile">
                         @if ($base64Profile)
                             <img src="{{ $base64Profile }}" alt="Profile">
@@ -572,7 +452,7 @@
                             <td>:</td>
                             <td class="table-body">{{ $stdData->teacher_name }}</td>
                         </tr>
-                          <tr>
+                        <tr>
                             <td class="table-head">Dob</td>
                             <td>:</td>
                             <td class="table-body">{{ $stdData->dob }}</td>
@@ -581,11 +461,6 @@
                             <td class="table-head">Mobile No.</td>
                             <td>:</td>
                             <td class="table-body">{{ $stdData->mobile }}</td>
-                        </tr>
-                        <tr>
-                            <td class="table-head">Experience</td>
-                            <td>:</td>
-                            <td class="table-body">{{ $stdData->experience }}</td>
                         </tr>
 
                     </table>
@@ -619,10 +494,11 @@
                 <div class="terms-back">
                     <ul>
                         <li>Lorem ipsum dolor sit amet. ipsum dolor sit amet consectetur adipisicing elit. Ut, placeat.
-                            </li>
-                        <li>Lorem ipsum dolor sit amet. ipsum dolor sit amet consectetur adipisicing elit.Lorem ipsum dolor sit amet
-                             </li>
-                        
+                        </li>
+                        <li>Lorem ipsum dolor sit amet. ipsum dolor sit amet consectetur adipisicing elit.Lorem ipsum
+                            dolor sit amet
+                        </li>
+
                     </ul>
                 </div>
                 <div class="school-detail-back">
@@ -633,7 +509,7 @@
                                 <td>:</td>
                                 <td class="table-body-back">info@techrlp.co.in
 
-</td>
+                                </td>
                             </tr>
                             <tr>
                                 <td class="table-head-back">Phone</td>

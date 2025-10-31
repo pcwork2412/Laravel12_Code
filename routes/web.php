@@ -53,7 +53,7 @@ Route::post('/student/logout', [StudentAuthController::class, 'logout'])->name('
 
 Route::middleware(['role:admin,teacher'])->group(function () {
     Route::get('/students/data/print', [CrudController::class, 'downloadPdf'])->name('students.download.pdf');
-    Route::get('/students/data/export', [CrudController::class, 'export'])->name('students.export');
+    Route::post('/students/data/export', [CrudController::class, 'export'])->name('students.export');
     Route::post('/students/bulkdelete', [CrudController::class, 'bulkDelete'])->name('students.bulk.delete');
 
     Route::get('/students/trashed', [CrudController::class, 'trashed'])->name('students.trashed');

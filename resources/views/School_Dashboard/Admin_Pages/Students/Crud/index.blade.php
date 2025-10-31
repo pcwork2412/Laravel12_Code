@@ -485,7 +485,7 @@
                         {{-- Action buttons --}}
                         <div>
                             <button id="deleteSelected" class="btn btn-danger">
-                                <i class="bi bi-trash-fill me-1"></i> Delete Selected 
+                                <i class="bi bi-trash-fill me-1"></i> Delete Selected
                             </button>
                             {{-- <a href="{{ route('students.trashed') }}"  class="btn btn-secondary">
                                 <i class="bi bi-file-earmark-pdf-fill me-1"></i> trash
@@ -520,9 +520,83 @@
                                 data-bs-target="#importStudentsModal">
                                 <i class="bi bi-upload me-1"></i> Import
                             </button>
-                            <a href="{{ route('students.export') }}" id="exportBtn" class="btn btn-success">
+                            <!-- Export Button -->
+                            <a href="#" id="openExportModal" class="btn btn-success">
                                 <i class="bi bi-file-earmark-excel-fill me-1"></i> Export
                             </a>
+
+                            <!-- Export Modal -->
+                            <div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel"
+                                aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                                <div class="modal-dialog modal-lg modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-success text-white">
+                                            <h3 class="modal-title" id="exportModalLabel">Select Fields to Export</h3>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+
+                                        <form id="exportForm">
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    @php
+                                                        $fields = [
+                                                            'promoted_class_name',
+                                                            'section',
+                                                            'student_uid',
+                                                            'student_name',
+                                                            'dob',
+                                                            'gender',
+                                                            'mother_name',
+                                                            'father_name',
+                                                            'guardian_name',
+                                                            'father_occupation_income',
+                                                            'mother_mobile',
+                                                            'father_mobile',
+                                                            'present_address',
+                                                            'permanent_address',
+                                                            'state_belong',
+                                                            'email_id',
+                                                            'aadhaar_number',
+                                                            'ration_card_type',
+                                                            'physically_handicapped',
+                                                            'blood_group',
+                                                            'height',
+                                                            'weight',
+                                                            'bank_name_branch',
+                                                            'account_number',
+                                                            'ifsc_code',
+                                                        ];
+                                                    @endphp
+
+                                                    @foreach ($fields as $field)
+                                                        <div class="col-md-4 mb-2">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input field-checkbox"
+                                                                    type="checkbox" name="fields[]"
+                                                                    value="{{ $field }}"
+                                                                    id="field_{{ $field }}" checked>
+                                                                <label class="form-check-label"
+                                                                    for="field_{{ $field }}">
+                                                                    {{ ucwords(str_replace('_', ' ', $field)) }}
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Cancel</button>
+                                                <button type="submit" id="exportBtnModal" class="btn btn-success">
+                                                    <i class="bi bi-download"></i> Export Selected
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                     <div class="card-body">
@@ -554,27 +628,77 @@
             </div>
         </div>
         {{-- Table Section End --}}
-       
     @endsection
     @push('styles')
-         <style>
-          #printTableContent {
-              border: #ccc 1px solid;
-              border-collapse: collapse;
+        <style>
+            #printTableContent {
+                border: #ccc 1px solid;
+                border-collapse: collapse;
             }
-            #printTableContent th, #printTableContent td {
-              border: #ccc 1px solid;
-              padding: 8px;
-              text-align: left;
-          }
-          #printTableContent tr:nth-child(even) {
-              background-color: #f2f2f2;
-              
-          }
+
+            #printTableContent th,
+            #printTableContent td {
+                border: #ccc 1px solid;
+                padding: 8px;
+                text-align: left;
+            }
+
+            #printTableContent tr:nth-child(even) {
+                background-color: #f2f2f2;
+
+            }
         </style>
     @endpush
     @push('scripts')
-    
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('openExportModal').addEventListener('click', function() {
+                    const modal = new bootstrap.Modal(document.getElementById('exportModal'));
+                    modal.show();
+                });
+                let exportFormEl = document.getElementById('exportForm');
+                exportFormEl.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const exportBtn = document.getElementById('exportBtnModal');
+                    exportBtn.disabled = true;
+                    exportBtn.innerHTML = 'Processing... <i class="fa fa-spinner fa-spin"></i>';
+
+                    const formData = new FormData(this);
+
+                    try {
+                        const response = await fetch("{{ route('students.export') }}", {
+                            method: "POST",
+                            headers: {
+                                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
+                                    .getAttribute('content')
+                            },
+                            body: formData
+                        });
+
+                        if (!response.ok) throw new Error('Server returned ' + response.status);
+
+                        const blob = await response.blob();
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = "students_export.xlsx";
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                    } catch (error) {
+                        alert('❌ Export failed: ' + error.message);
+                        console.error(error);
+                    } finally {
+                        exportBtn.disabled = false;
+                        exportBtn.innerHTML = '<i class="bi bi-download"></i> Export Selected';
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('exportModal'));
+                        exportFormEl.reset();
+                        modal.hide();
+                    }
+                });
+            });
+        </script>
+
         <script src="{{ asset('pos/assets/js/CustomJS/Global/global.js') }}"></script>
         <script src="{{ asset('pos/assets/js/CustomJS/Students/studentajax.js') }}"></script>
     @endpush

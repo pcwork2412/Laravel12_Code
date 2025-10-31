@@ -821,7 +821,7 @@
                     </div>
                 </a>
 
-                <a href="{{ route('marksheet.form') }}" class="action-card"
+                <a href="{{ route('students.marksheet.individual') }}" class="action-card"
                     style="--action-color-1: #06b6d4; --action-color-2: #0891b2;">
                     <div class="action-icon"><i class="fas fa-print"></i></div>
                     <div class="action-text">

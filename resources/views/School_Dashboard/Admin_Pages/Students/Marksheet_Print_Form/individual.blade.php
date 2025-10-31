@@ -4,30 +4,6 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
 
-                {{-- Alerts --}}
-                @if (session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
-                @if (session('error'))
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        {{ session('error') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
-                @if ($errors->any())
-                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <ul class="mb-0">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
-
                 {{-- Card --}}
                 <div class="card shadow-sm border-0">
                     <div class="card-header d-flex justify-content-between align-items-center bg-primary text-white">
@@ -38,7 +14,7 @@
                 </div>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('marksheet.student.download') }}" method="POST" id="marksForm">
+                        <form action="{{ route('students.marksheet.generateSeparate') }}" method="POST" id="marksForm">
                             @csrf
                             <div class="row">
 
@@ -114,4 +90,58 @@
 
 @push('scripts')
     <script src="{{ asset('pos/assets/js/CustomJS/Global/global.js') }}"></script>
+    <script>
+        // Form submit par button disable karne ka script
+document.addEventListener('DOMContentLoaded', function() {
+    const marksForm = document.getElementById('marksForm');
+    
+    if (marksForm) {
+        // Sabhi submit buttons ko select karo
+        const submitButtons = marksForm.querySelectorAll('button[type="submit"]');
+        
+        submitButtons.forEach(function(button) {
+            button.addEventListener('click', function(e) {
+                // Hidden input add karo jo button ki value send karega
+                const existingHidden = marksForm.querySelector('input[name="action"]');
+                if (existingHidden) {
+                    existingHidden.remove();
+                }
+                
+                // Naya hidden input create karo
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'action';
+                hiddenInput.value = button.value; // 'preview' ya 'generate'
+                marksForm.appendChild(hiddenInput);
+            });
+        });
+        
+        marksForm.addEventListener('submit', function(e) {
+            // Jo button click hua hai usko find karo
+            const clickedButton = document.activeElement;
+            
+            // Check karo ki clicked element button hai ya nahi
+            if (clickedButton && clickedButton.type === 'submit') {
+                // Button ko disable karo
+                clickedButton.disabled = true;
+                
+                // Button ka original text save karo
+                const originalText = clickedButton.innerHTML;
+                
+                // Loading text show karo with icon
+                const iconClass = clickedButton.value === 'preview' ? 'fa-eye' : 'fa-download';
+                clickedButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Processing...';
+                
+                // Agar form validation fail ho ya error aaye to button enable karo
+                setTimeout(function() {
+                    if (document.body) {
+                        clickedButton.disabled = false;
+                        clickedButton.innerHTML = originalText;
+                    }
+                }, 5000);
+            }
+        });
+    }
+});
+    </script>
 @endpush
