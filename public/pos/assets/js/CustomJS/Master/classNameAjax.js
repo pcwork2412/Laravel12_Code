@@ -306,13 +306,13 @@ $(document).ready(function () {
                             },
                         });
                     },
-                    error: function () {
+                    error: function (res) {
                         // Error case
                         Swal.fire({
                             toast: true,
                             position: "top-end",
                             icon: "error",
-                            title: "Something went wrong!",
+                            title: res.message,
                             showConfirmButton: false,
                             timer: 3000,
                             timerProgressBar: true,

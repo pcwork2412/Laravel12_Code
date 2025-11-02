@@ -14,7 +14,7 @@
                             @csrf
                             <div class="row d-flex justify-between ">
                                 <div class="mb-4 col-md-6">
-                                    <label for="promoted_class_name" class="form-label fw-semibold">Choose Class</label>
+                                    <label for="class_name" class="form-label fw-semibold">Choose Class</label>
                                    <select id="class_name" name="class_name" class="form-select globalClassSelect"
                                             required>
                                             <option value="">Select Class</option>

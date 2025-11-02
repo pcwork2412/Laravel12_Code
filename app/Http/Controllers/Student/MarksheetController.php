@@ -96,7 +96,7 @@ class MarksheetController extends Controller
             MarksheetHistory::create([
                 'student_uid' => $student->student_uid,
                 'student_name' => $student->student_name,
-                'class_name' => $student->promoted_class_name ?? $class,
+                'class_name' => $student->class_name ?? $class,
                 'section_name' => $student->section ?? $section,
                 'generation_type' => 'single',
                 'action_type' => $request->action,
@@ -150,19 +150,19 @@ class MarksheetController extends Controller
         try {
             // ✅ Validation
             $request->validate([
-                'promoted_class_name' => 'required|string',
+                'class_name' => 'required|string',
                 'section_name' => 'required|string',
                 'action' => 'required|in:preview,generate',
             ]);
 
-            $class = $request->promoted_class_name;
+            $class = $request->class_name;
             $section = $request->section_name;
 
             // ✅ Students + marks eager load
-            $students = Crud::where('promoted_class_name', $class)
-                ->where('section', $section)
+            $students = Crud::where('class_id', $class)
+                ->where('section_id', $section)
                 ->with('marks')
-                ->orderBy('student_name')
+                ->orderBy('id', 'asc')
                 ->get();
             $school = SchoolMaster::first();
 
