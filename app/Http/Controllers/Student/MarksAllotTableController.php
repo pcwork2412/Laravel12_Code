@@ -150,8 +150,7 @@ class MarksAllotTableController extends Controller
         // ✅ DataTables AJAX request
         if ($request->ajax()) {
             $query = Crud::with('marks') // relation: Student hasMany MarksAllotTable
-                ->select(['id', 'student_name', 'student_uid', 'promoted_class_name', 'section']);
-
+                ->select(['id', 'student_name', 'student_uid', 'promoted_class_name', 'section'])->latest();
             return DataTables::of($query)
                 ->addIndexColumn() // ✅ yeh line add karo
                 ->addColumn('class', function ($row) {

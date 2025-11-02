@@ -192,8 +192,6 @@
                     { data: 'last_generated' },
                     { data: 'actions', orderable: false, searchable: false }
                 ],
-                order: [[6, 'desc']], // Sort by last_generated
-                pageLength: 25,
                 language: {
                     processing: '<i class="fa fa-spinner fa-spin fa-3x text-danger"></i><br>Loading...'
                 }
@@ -420,7 +418,6 @@
 @endpush
 
 @push('styles')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
     <style>
         /* Table Styling */
         #historyTable {

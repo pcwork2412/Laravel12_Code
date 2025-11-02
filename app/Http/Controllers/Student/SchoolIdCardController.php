@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
-use App\Models\IdCardHistory;
 use App\Models\Masters\SchoolMaster;
 use Illuminate\Http\Request;
 use App\Models\Masters\StdClass;
 use App\Models\Masters\Section;
 use App\Models\Students\Crud;
+use App\Models\Students\IdCardHistory;
 use Barryvdh\Snappy\Facades\SnappyPdf;
 use Illuminate\Support\Facades\DB;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -282,8 +282,9 @@ $pdf = SnappyPdf::loadView(
                     DB::raw('COUNT(*) as total_generations'),
                     DB::raw('MAX(generated_at) as last_generated'),
                     DB::raw('MIN(generated_at) as first_generated')
-                ])
-                    ->groupBy('class_name', 'section_name', 'generation_type', DB::raw('DATE(generated_at)'));
+                ])->latest();
+
+                $query->groupBy('class_name', 'section_name', 'generation_type', DB::raw('DATE(generated_at)'));
 
                 // ✅ Filter by class
                 if ($request->class_name && $request->class_name != 'All') {

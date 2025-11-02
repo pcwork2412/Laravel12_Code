@@ -12,7 +12,7 @@ class StudentApprovalController extends Controller
       public function pendingStudent(Request $request)
     {
          if ($request->ajax()) {
-            $data = Crud::where('status', 'pending')->get();
+            $data = Crud::where('status', 'pending')->latest();
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -20,22 +20,23 @@ class StudentApprovalController extends Controller
                     return '<span class="badge bg-warning text-dark">'.$row->status.'</span>';
                 })
                 ->addColumn('action', function ($row) {
-                    $approveBtn = '<form action="'.route('admin.students.approve', $row->id).'" method="POST" style="display:inline-block">
-                                    '.csrf_field().'
-                                    <button type="submit" class="btn btn-success btn-sm">
-                                        <i class="fa fa-check"></i> Approve
-                                    </button>
-                                </form>';
+    $approveBtn = '<form action="'.route('admin.students.approve', $row->id).'" method="POST" class="actionForm d-inline-block">
+                        '.csrf_field().'
+                        <button type="submit" class="btn btn-success btn-sm action-btn">
+                            <i class="fa fa-check me-1"></i> Approve
+                        </button>
+                    </form>';
 
-                    $rejectBtn = '<form action="'.route('admin.students.reject', $row->id).'" method="POST" style="display:inline-block">
-                                    '.csrf_field().'
-                                    <button type="submit" class="btn btn-danger btn-sm">
-                                        <i class="fa fa-times"></i> Reject
-                                    </button>
-                                </form>';
+    $rejectBtn = '<form action="'.route('admin.students.reject', $row->id).'" method="POST" class="actionForm d-inline-block">
+                        '.csrf_field().'
+                        <button type="submit" class="btn btn-danger btn-sm action-btn">
+                            <i class="fa fa-times me-1"></i> Reject
+                        </button>
+                    </form>';
 
-                    return $approveBtn . ' ' . $rejectBtn;
-                })
+    return $approveBtn . ' ' . $rejectBtn;
+})
+
                 ->rawColumns(['status', 'action'])
                 ->make(true);
         }
@@ -50,22 +51,22 @@ class StudentApprovalController extends Controller
         // $approvedStudents = Crud::where('role', 'student')->where('status', 'approved')->get();
         // return view('school_dashboard.admin_pages.students.Student_Requests.approvedstudent', compact('approvedStudents'));
         if ($request->ajax()) {
-            $data = Crud::where('status', 'approved')->get();
+            $data = Crud::where('status', 'approved')->latest();
             
         return \Yajra\DataTables\Facades\DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('status', function ($row) {
                 return '<span class="badge bg-success">'.$row->status.'</span>';
             })
-            ->addColumn('action', function ($row) {
-                $rejectBtn = '<form action="'.route('admin.students.reject', $row->id).'" method="POST" style="display:inline-block">
-                                '.csrf_field().'
-                                <button type="submit" class="btn btn-danger btn-sm">
-                                    <i class="fa fa-times"></i> Reject
-                                </button>
-                              </form>';
-                return $rejectBtn;
-            })
+           ->addColumn('action', function ($row) {
+    return '<form action="'.route('admin.students.reject', $row->id).'" method="POST" class="rejectForm" style="display:inline-block">'
+        .csrf_field().
+        '<button type="submit" class="btn btn-danger btn-sm rejectBtn">
+            <i class="fa fa-times me-1"></i> Reject
+        </button>
+    </form>';
+})
+
             ->rawColumns(['status', 'action'])
             ->make(true);
         }
@@ -76,30 +77,31 @@ class StudentApprovalController extends Controller
         // $rejectedStudents = Crud::where('role', 'student')->where('status', 'rejected')->get();
         // return view('school_dashboard.admin_pages.students.Student_Requests.rejectedstudent', compact('rejectedStudents'));
           if ($request->ajax()) {
-        $data = Crud::where('status', 'rejected')->get();
+        $data = Crud::where('status', 'rejected')->latest();
 
         return \Yajra\DataTables\Facades\DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('status', function ($row) {
                 return '<span class="badge bg-danger">'.$row->status.'</span>';
             })
-            ->addColumn('action', function ($row) {
-                $approveBtn = '<form action="'.route('admin.students.approve', $row->id).'" method="POST" style="display:inline-block">
-                                '.csrf_field().'
-                                <button type="submit" class="btn btn-success btn-sm">
-                                    <i class="fa fa-check"></i> Approve
-                                </button>
-                              </form>';
+           ->addColumn('action', function ($row) {
+    $approveBtn = '<form action="'.route('admin.students.approve', $row->id).'" method="POST" class="approveForm" style="display:inline-block">'
+                    .csrf_field().
+                    '<button type="submit" class="btn btn-success btn-sm approveBtn">
+                        <i class="fa fa-check me-1"></i> Approve
+                    </button>
+                  </form>';
 
-                $deleteBtn = '<form action="'.route('admin.students.destroy', $row->id).'" method="POST" style="display:inline-block" onsubmit="return confirm(\'Are you sure you want to delete this student?\')">
-                                '.csrf_field().method_field('DELETE').'
-                                <button type="submit" class="btn btn-danger btn-sm">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                              </form>';
+    // $deleteBtn = '<form action="'.route('admin.students.destroy', $row->id).'" method="POST" class="deleteForm" style="display:inline-block">'
+    //                 .csrf_field().method_field('DELETE').
+    //                 '<button type="submit" class="btn btn-danger btn-sm deleteBtn">
+    //                     <i class="fa fa-trash"></i>
+    //                 </button>
+    //               </form>';
 
-                return $approveBtn . ' ' . $deleteBtn;
-            })
+    return $approveBtn;
+})
+
             ->rawColumns(['status', 'action'])
             ->make(true);
     }
@@ -108,27 +110,27 @@ class StudentApprovalController extends Controller
     }
 
     public function approve($id)
-    {
-        $student = Crud::findOrFail($id);
-        $student->status = 'approved';
-        $student->save();
+{
+    $student = Crud::findOrFail($id);
+    $student->status = 'approved';
+    $student->save();
 
-        return back()->with('success', 'Student approved successfully!');
-    }
+    return response()->json(['message' => 'Student approved successfully!']);
+}
 
-    public function reject($id)
-    {
-        $student = Crud::findOrFail($id);
-        $student->status = 'rejected';
-        $student->save();
+public function reject($id)
+{
+    $student = Crud::findOrFail($id);
+    $student->status = 'rejected';
+    $student->save();
 
-        return back()->with('error', 'Student rejected!');
-    }
+    return response()->json(['message' => 'Student rejected successfully!']);
+}
+
     public function destroy($id)
     {
         $student = Crud::findOrFail($id);
         $student->delete();
-
-        return back()->with('success', 'Student Deleted!');
+            return response()->json(['message' => 'Student Deleted!!']);
     }
 }

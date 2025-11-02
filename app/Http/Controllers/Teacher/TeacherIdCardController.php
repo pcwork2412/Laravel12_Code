@@ -164,10 +164,32 @@ class TeacherIdCardController extends Controller
                 'school_logo'           => $this->imageToBase64($schlMaster->school_logo),
                 'school_principal_sign' => $this->imageToBase64($schlMaster->school_principal_sign),
             ];
+                 // ✅ Generate QR codes for ALL teachers individually
+            $teachers = $teachers->map(function ($teacher) {
+                $data = [
+                    'teacher_id' => $teacher->teacher_id,
+                    'teacher_name' => $teacher->teacher_name,
+                    'mobile' => $teacher->mobile,
+                    'gender' => $teacher->gender,
+                    'dob' => $teacher->dob,
+                    'email' => $teacher->email,
+                    'role' => $teacher->role,
+                    'city' => $teacher->city,
+                    'qualification' => $teacher->qualification,
+                    'experience' => $teacher->experience,
+                    'address' => $teacher->address,
+                ];
+                $qr = QrCode::size(200)->generate(json_encode($data));
+                $teacher->qr_code = 'data:image/svg+xml;base64,' . base64_encode($qr);
+                return $teacher;
+            });
+
+            $base64Qr = $teachers->first()->qr_code ?? '';
+            
 
             // ✅ Generate PDF first - agar error aaye to history save nahi hogi
             $pdf = SnappyPdf::loadView('school_dashboard.admin_pages.teachers.idcard_print_form.pdf.card4', 
-                compact('teachers', 'schoolData'))
+                compact('teachers','base64Qr' ,'schoolData'))
                 ->setOption('page-size', 'A4')
                 ->setOption('margin-top', 0)
                 ->setOption('margin-bottom', 0)
@@ -226,8 +248,8 @@ class TeacherIdCardController extends Controller
                     DB::raw('COUNT(*) as total_generations'),
                     DB::raw('MAX(generated_at) as last_generated'),
                     DB::raw('MIN(generated_at) as first_generated')
-                ])
-                    ->groupBy('generation_type', 'action_type', DB::raw('DATE(generated_at)'))
+                ])->latest();
+                    $query->groupBy('generation_type', 'action_type', DB::raw('DATE(generated_at)'))
                     ->orderBy('last_generated', 'desc');
 
                 return DataTables::of($query)

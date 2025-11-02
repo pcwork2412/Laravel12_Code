@@ -150,76 +150,64 @@ $("#subjectForm").on("submit", function (e) {
             });
         }
     });
-    // Delete subject Section
-    $(document).on("click", ".subjectDeleteBtn", function () {
-        let id = $(this).data("id");
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!",
-        }).then((result) => {
-            if (result.isConfirmed) {
+  // Delete subject Section (fix with preConfirm + showLoaderOnConfirm)
+$(document).on("click", ".subjectDeleteBtn", function () {
+    let id = $(this).data("id");
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+        showLoaderOnConfirm: true,
+        allowOutsideClick: () => !Swal.isLoading(),
+        preConfirm: () => {
+            // Return a promise so Swal shows loader until AJAX finishes
+            return new Promise((resolve, reject) => {
                 $.ajax({
                     url: `/subject_name/${id}`,
                     type: "DELETE",
                     data: {
-                        _token: $('meta[name="csrf-token"]').attr("content"),
+                        _token: $('meta[name="csrf-token"]').attr("content")
                     },
                     success: function (res) {
-                        table.ajax.reload();
-                       Swal.fire({
-                            toast: true,
-                            position: "top-end", // ✅ right top corner
-                            icon: "success",
-                            title: `${
-                                res.subjectName || "The School"
-                            } has been deleted.`,
-                            showConfirmButton: false,
-                            timer: 3000, // auto close after 3s
-                            timerProgressBar: true,
-                            didOpen: (toast) => {
-                                // Hover पर stop होगा
-                                toast.addEventListener(
-                                    "mouseenter",
-                                    Swal.stopTimer
-                                );
-                                toast.addEventListener(
-                                    "mouseleave",
-                                    Swal.resumeTimer
-                                );
-                            },
-                        });
+                        resolve(res); // resolved value available as result.value
                     },
-                    error: function () {
-                       Swal.fire({
-                            toast: true,
-                            position: "top-end", // ✅ right top corner
-                            icon: "error",
-                            title: "something Went Worng",
-                            showConfirmButton: false,
-                            timer: 3000, // auto close after 3s
-                            timerProgressBar: true,
-                            didOpen: (toast) => {
-                                // Hover पर stop होगा
-                                toast.addEventListener(
-                                    "mouseenter",
-                                    Swal.stopTimer
-                                );
-                                toast.addEventListener(
-                                    "mouseleave",
-                                    Swal.resumeTimer
-                                );
-                            },
-                        });
-                    },
+                    error: function (xhr, status, err) {
+                        // pass error message to showValidationMessage (optional)
+                        reject(xhr.responseJSON?.message || "Request failed");
+                    }
                 });
-            }
-        });
+            }).catch((errMsg) => {
+                // show validation message inside the modal (keeps modal open)
+                Swal.showValidationMessage(String(errMsg));
+            });
+        }
+    }).then((result) => {
+        if (result.isConfirmed && result.value) {
+            // AJAX success response is in result.value
+            let res = result.value;
+            if (typeof table !== "undefined" && table.ajax) table.ajax.reload();
+
+            Swal.fire({
+                toast: true,
+                position: "top-end",
+                icon: "success",
+                title: `${res.subjectName || "The School"} has been deleted.`,
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener("mouseenter", Swal.stopTimer);
+                    toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+            });
+        }
     });
+});
+
 
     // Close Modal on Cancel or Close Button
     $("#subjectcancelBtn").on("click", function () {

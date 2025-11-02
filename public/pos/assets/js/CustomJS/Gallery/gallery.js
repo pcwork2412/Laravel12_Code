@@ -294,6 +294,9 @@ $(document).on("click", ".editGalleryBtn", function () {
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "Cancel",
+            showLoaderOnConfirm: true,
+            allowOutsideClick: () => !Swal.isLoading(),
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({

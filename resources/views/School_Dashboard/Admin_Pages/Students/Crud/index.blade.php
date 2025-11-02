@@ -407,7 +407,8 @@
 
                     <!-- 🔸 Modal Body -->
                     <div class="modal-body">
-                        <form action="{{ route('students.import.data') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('students.import.data') }}" id="importForm" method="POST"
+                            enctype="multipart/form-data">
                             @csrf
 
                             <!-- File Input -->
@@ -432,7 +433,8 @@
                                     class="btn btn-outline-success btn-sm rounded-pill px-4 shadow-sm">
                                     <i class="bi bi-file-earmark-excel me-2"></i> Download Excel Template
                                 </a>
-                                <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm">
+                                <button type="submit" id="importBtn"
+                                    class="btn btn-primary rounded-pill px-4 shadow-sm">
                                     <i class="bi bi-box-arrow-in-down me-2"></i> Import Data
                                 </button>
                             </div>
@@ -651,11 +653,60 @@
     @endpush
     @push('scripts')
         <script>
+            // // Export Script
+            // document.addEventListener('DOMContentLoaded', function() {
+            //     document.getElementById('openExportModal').addEventListener('click', function() {
+            //         const modal = new bootstrap.Modal(document.getElementById('exportModal'));
+            //         modal.show();
+            //     });
+            //     let exportFormEl = document.getElementById('exportForm');
+            //     exportFormEl.addEventListener('submit', async function(e) {
+            //         e.preventDefault();
+            //         const exportBtn = document.getElementById('exportBtnModal');
+            //         exportBtn.disabled = true;
+            //         exportBtn.innerHTML = 'Processing... <i class="fa fa-spinner fa-spin"></i>';
+
+            //         const formData = new FormData(this);
+
+            //         try {
+            //             const response = await fetch("{{ route('students.export') }}", {
+            //                 method: "POST",
+            //                 headers: {
+            //                     "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
+            //                         .getAttribute('content')
+            //                 },
+            //                 body: formData
+            //             });
+
+            //             if (!response.ok) throw new Error('Server returned ' + response.status);
+
+            //             const blob = await response.blob();
+            //             const url = window.URL.createObjectURL(blob);
+            //             const a = document.createElement('a');
+            //             a.href = url;
+            //             a.download = "students_export.xlsx";
+            //             document.body.appendChild(a);
+            //             a.click();
+            //             a.remove();
+            //         } catch (error) {
+            //             alert('❌ Export failed: ' + error.message);
+            //             console.error(error);
+            //         } finally {
+            //             exportBtn.disabled = false;
+            //             exportBtn.innerHTML = '<i class="bi bi-download"></i> Export Selected';
+            //             const modal = bootstrap.Modal.getInstance(document.getElementById('exportModal'));
+            //             exportFormEl.reset();
+            //             modal.hide();
+            //         }
+            //     });
+            // });
+            // Export Script with Current Page Data Only
             document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('openExportModal').addEventListener('click', function() {
                     const modal = new bootstrap.Modal(document.getElementById('exportModal'));
                     modal.show();
                 });
+
                 let exportFormEl = document.getElementById('exportForm');
                 exportFormEl.addEventListener('submit', async function(e) {
                     e.preventDefault();
@@ -664,6 +715,25 @@
                     exportBtn.innerHTML = 'Processing... <i class="fa fa-spinner fa-spin"></i>';
 
                     const formData = new FormData(this);
+
+                    // Get IDs of students currently visible in the DataTable
+                    const visibleStudentIds = [];
+                    const table = $('#studentTable').DataTable();
+
+                    // Get all rows on the current page
+                    table.rows({
+                        page: 'current'
+                    }).every(function() {
+                        const rowData = this.data();
+                        // Assuming your DataTable has student ID in the data
+                        // Adjust 'id' based on your actual column name
+                        if (rowData.id) {
+                            visibleStudentIds.push(rowData.id);
+                        }
+                    });
+
+                    // Add visible student IDs to form data
+                    formData.append('student_ids', JSON.stringify(visibleStudentIds));
 
                     try {
                         const response = await fetch("{{ route('students.export') }}", {
@@ -696,6 +766,85 @@
                         modal.hide();
                     }
                 });
+            });
+
+            // ============================================
+            // PDF Download Button Handler
+            // ============================================
+            document.getElementById('printBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+
+                // Show loading state
+                const originalHTML = this.innerHTML;
+                this.innerHTML = '<i class="fa fa-spinner fa-spin me-1"></i> Generating PDF...';
+                this.disabled = true;
+
+                // Get IDs of students currently visible in the DataTable
+                const visibleStudentIds = [];
+                const table = $('#studentTable').DataTable();
+
+                // Get all rows on the current page
+                table.rows({
+                    page: 'current'
+                }).every(function() {
+                    const rowData = this.data();
+                    if (rowData.id) {
+                        visibleStudentIds.push(rowData.id);
+                    }
+                });
+
+                if (visibleStudentIds.length === 0) {
+                    alert('❌ No students found on current page');
+                    this.innerHTML = originalHTML;
+                    this.disabled = false;
+                    return;
+                }
+
+                // Create a form and submit it
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '{{ route('students.download.pdf') }}';
+                form.target = '_blank'; // Open in new tab
+
+                // Add CSRF token
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = '_token';
+                csrfInput.value = '{{ csrf_token() }}';
+                form.appendChild(csrfInput);
+
+                // Add student IDs
+                const idsInput = document.createElement('input');
+                idsInput.type = 'hidden';
+                idsInput.name = 'student_ids';
+                idsInput.value = JSON.stringify(visibleStudentIds);
+                form.appendChild(idsInput);
+
+                // Submit form
+                document.body.appendChild(form);
+                form.submit();
+                document.body.removeChild(form);
+
+                // Reset button state after a delay
+                setTimeout(() => {
+                    this.innerHTML = originalHTML;
+                    this.disabled = false;
+                }, 2000);
+            });
+
+
+
+            // !--Spinner Script-- >
+
+            $(document).on("submit", "#importForm", function() {
+                let btn = $("#importBtn");
+
+                // Disable button & show spinner
+                btn.prop("disabled", true);
+                btn.html(`
+            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Importing...
+        `);
             });
         </script>
 

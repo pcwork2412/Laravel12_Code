@@ -93,7 +93,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label for="pincode" class="form-label fw-semibold">Pincode</label>
-                                    <input type="text" id="pincode" name="pincode" class="form-control rounded-3"
+                                    <input type="number" id="pincode" name="pincode" class="form-control rounded-3"
                                         placeholder="Enter Pincode">
                                 </div>
 
@@ -136,7 +136,8 @@
 
                     <!-- 🔸 Modal Body -->
                     <div class="modal-body">
-                        <form action="{{ route('teachers.import.data') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('teachers.import.data') }}" id="importForm" method="POST"
+                            enctype="multipart/form-data">
                             @csrf
 
                             <!-- File Input -->
@@ -162,7 +163,8 @@
                                     <i class="bi bi-file-earmark-excel me-2"></i>
                                     Download Excel Template
                                 </a>
-                                <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm">
+                                <button type="submit" id="importBtn"
+                                    class="btn btn-primary rounded-pill px-4 shadow-sm">
                                     <i class="bi bi-box-arrow-in-down me-2"></i> Import Data
                                 </button>
                             </div>
@@ -174,112 +176,176 @@
         </div>
         <!-- End Teacher Import Modal -->
 
-      <div class="container">
-          {{-- Teacher Table Section --}}
-        <div class="row">
-            <div class="col-12">
-                <div class="card shadow-sm border-0 mb-4">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h4 class="mb-0 fw-bold text-primary">
-                            <i class="fa-solid fa-users me-2"></i>Teachers List
-                        </h4>
-                        <!-- 🔹 Button to trigger modal -->
-                        {{-- <button type="button" id="addStudentBtn" class="btn btn-success shadow-sm"
+
+        <!--Start Export Modal -->
+        <div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true"
+            data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-success text-white">
+                        <h3 class="modal-title" id="exportModalLabel">Select Fields to Export</h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <form id="exportForm">
+                        <div class="modal-body">
+                            <div class="row">
+                                @php
+                                    $fields = [
+                                        'teacher_id',
+                                        'teacher_name',
+                                        'role',
+                                        'status',
+                                        'password',
+                                        'dob',
+                                        'gender',
+                                        'image',
+                                        'email',
+                                        'mobile',
+                                        'address',
+                                        'city',
+                                        'state',
+                                        'pincode',
+                                        'qualification',
+                                        'experience',
+                                        'documents',
+                                    ];
+                                @endphp
+
+                                @foreach ($fields as $field)
+                                    <div class="col-md-4 mb-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input field-checkbox" type="checkbox"
+                                                name="fields[]" value="{{ $field }}"
+                                                id="field_{{ $field }}" checked>
+                                            <label class="form-check-label" for="field_{{ $field }}">
+                                                {{ ucwords(str_replace('_', ' ', $field)) }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" id="exportBtnModal" class="btn btn-success">
+                                <i class="bi bi-download"></i> Export Selected
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- End Export Modal -->
+
+
+        <div class="container">
+            {{-- Teacher Table Section --}}
+            <div class="row">
+                <div class="col-12">
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0 fw-bold text-primary">
+                                <i class="fa-solid fa-users me-2"></i>Teachers List
+                            </h4>
+                            <!-- 🔹 Button to trigger modal -->
+                            {{-- <button type="button" id="addStudentBtn" class="btn btn-success shadow-sm"
                             data-bs-toggle="modal" data-bs-target="#addStudentModal">
                             <i class="bi bi-person-plus-fill me-2"></i> Add New Student
                         </button> --}}
-                        <a href="{{ route('teachers.create') }}" class="btn btn-primary shadow-sm">
-                            <i class="bi bi-person-plus-fill me-2"></i> Add New Teacher
-                        </a>
+                            <a href="{{ route('teachers.create') }}" class="btn btn-primary shadow-sm">
+                                <i class="bi bi-person-plus-fill me-2"></i> Add New Teacher
+                            </a>
 
+                        </div>
                     </div>
                 </div>
-            </div>
 
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="card shadow-sm border-0 mb-4">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        {{-- Select option --}}
-                        <button id="deleteSelected" class="btn btn-danger">
-                            <i class="bi bi-trash-fill me-1"></i> Delete Selected
-                        </button>
-                        {{-- Action buttons --}}
-                        <div>
-                            <a href="{{ route('teachers.download.pdf') }}" id="printBtn" class="btn btn-secondary">
-                                <i class="bi bi-file-earmark-pdf-fill me-1"></i> PDF
-                            </a>
-                             {{-- <a href="{{ route('teachers.trashed') }}"  class="btn btn-secondary">
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            {{-- Select option --}}
+                            <button id="deleteSelected" class="btn btn-danger">
+                                <i class="bi bi-trash-fill me-1"></i> Delete Selected
+                            </button>
+                            {{-- Action buttons --}}
+                            <div>
+                                <a href="{{ route('teachers.download.pdf') }}" id="printBtn" class="btn btn-secondary">
+                                    <i class="bi bi-file-earmark-pdf-fill me-1"></i> PDF
+                                </a>
+                                {{-- <a href="{{ route('teachers.trashed') }}"  class="btn btn-secondary">
                                 <i class="bi bi-file-earmark-pdf-fill me-1"></i> trash
                             </a> --}}
-                            <button id="printTeacher" class="btn btn-warning">
-                                <i class="bi bi-printer-fill me-1"></i> Print
-                            </button>
+                                <button id="printTeacher" class="btn btn-warning">
+                                    <i class="bi bi-printer-fill me-1"></i> Print
+                                </button>
 
-                            <div id="printableTeacherArea" style="display:none;">
-                                <table id="printTeacherContent" border="1" cellpadding="5" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>S.No</th>
-                                            <th>Image</th>
-                                            <th>Teacher Name</th>
-                                            <th>Email</th>
-                                            <th>Phone</th>
-                                            <th>Class Assigned</th>
-                                            <th>Subjects</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
+                                <div id="printableTeacherArea" style="display:none;">
+                                    <table id="printTeacherContent" border="1" cellpadding="5" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>S.No</th>
+                                                <th>Image</th>
+                                                <th>Teacher Name</th>
+                                                <th>Email</th>
+                                                <th>Phone</th>
+                                                <th>Class Assigned</th>
+                                                <th>Subjects</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+
+
+                                <button id="filterBtn" class="btn btn-info" data-bs-toggle="modal"
+                                    data-bs-target="#importTeachersModal">
+                                    <i class="bi bi-upload me-1"></i> Import
+                                </button>
+                                <a href="#" id="openExportModal" class="btn btn-success">
+                                    <i class="bi bi-file-earmark-excel-fill me-1"></i> Export
+                                </a>
                             </div>
-
-
-                            <button id="filterBtn" class="btn btn-info" data-bs-toggle="modal"
-                                data-bs-target="#importTeachersModal">
-                                <i class="bi bi-upload me-1"></i> Import
-                            </button>
-                            <a href="{{ route('teachers.export') }}" id="exportBtn" class="btn btn-success">
-                                <i class="bi bi-file-earmark-excel-fill me-1"></i> Export
-                            </a>
                         </div>
-                    </div>
-                    <div class="card-body">
+                        <div class="card-body">
 
-                        <div class="table-responsive" id="teacherList">
+                            <div class="table-responsive" id="teacherList">
 
-                            <table id="teacherTable" class="table table-bordered table-striped"
-                                data-url="{{ route('teachers.index') }}">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th>
-                                            <input type="checkbox" id="select_all">
-                                        </th>
+                                <table id="teacherTable" class="table table-bordered table-striped"
+                                    data-url="{{ route('teachers.index') }}">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>
+                                                <input type="checkbox" id="select_all">
+                                            </th>
 
-                                        <th>Image</th>
-                                        <th>Name</th>
-                                        {{-- <th>Role</th> --}}
-                                        {{-- <th>Status</th> --}}
-                                        {{-- <th>DOB</th>
+                                            <th>Image</th>
+                                            <th>Name</th>
+                                            {{-- <th>Role</th> --}}
+                                            {{-- <th>Status</th> --}}
+                                            {{-- <th>DOB</th>
                                         <th>Gender</th>
                                         <th>Email</th> --}}
-                                        <th>Mobile</th>
-                                        <th>Qualification</th>
-                                        <th>Experience</th>
-                                        <th>Documents</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                            </table>
+                                            <th>Mobile</th>
+                                            <th>Qualification</th>
+                                            <th>Experience</th>
+                                            <th>Documents</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                </table>
 
 
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            {{-- Teacher Table Section End --}}
         </div>
-        {{-- Teacher Table Section End --}}
-      </div>
     @endsection
     @push('styles')
         <style>
@@ -302,5 +368,205 @@
         </style>
     @endpush
     @push('scripts')
+        <script>
+            // Export Script
+            // document.addEventListener('DOMContentLoaded', function() {
+            //     document.getElementById('openExportModal').addEventListener('click', function() {
+            //         const modal = new bootstrap.Modal(document.getElementById('exportModal'));
+            //         modal.show();
+            //     });
+            //     let exportFormEl = document.getElementById('exportForm');
+            //     exportFormEl.addEventListener('submit', async function(e) {
+            //         e.preventDefault();
+            //         const exportBtn = document.getElementById('exportBtnModal');
+            //         exportBtn.disabled = true;
+            //         exportBtn.innerHTML = 'Processing... <i class="fa fa-spinner fa-spin"></i>';
+
+            //         const formData = new FormData(this);
+
+            //         try {
+            //             const response = await fetch("{{ route('teachers.export') }}", {
+            //                 method: "POST",
+            //                 headers: {
+            //                     "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
+            //                         .getAttribute('content')
+            //                 },
+            //                 body: formData
+            //             });
+
+            //             if (!response.ok) throw new Error('Server returned ' + response.status);
+
+            //             const blob = await response.blob();
+            //             const url = window.URL.createObjectURL(blob);
+            //             const a = document.createElement('a');
+            //             a.href = url;
+            //             a.download = "teachers_export.xlsx";
+            //             document.body.appendChild(a);
+            //             a.click();
+            //             a.remove();
+            //         } catch (error) {
+            //             alert('❌ Export failed: ' + error.message);
+            //             console.error(error);
+            //         } finally {
+            //             exportBtn.disabled = false;
+            //             exportBtn.innerHTML = '<i class="bi bi-download"></i> Export Selected';
+            //             const modal = bootstrap.Modal.getInstance(document.getElementById('exportModal'));
+            //             exportFormEl.reset();
+            //             modal.hide();
+            //         }
+            //     });
+            // });
+            // Export Script with Current Page Data Only
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('openExportModal').addEventListener('click', function() {
+                    const modal = new bootstrap.Modal(document.getElementById('exportModal'));
+                    modal.show();
+                });
+
+                let exportFormEl = document.getElementById('exportForm');
+                exportFormEl.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const exportBtn = document.getElementById('exportBtnModal');
+                    exportBtn.disabled = true;
+                    exportBtn.innerHTML = 'Processing... <i class="fa fa-spinner fa-spin"></i>';
+
+                    const formData = new FormData(this);
+
+                    // Get IDs of teachers currently visible in the DataTable
+                    const visibleStudentIds = [];
+                    const table = $('#teacherTable').DataTable();
+
+                    // Get all rows on the current page
+                    table.rows({
+                        page: 'current'
+                    }).every(function() {
+                        const rowData = this.data();
+                        // Assuming your DataTable has teacher ID in the data
+                        // Adjust 'id' based on your actual column name
+                        if (rowData.id) {
+                            visibleStudentIds.push(rowData.id);
+                        }
+                    });
+
+                    // Add visible teacher IDs to form data
+                    formData.append('teacher_ids', JSON.stringify(visibleStudentIds));
+
+                    try {
+                        const response = await fetch("{{ route('teachers.export') }}", {
+                            method: "POST",
+                            headers: {
+                                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
+                                    .getAttribute('content')
+                            },
+                            body: formData
+                        });
+
+                        if (!response.ok) throw new Error('Server returned ' + response.status);
+
+                        const blob = await response.blob();
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = "teachers_export.xlsx";
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                    } catch (error) {
+                        alert('❌ Export failed: ' + error.message);
+                        console.error(error);
+                    } finally {
+                        exportBtn.disabled = false;
+                        exportBtn.innerHTML = '<i class="bi bi-download"></i> Export Selected';
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('exportModal'));
+                        exportFormEl.reset();
+                        modal.hide();
+                    }
+                });
+            });
+
+               // ============================================
+    // PDF Download Button Handler
+    // ============================================
+    document.getElementById('printBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Show loading state
+        const originalHTML = this.innerHTML;
+        this.innerHTML = '<i class="fa fa-spinner fa-spin me-1"></i> Generating PDF...';
+        this.disabled = true;
+        
+        // Get IDs of teachers currently visible in the DataTable
+        const visibleTeacherIds = [];
+        const table = $('#teacherTable').DataTable();
+        
+        // Get all rows on the current page
+        table.rows({ page: 'current' }).every(function() {
+            const rowData = this.data();
+            if (rowData.id) {
+                visibleTeacherIds.push(rowData.id);
+            }
+        });
+        
+        if (visibleTeacherIds.length === 0) {
+            alert('❌ No teachers found on current page');
+            this.innerHTML = originalHTML;
+            this.disabled = false;
+            return;
+        }
+        
+        // Create a form and submit it
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '{{ route("teachers.download.pdf") }}';
+        form.target = '_blank'; // Open in new tab
+        
+        // Add CSRF token
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = '_token';
+        csrfInput.value = '{{ csrf_token() }}';
+        form.appendChild(csrfInput);
+        
+        // Add teacher IDs
+        const idsInput = document.createElement('input');
+        idsInput.type = 'hidden';
+        idsInput.name = 'teacher_ids';
+        idsInput.value = JSON.stringify(visibleTeacherIds);
+        form.appendChild(idsInput);
+        
+        // Submit form
+        document.body.appendChild(form);
+        form.submit();
+        document.body.removeChild(form);
+        
+        // Reset button state after a delay
+        setTimeout(() => {
+            this.innerHTML = originalHTML;
+            this.disabled = false;
+        }, 2000);
+    });
+
+
+// Import Form Spinner
+$(document).on("submit", "#importForm", function() {
+    let btn = $("#importBtn");
+    btn.prop("disabled", true);
+    btn.html(`
+        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+        Importing...
+    `);
+});
+            // !--Spinner Script-- >
+            $(document).on("submit", "#importForm", function() {
+                let btn = $("#importBtn");
+
+                // Disable button & show spinner
+                btn.prop("disabled", true);
+                btn.html(`
+            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Importing...
+        `);
+            });
+        </script>
         <script src="{{ asset('pos/assets/js/CustomJS/Teachers/teacherajax.js') }}"></script>
     @endpush

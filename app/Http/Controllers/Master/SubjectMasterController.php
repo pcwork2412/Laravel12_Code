@@ -17,7 +17,7 @@ class SubjectMasterController extends Controller
     {
         $classes = StdClass::orderBy('class_name', 'asc')->get();
         if ($request->ajax()) {
-            $query = SubjectMaster::select(['id', 'subject_name', 'max_marks', 'class_id']);
+            $query = SubjectMaster::select(['id', 'subject_name', 'max_marks', 'class_id'])->latest();
             return DataTables::of($query)
                 ->addIndexColumn()
                 ->addColumn('class_name', function ($row) {

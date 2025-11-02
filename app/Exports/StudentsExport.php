@@ -8,25 +8,25 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class StudentsExport implements FromCollection, WithHeadings
 {
-    // public function collection()
-    // {
-    //     return Crud::select('student_name', 'promoted_class_name', 'section', 'father_name', 'father_mobile')->get();
-    // }
+    protected $fields;
+    protected $studentIds;
 
-    // public function headings(): array
-    // {
-    //     return ['Student Name', 'Class', 'Section', 'Father Name', 'Mobile'];
-    // }
-      protected $fields;
-
-    public function __construct(array $fields)
+    public function __construct(array $fields, array $studentIds = [])
     {
         $this->fields = $fields;
+        $this->studentIds = $studentIds;
     }
 
     public function collection()
     {
-        return Crud::select($this->fields)->get();
+        $query = Crud::select($this->fields);
+        
+        // Filter by student IDs if provided
+        if (!empty($this->studentIds)) {
+            $query->whereIn('id', $this->studentIds);
+        }
+        
+        return $query->get();
     }
 
     public function headings(): array

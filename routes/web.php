@@ -52,7 +52,7 @@ Route::middleware('guest.role')->prefix('student')->group(function () {
 Route::post('/student/logout', [StudentAuthController::class, 'logout'])->name('student.logout');
 
 Route::middleware(['role:admin,teacher'])->group(function () {
-    Route::get('/students/data/print', [CrudController::class, 'downloadPdf'])->name('students.download.pdf');
+    Route::post('/students/data/print', [CrudController::class, 'downloadPdf'])->name('students.download.pdf');
     Route::post('/students/data/export', [CrudController::class, 'export'])->name('students.export');
     Route::post('/students/bulkdelete', [CrudController::class, 'bulkDelete'])->name('students.bulk.delete');
 
@@ -120,10 +120,10 @@ Route::delete('/teachers/force-delete-all', [TeacherCrudController::class, 'forc
 Route::resource('teachers', TeacherCrudController::class);
 
 
-    Route::get('/teachers/data/print', [TeacherCrudController::class, 'downloadPdf'])->name('teachers.download.pdf');
+    Route::post('/teachers/data/print', [TeacherCrudController::class, 'downloadPdf'])->name('teachers.download.pdf');
 
 
-    Route::get('/teachers/data/export', [TeacherCrudController::class, 'export'])->name('teachers.export');
+    Route::post('/teachers/data/export', [TeacherCrudController::class, 'export'])->name('teachers.export');
 
     Route::post('/staff/bulk-delete', [TeacherCrudController::class, 'bulkDelete'])->name('staff.bulk.delete');
 });

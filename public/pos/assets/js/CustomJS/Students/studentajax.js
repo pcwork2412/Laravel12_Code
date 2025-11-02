@@ -53,6 +53,7 @@ $(document).ready(function () {
             console.error("DataTable Ajax Error:", xhr.responseText);
         },
     });
+    
 
     // Reload table when class changes
     $("#classFilter").on("change", function () {
@@ -107,6 +108,8 @@ $(document).ready(function () {
             cancelButtonColor: "#3085d6",
             confirmButtonText: "Yes, delete them!",
             cancelButtonText: "Cancel",
+            showLoaderOnConfirm: true,
+            allowOutsideClick: () => !Swal.isLoading(),
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({

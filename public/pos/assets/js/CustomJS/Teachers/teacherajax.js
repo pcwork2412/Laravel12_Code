@@ -86,7 +86,9 @@ $('#deleteSelected').on('click', function () {
             confirmButtonColor: '#d33',
             cancelButtonColor: '#3085d6',
             confirmButtonText: 'Yes, delete!',
-            cancelButtonText: 'Cancel'
+            cancelButtonText: 'Cancel',
+            showLoaderOnConfirm: true,
+             allowOutsideClick: () => !Swal.isLoading(),
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({

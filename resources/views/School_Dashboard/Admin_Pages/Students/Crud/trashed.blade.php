@@ -106,18 +106,35 @@ $(document).ready(function() {
         $('#selectAll').prop('checked', $('.selectRow:checked').length === $('.selectRow').length);
     });
 
-    // Single Restore
+    // Spinner Helper Function
+    function showSpinner(btn, text = 'Processing...') {
+        btn.prop('disabled', true);
+        btn.data('original', btn.html());
+        btn.html(`<span class="spinner-border spinner-border-sm me-2"></span>${text}`);
+    }
+
+    function resetSpinner(btn) {
+        btn.prop('disabled', false);
+        if (btn.data('original')) btn.html(btn.data('original'));
+    }
+
+    // 🔹 Single Restore
     $(document).on('click', '.restore-btn', function() {
-        let id = $(this).data('id');
+        let btn = $(this);
+        let id = btn.data('id');
+
+        showSpinner(btn, 'Restoring...');
         $.post("{{ url('students/restore') }}/" + id, {_token: '{{ csrf_token() }}'}, function(res) {
             toastr.success(res.message);
             trashedTable.ajax.reload();
-        });
+        }).always(() => resetSpinner(btn));
     });
 
-    // Single Permanent Delete
+    // 🔹 Single Permanent Delete
     $(document).on('click', '.force-del-btn', function() {
-        let id = $(this).data('id');
+        let btn = $(this);
+        let id = btn.data('id');
+
         Swal.fire({
             title: 'Are you sure?',
             text: "This will permanently delete the student!",
@@ -127,6 +144,7 @@ $(document).ready(function() {
             confirmButtonText: 'Yes, Delete!'
         }).then((result) => {
             if (result.isConfirmed) {
+                showSpinner(btn, 'Deleting...');
                 $.ajax({
                     url: "{{ url('students/forcedelete') }}/" + id,
                     type: 'DELETE',
@@ -134,26 +152,32 @@ $(document).ready(function() {
                     success: function(res) {
                         toastr.success(res.message);
                         trashedTable.ajax.reload();
-                    }
+                    },
+                    complete: () => resetSpinner(btn)
                 });
             }
         });
     });
 
-    // Bulk Restore
+    // 🔹 Bulk Restore
     $('#bulkRestore').on('click', function() {
+        let btn = $(this);
         let ids = $('.selectRow:checked').map(function(){ return $(this).val(); }).get();
+
         if(ids.length === 0) { toastr.warning('Please select at least one student'); return; }
 
+        showSpinner(btn, 'Restoring...');
         $.post("{{ url('students/bulk-restore') }}", {_token: '{{ csrf_token() }}', ids: ids}, function(res){
             toastr.success(res.message);
             trashedTable.ajax.reload();
-        });
+        }).always(() => resetSpinner(btn));
     });
 
-    // Bulk Permanent Delete
+    // 🔹 Bulk Permanent Delete
     $('#bulkDelete').on('click', function() {
+        let btn = $(this);
         let ids = $('.selectRow:checked').map(function(){ return $(this).val(); }).get();
+
         if(ids.length === 0) { toastr.warning('Please select at least one student'); return; }
 
         Swal.fire({
@@ -165,6 +189,7 @@ $(document).ready(function() {
             confirmButtonText: 'Yes, Delete All!'
         }).then((result) => {
             if(result.isConfirmed){
+                showSpinner(btn, 'Deleting...');
                 $.ajax({
                     url: "{{ url('students/bulk-delete') }}",
                     type: 'DELETE',
@@ -172,7 +197,8 @@ $(document).ready(function() {
                     success: function(res) {
                         toastr.success(res.message);
                         trashedTable.ajax.reload();
-                    }
+                    },
+                    complete: () => resetSpinner(btn)
                 });
             }
         });
@@ -180,4 +206,5 @@ $(document).ready(function() {
 
 });
 </script>
+
 @endpush

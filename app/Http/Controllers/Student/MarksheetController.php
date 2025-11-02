@@ -248,8 +248,8 @@ class MarksheetController extends Controller
     DB::raw('COUNT(*) as total_generations'),
     DB::raw('DATE(MAX(generated_at)) as generation_date'),
     DB::raw('MAX(generated_at) as last_generated')
-])
-->groupBy('class_name', 'section_name', 'generation_type');
+])->latest();
+$query->groupBy('class_name', 'section_name', 'generation_type');
 
 
                 // ✅ Filter by class

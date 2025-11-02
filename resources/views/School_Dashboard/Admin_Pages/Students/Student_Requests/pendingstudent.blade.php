@@ -88,6 +88,35 @@
                 // }
             });
         });
+        $(document).on('submit', '.actionForm', function(e) {
+    e.preventDefault();
+
+    let form = $(this);
+    let btn = form.find('.action-btn');
+    let originalHTML = btn.html();
+
+    // Disable button + show spinner
+    btn.prop('disabled', true)
+       .html('<i class="fa fa-spinner fa-spin me-1"></i> Processing...');
+
+    // AJAX form submit
+    $.ajax({
+        url: form.attr('action'),
+        method: form.attr('method'),
+        data: form.serialize(),
+        success: function(res) {
+            $('#studentsTable').DataTable().ajax.reload(); // reload table
+            toastr.success(res.message || 'Action completed successfully!');
+        },
+        error: function(xhr) {
+            toastr.error('Something went wrong!');
+        },
+        complete: function() {
+            // Re-enable button
+            btn.prop('disabled', false).html(originalHTML);
+        }
+    });
+});
     </script>
     
 @endpush

@@ -57,7 +57,7 @@
                             <option value="">Select Class</option>
                             @foreach ($classes as $class)
                                 @php
-                                    $isAllotted = $allotedTeachers->contains('teacher_id', $teacher->id);
+                                    // $isAllotted = $allotedTeachers->contains('teacher_id', $teacher->id);
                                 @endphp
                                 <option value="{{ $class->id }}">{{ $class->class_name }}</option>
                             @endforeach

@@ -10,7 +10,7 @@
                     </div>
                     <div class="card-body">
 
-                        <form action="{{ route('students.marksheet.generate') }}" method="POST">
+                        <form action="{{ route('students.marksheet.generate') }}" id="singalMarksheetForm" method="POST">
                             @csrf
                             <div class="row d-flex justify-between ">
                                 <div class="mb-4 col-md-6">
@@ -49,7 +49,60 @@
 @push('scripts')
     <script src="{{ asset('pos/assets/js/CustomJS/Global/global.js') }}"></script>
 
-    <script>
-        
+      <script>
+        // Form submit par button disable karne ka script
+        document.addEventListener('DOMContentLoaded', function() {
+            const singalMarksheetForm = document.getElementById('singalMarksheetForm');
+
+            if (singalMarksheetForm) {
+                // Sabhi submit buttons ko select karo
+                const submitButtons = singalMarksheetForm.querySelectorAll('button[type="submit"]');
+
+                submitButtons.forEach(function(button) {
+                    button.addEventListener('click', function(e) {
+                        // Hidden input add karo jo button ki value send karega
+                        const existingHidden = singalMarksheetForm.querySelector(
+                        'input[name="action"]');
+                        if (existingHidden) {
+                            existingHidden.remove();
+                        }
+
+                        // Naya hidden input create karo
+                        const hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = 'action';
+                        hiddenInput.value = button.value; // 'preview' ya 'generate'
+                        singalMarksheetForm.appendChild(hiddenInput);
+                    });
+                });
+
+                singalMarksheetForm.addEventListener('submit', function(e) {
+                    // Jo button click hua hai usko find karo
+                    const clickedButton = document.activeElement;
+
+                    // Check karo ki clicked element button hai ya nahi
+                    if (clickedButton && clickedButton.type === 'submit') {
+                        // Button ko disable karo
+                        clickedButton.disabled = true;
+
+                        // Button ka original text save karo
+                        const originalText = clickedButton.innerHTML;
+
+                        // Loading text show karo with icon
+                        const iconClass = clickedButton.value === 'preview' ? 'fa-eye' : 'fa-download';
+                        clickedButton.innerHTML =
+                            '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Processing...';
+
+                        // Agar form validation fail ho ya error aaye to button enable karo
+                        setTimeout(function() {
+                            if (document.body) {
+                                clickedButton.disabled = false;
+                                clickedButton.innerHTML = originalText;
+                            }
+                        }, 5000);
+                    }
+                });
+            }
+        });
     </script>
 @endpush

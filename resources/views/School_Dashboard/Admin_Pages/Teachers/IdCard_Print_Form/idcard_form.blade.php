@@ -14,7 +14,7 @@
         <div class="card-body  rounded-3">
             @php
             @endphp
-            <form action="{{ route('teachers.genIdAll') }}" method="POST" target="_blank" class="row g-3">
+            <form action="{{ route('teachers.genIdAll') }}" method="POST" id="allIdCardForm" class="row g-3">
                 @csrf
 
                 <div class="col-md-4">
@@ -50,3 +50,61 @@
     @endif --}}
 
 @endsection
+@push('scripts')
+     <script>
+        // Form submit par button disable karne ka script
+        document.addEventListener('DOMContentLoaded', function() {
+            const allIdCardForm = document.getElementById('allIdCardForm');
+
+            if (allIdCardForm) {
+                // Sabhi submit buttons ko select karo
+                const submitButtons = allIdCardForm.querySelectorAll('button[type="submit"]');
+
+                submitButtons.forEach(function(button) {
+                    button.addEventListener('click', function(e) {
+                        // Hidden input add karo jo button ki value send karega
+                        const existingHidden = allIdCardForm.querySelector(
+                        'input[name="action"]');
+                        if (existingHidden) {
+                            existingHidden.remove();
+                        }
+
+                        // Naya hidden input create karo
+                        const hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = 'action';
+                        hiddenInput.value = button.value; // 'preview' ya 'generate'
+                        allIdCardForm.appendChild(hiddenInput);
+                    });
+                });
+
+                allIdCardForm.addEventListener('submit', function(e) {
+                    // Jo button click hua hai usko find karo
+                    const clickedButton = document.activeElement;
+
+                    // Check karo ki clicked element button hai ya nahi
+                    if (clickedButton && clickedButton.type === 'submit') {
+                        // Button ko disable karo
+                        clickedButton.disabled = true;
+
+                        // Button ka original text save karo
+                        const originalText = clickedButton.innerHTML;
+
+                        // Loading text show karo with icon
+                        const iconClass = clickedButton.value === 'preview' ? 'fa-eye' : 'fa-download';
+                        clickedButton.innerHTML =
+                            '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Processing...';
+
+                        // Agar form validation fail ho ya error aaye to button enable karo
+                        setTimeout(function() {
+                            if (document.body) {
+                                clickedButton.disabled = false;
+                                clickedButton.innerHTML = originalText;
+                            }
+                        }, 5000);
+                    }
+                });
+            }
+        });
+    </script>
+@endpush

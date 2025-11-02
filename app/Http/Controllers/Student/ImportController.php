@@ -40,35 +40,35 @@ class ImportController extends Controller
     }
 
     public function import(Request $request)
-{
-    $request->validate([
-        'file' => 'required|mimes:xlsx,xls,csv'
-    ]);
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv'
+        ]);
 
-    $import = new StudentsImport();
+        $import = new StudentsImport();
 
-    Excel::import($import, $request->file('file'));
+        Excel::import($import, $request->file('file'));
 
-    $totalSuccess = $import->successCount;
-    $totalErrors = count($import->errorDetails);
+        $totalSuccess = $import->successCount;
+        $totalErrors = count($import->errorDetails);
 
-    // Error messages combine करें
-  $errorMessages = '';
-$maxToShow = '20'; // कितने error दिखाने हैं
-foreach ($import->errorDetails as $index => $err) {
-    if ($index < $maxToShow) {
-        $errorMessages .= "⛔ {$err['row']}: {$err['reason']}<br>";
-    }
-}
-if ($totalErrors > $maxToShow) {
-    $remaining = $totalErrors - $maxToShow;
-    $errorMessages .= "<b>...और {$remaining} और errors हैं।</b>";
-}
+        // Error messages combine करें
+        $errorMessages = '';
+        $maxToShow = '20'; // कितने error दिखाने हैं
+        foreach ($import->errorDetails as $index => $err) {
+            if ($index < $maxToShow) {
+                $errorMessages .= "⛔ {$err['row']}: {$err['reason']}<br>";
+            }
+        }
+        if ($totalErrors > $maxToShow) {
+            $remaining = $totalErrors - $maxToShow;
+            $errorMessages .= "<b>...और {$remaining} और errors हैं।</b>";
+        }
 
-if ($totalErrors > 0) {
-    return back()->with([
-        
-        'error' => "
+        if ($totalErrors > 0) {
+            return back()->with([
+
+                'error' => "
             <div style='
                 max-height:150px;
                 overflow-y:auto;
@@ -96,11 +96,9 @@ if ($totalErrors > 0) {
                 </div>
             </div>
             "
-    ]);
+            ]);
+        }
 
+        return back()->with('success', "✅ Import successful! Total records saved: {$totalSuccess}");
     }
-
-    return back()->with('success', "✅ Import successful! Total records saved: {$totalSuccess}");
-}
-
 }

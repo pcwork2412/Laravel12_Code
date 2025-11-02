@@ -110,16 +110,23 @@ $(document).ready(function() {
 
     // ♻️ Single Restore
     $(document).on('click', '.restore-btn', function() {
-        let id = $(this).data('id');
+        let btn = $(this);
+        let id = btn.data('id');
+
+        btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Restoring...');
         $.post("{{ url('teachers/restore') }}/" + id, {_token: '{{ csrf_token() }}'}, function(res) {
             toastr.success(res.message);
             trashedTable.ajax.reload();
+        }).always(function() {
+            btn.prop('disabled', false).html('<i class="bi bi-arrow-clockwise"></i> Restore');
         });
     });
 
     // ❌ Single Permanent Delete
     $(document).on('click', '.force-del-btn', function() {
-        let id = $(this).data('id');
+        let btn = $(this);
+        let id = btn.data('id');
+
         Swal.fire({
             title: 'Are you sure?',
             text: "This will permanently delete the teacher record!",
@@ -129,6 +136,7 @@ $(document).ready(function() {
             confirmButtonText: 'Yes, Delete!'
         }).then((result) => {
             if (result.isConfirmed) {
+                btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Deleting...');
                 $.ajax({
                     url: "{{ url('teachers/force-delete') }}/" + id,
                     type: 'DELETE',
@@ -136,6 +144,9 @@ $(document).ready(function() {
                     success: function(res) {
                         toastr.success(res.message);
                         trashedTable.ajax.reload();
+                    },
+                    complete: function() {
+                        btn.prop('disabled', false).html('<i class="bi bi-trash-fill"></i> Delete');
                     }
                 });
             }
@@ -144,20 +155,28 @@ $(document).ready(function() {
 
     // ♻️ Bulk Restore
     $('#bulkRestore').on('click', function() {
+        let btn = $(this);
         let ids = $('.selectRow:checked').map(function(){ return $(this).val(); }).get();
+
         if(ids.length === 0) {
             toastr.warning('Please select at least one teacher');
             return;
         }
+
+        btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Restoring...');
         $.post("{{ route('teachers.restoreAll') }}", {_token: '{{ csrf_token() }}', ids: ids}, function(res){
             toastr.success(res.message);
             trashedTable.ajax.reload();
+        }).always(function() {
+            btn.prop('disabled', false).html('Restore Selected');
         });
     });
 
     // ☠️ Bulk Permanent Delete
     $('#bulkDelete').on('click', function() {
+        let btn = $(this);
         let ids = $('.selectRow:checked').map(function(){ return $(this).val(); }).get();
+
         if(ids.length === 0) {
             toastr.warning('Please select at least one teacher');
             return;
@@ -172,6 +191,7 @@ $(document).ready(function() {
             confirmButtonText: 'Yes, Delete All!'
         }).then((result) => {
             if(result.isConfirmed){
+                btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Deleting...');
                 $.ajax({
                     url: "{{ route('teachers.forceDeleteAll') }}",
                     type: 'DELETE',
@@ -179,6 +199,9 @@ $(document).ready(function() {
                     success: function(res) {
                         toastr.success(res.message);
                         trashedTable.ajax.reload();
+                    },
+                    complete: function() {
+                        btn.prop('disabled', false).html('Delete Selected');
                     }
                 });
             }
@@ -187,4 +210,5 @@ $(document).ready(function() {
 
 });
 </script>
+
 @endpush

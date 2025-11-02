@@ -44,7 +44,7 @@ class CrudController extends Controller
             $main_class_id = $allotment->main_class_id;
             $main_section_id = $allotment->main_section_id;
             // ✅ Step 2: Prepare query
-            $query = Crud::where('class_id', $main_class_id)->where('section_id', $main_section_id)->select(['id', 'student_uid', 'promoted_class_name', 'section', 'student_name', 'dob', 'gender', 'mother_name', 'father_name', 'guardian_name', 'father_occupation_income', 'mother_mobile', 'father_mobile', 'present_address', 'permanent_address', 'local_guardian', 'state_belong', 'whatsapp_mobile', 'alternate_mobile', 'email_id', 'aadhaar_number', 'ration_card_type', 'physically_handicapped', 'image', 'blood_group', 'height', 'weight', 'account_holder_name', 'bank_name_branch', 'account_number', 'ifsc_code', 'created_at']);
+            $query = Crud::where('class_id', $main_class_id)->where('section_id', $main_section_id)->select(['id', 'student_uid', 'promoted_class_name', 'section', 'student_name', 'dob', 'gender', 'mother_name', 'father_name', 'guardian_name', 'father_occupation_income', 'mother_mobile', 'father_mobile', 'present_address', 'permanent_address', 'local_guardian', 'state_belong', 'whatsapp_mobile', 'alternate_mobile', 'email_id', 'aadhaar_number', 'ration_card_type', 'physically_handicapped', 'image', 'blood_group', 'height', 'weight', 'account_holder_name', 'bank_name_branch', 'account_number', 'ifsc_code', 'created_at'])->latest();
             // ✅ Step 3: AJAX Data Return 
             if ($request->ajax()) {
                 return DataTables::of($query)->addIndexColumn()
@@ -111,7 +111,7 @@ class CrudController extends Controller
                     'account_number',
                     'ifsc_code',
                     'created_at'
-                ]);
+                ])->latest();
                 // ✅ Filter by class if not "All"
                 if ($request->class_id && $request->class_id != 'All') {
                     $query->where('class_id', $request->class_id);
@@ -577,7 +577,7 @@ class CrudController extends Controller
     public function trashed(Request $request)
     {
         if ($request->ajax()) {
-            $students = Crud::onlyTrashed()->select(['id','student_name','student_uid','promoted_class_name','section','deleted_at']);
+            $students = Crud::onlyTrashed()->select(['id','student_name','student_uid','promoted_class_name','section','deleted_at'])->orderBy('id', 'asc')->latest();
 
             return DataTables::of($students)
                 ->addIndexColumn()
@@ -657,22 +657,44 @@ class CrudController extends Controller
         ]);
     }
 
-    public function downloadPdf()
-    {
-        $students = Crud::all();
-        // dd($students);
-        $pdf = Pdf::loadView('school_dashboard.admin_pages.students.crud.pdf.studentlistpdf', compact('students'));
-        return $pdf->download('student_data.pdf');
-    }
+    // ============================================
+// Controller Method (StudentController.php)
+// ============================================
 
-    public function export(Request $request)
-    {
+public function downloadPdf(Request $request)
+{
+    // Get student IDs from request
+    $studentIds = json_decode($request->input('student_ids', '[]'), true);
+    
+    // Validation
+    if (empty($studentIds)) {
+        return back()->with('error', 'No students found on current page');
+    }
+    
+    // Get only students with matching IDs (preserving order)
+    $students = Crud::whereIn('id', $studentIds)
+                    ->orderByRaw('FIELD(id, ' . implode(',', $studentIds) . ')')
+                    ->get();
+    
+    // Generate PDF
+    $pdf = Pdf::loadView('school_dashboard.admin_pages.students.crud.pdf.studentlistpdf', compact('students'));
+    
+    return $pdf->download('student_data_' . date('Y-m-d_H-i-s') . '.pdf');
+}
+
+ public function export(Request $request)
+{
     $fields = $request->input('fields', []);
+    $studentIds = json_decode($request->input('student_ids', '[]'), true);
 
     if (empty($fields)) {
-        return response()->json(['error' => 'Please select at least one field'], 400);
+        return back()->with(['error' => 'Please select at least one field'], 400);
     }
 
-    return Excel::download(new StudentsExport($fields), 'students_export.xlsx');
+    if (empty($studentIds)) {
+        return back()->with(['error' => 'No students found on current page'], 400);
     }
+
+    return Excel::download(new StudentsExport($fields, $studentIds), 'students_export.xlsx');
+}
 }

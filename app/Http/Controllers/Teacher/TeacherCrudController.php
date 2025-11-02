@@ -41,7 +41,7 @@ class TeacherCrudController extends Controller
                 'qualification',
                 'experience',
                 'documents'
-            ]);
+            ])->latest();
 
             return DataTables::of($query)
                 ->addIndexColumn()
@@ -115,7 +115,7 @@ class TeacherCrudController extends Controller
                 'address'                 => 'required|string|max:255',
                 'city'                    => 'nullable|string|max:255',
                 'state'                   => 'nullable|string|max:255',
-                'pincode'                 => 'nullable|string|max:10',
+                'pincode'                 => 'nullable|numeric',
                 'qualification'           => 'nullable|string|max:255',
                 'experience'              => 'nullable|string|max:255',
                 'documents'               => 'nullable|file|mimes:pdf,doc,docx,zip|max:10240', // multiple as zip
@@ -221,7 +221,7 @@ class TeacherCrudController extends Controller
             'address' => 'nullable|string|max:255',
             'city' => 'nullable|string|max:255',
             'state' => 'nullable|string|max:255',
-            'pincode' => 'nullable|string|max:10',
+            'pincode'  => 'nullable|numeric',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'documents' => 'nullable|file|mimes:pdf,zip,doc,docx|max:10240', // max 10MB
         ]);
@@ -302,7 +302,7 @@ public function bulkDelete(Request $request)
 public function trashed(Request $request)
 {
     if ($request->ajax()) {
-        $teachers = TeacherCrud::onlyTrashed()->select(['id', 'teacher_name','qualification','mobile','deleted_at']);
+        $teachers = TeacherCrud::onlyTrashed()->select(['id', 'teacher_name','qualification','mobile','deleted_at'])->orderBy('id', 'asc')->latest();
 
         return datatables()->of($teachers)
             ->addIndexColumn()
@@ -400,19 +400,42 @@ public function forceDeleteAll(Request $request)
 
 
 
-    public function downloadPdf()
-    {
-        $teachers = TeacherCrud::all();
-        // dd($teachers);
-        $pdf = Pdf::loadView('school_dashboard.admin_pages.teachers.teachercrud.pdf.teacherlist', compact('teachers'));
-        return $pdf->download('teacher_data.pdf');
+   public function downloadPdf(Request $request)
+{
+    // Get teacher IDs from request
+    $teacherIds = json_decode($request->input('teacher_ids', '[]'), true);
+    
+    // Validation
+    if (empty($teacherIds)) {
+        return back()->with('error', 'No teachers found on current page');
+    }
+    
+    // Get only teachers with matching IDs (preserving order)
+    $teachers = TeacherCrud::whereIn('id', $teacherIds)
+                           ->orderByRaw('FIELD(id, ' . implode(',', $teacherIds) . ')')
+                           ->get();
+    
+    // Generate PDF
+    $pdf = Pdf::loadView('school_dashboard.admin_pages.teachers.teachercrud.pdf.teacherlist', compact('teachers'));
+    
+    return $pdf->download('teacher_data_' . date('Y-m-d_H-i-s') . '.pdf');
+}
+
+  public function export(Request $request)
+{
+    $fields = $request->input('fields', []);
+    $teacherIds = json_decode($request->input('teacher_ids', '[]'), true);
+
+    if (empty($fields)) {
+        return response()->json(['error' => 'Please select at least one field'], 400);
     }
 
-
-    public function export()
-    {
-        return Excel::download(new TeachersExport, 'teacher-list.xlsx');
+    if (empty($teacherIds)) {
+        return response()->json(['error' => 'No teachers found on current page'], 400);
     }
 
+    // Correct parameter order: fields first, IDs second
+    return Excel::download(new TeachersExport($fields, $teacherIds), 'teachers_export.xlsx');
+}
    
 }

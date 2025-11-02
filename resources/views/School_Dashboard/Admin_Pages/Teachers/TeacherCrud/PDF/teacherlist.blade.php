@@ -1,6 +1,7 @@
 <table border="1" cellspacing="0" cellpadding="6" width="100%">
     <thead>
         <tr style="background-color:#ddd;">
+            <th>Teacher ID</th>
             <th>Teacher Name</th>
             <th>Email</th>
             <th>Mobile</th>
@@ -11,6 +12,7 @@
     <tbody>
         @foreach($teachers as $t)
         <tr>
+            <td>{{ $loop->iteration }}</td>
             <td>{{ $t->teacher_name }}</td>
             <td>{{ $t->email }}</td>
             <td>{{ $t->mobile }}</td>

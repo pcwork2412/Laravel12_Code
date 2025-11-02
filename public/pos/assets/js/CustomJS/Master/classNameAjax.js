@@ -86,7 +86,7 @@ $(document).ready(function () {
 
                 // 🔹 Reset button
                 $("#saveBtn")
-                    .html('<i class="fas fa-save"></i> Submit')
+                    .html('<i class="fas fa-save"></i> Add Class')
                     .prop("disabled", false);
             },
             error: function (xhr) {
@@ -111,7 +111,7 @@ $(document).ready(function () {
 
                 // 🔹 Reset button on error
                 $("#saveBtn")
-                    .html('<i class="fas fa-save"></i> Submit')
+                    .html('<i class="fas fa-save"></i> Add Class')
                     .prop("disabled", false);
             },
         });
@@ -269,6 +269,8 @@ $(document).ready(function () {
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, delete it!",
+            showLoaderOnConfirm: true,
+             allowOutsideClick: () => !Swal.isLoading(),
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({

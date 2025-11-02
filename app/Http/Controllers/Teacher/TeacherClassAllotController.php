@@ -23,7 +23,7 @@ class TeacherClassAllotController extends Controller
         if ($request->ajax()) {
 
             // ✅ Eager loading for performance
-            $data = TeacherAllotment::with(['teacher', 'mainClass', 'mainSection'])->get();
+            $data = TeacherAllotment::with(['teacher', 'mainClass', 'mainSection'])->latest();
 
             return DataTables::of($data)
                 ->addIndexColumn()
